@@ -24,6 +24,7 @@
 
 @theme {
   --font-primary: 'EurostileExtended';
+  --font-montserrat: 'Montserrat';
 }
 
 body {

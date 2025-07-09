@@ -1,16 +1,24 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { routes } from '../pages/pages'
 import NavMenu from "../NavMenu/NavMenu.tsx";
 
 const App = () => {
 
   return (
-      <div className="fixed inset-0 bg-linear-120 from-[#70139f] from-15% via-[#79156b] via-40% to-[#340575] to-90% overflow-auto">
-      <div className="flex h-full w-full">
-              <NavMenu />
-              <main className="ml-64 p-6 w-full text-white">
-                  {/* Контент */}
-              </main>
+      <Router>
+          <div className="fixed inset-0 bg-linear-120 overflow-hidden from-[#70139f] from-20% via-[#79156b] via-30% to-[#340575] to-80%">
+              <div className="flex h-full w-full">
+                  <NavMenu />
+                  <main className="ml-64 p-6 w-full text-white">
+                      <Routes>
+                          {routes.map(({ path, element }) => (
+                              <Route key={path} path={path} element={element} />
+                          ))}
+                      </Routes>
+                  </main>
+              </div>
           </div>
-      </div>
+      </Router>
   )
 }
 
