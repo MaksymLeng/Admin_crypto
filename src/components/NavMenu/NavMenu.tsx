@@ -4,12 +4,12 @@ import Logo from '../../assets/N.svg'
 
 const NavMenu = () => {
     return (
-        <aside className="fixed top-0 left-0 lg:h-full md:w-full lg:w-60 bg-black/30 text-white flex  flex-row lg:flex-col items-center py-4 lg:py-6 gap-4 lg:gap-0 px-4 lg:px-5 z-50 backdrop-blur-sm">
+        <aside className="fixed top-0 left-0 lg:h-full w-full lg:w-60 bg-black/30 text-white flex  flex-row lg:flex-col items-center py-4 lg:py-6 gap-2 lg:gap-0 px-1 lg:px-5 z-50 backdrop-blur-sm">
             <img src={Logo} alt="Logo" className="w-12 h-12 lg:mb-6" />
 
             <div className="w-full">
                 <hr className="text-[#B886F9] opacity-40 shadow-lg mb-4 lg:mb-6" />
-                <ul className="lg:list-disc list-none list-outside flex lg:flex-col gap-2 md: lg:gap-0 flex-row  lg:pl-6 lg:space-y-4 text-sm font-medium md:justify-between">
+                <ul className="lg:list-disc list-none list-outside flex lg:flex-col gap-1.5 lg:gap-0 flex-row  lg:pl-6 lg:space-y-4 text-sm font-medium md:justify-between">
                     {routes.map(({ path, name }) => {
                         const isDeposit = name === 'Deposit/Withdraw'
                         return (

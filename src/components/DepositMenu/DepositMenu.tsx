@@ -47,15 +47,15 @@ const DepositMenu = () => {
             </div>
 
             {/* Правая часть */}
-            <div className="relative bg-black/30 rounded-2xl py-6 px-5 lg:w-[60%] w-[90%] shadow-md text-white flex flex-col justify-between">
-                <h2 className="absolute font-montserrat -top-7 left-1/2 lg:-left-0 -translate-x-1/2 lg:-translate-0 text-4xl opacity-80 font-extrabold text-center italic mb-6 tracking-wider">
+            <div className="relative bg-black/30 rounded-2xl py-6 lg:px-5 px-3 lg:w-[60%] w-[100%] shadow-md text-white flex flex-col justify-between">
+                <h2 className="absolute font-montserrat -top-7 left-1/2 lg:-left-0 -translate-x-1/2 lg:-translate-0 text-3xl lg:text-4xl opacity-80 font-extrabold text-center italic mb-6 tracking-wider">
                     DEPOSIT/WITHDRAW
                 </h2>
 
                 <div className="text-sm space-y-5 pt-2">
                     <div className="flex justify-between items-center">
                         <span className="font-bold text-xl">OWNER ID:</span>
-                        <span className="font-bold text-3xl px-4">0021 3157</span>
+                        <span className="font-bold text-xl lg:text-3xl px-4">0021 3157</span>
                     </div>
 
                     <div className="flex justify-between items-center opacity-60">
