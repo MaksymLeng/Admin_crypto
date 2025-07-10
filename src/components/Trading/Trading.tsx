@@ -1,9 +1,101 @@
+import { useTrades } from "../../hooks/useTrades";
+import type {Trade} from "../../Types/Types.tsx";
 
 const Trading = () => {
-    return (
-        <>
-        </>
-    )
-}
+    const { data: trades, loading } = useTrades();
 
-export default Trading
+    const bestTrade = trades.reduce(
+        (max, t) => (t.rawAmount > max.rawAmount ? t : max),
+        trades[0] || { rawAmount: 0 }
+    );
+
+    return (
+        <div className="relative min-h-screen w-full text-white px-4 py-16 bg-linear-110 from-[#a70866] to-[#340575] via-[#79156b] rounded-2xl">
+            {/* LIVE TRADES LABEL */}
+            <div className="relative bg-[#340575]/70 py-8 rounded-2xl">
+                <h1 className="absolute lg:top-7 top-9 left-1/2 -translate-x-1/2 text-5xl tracking-wide font-bold  text-white z-10 whitespace-nowrap text-shadow-lg">
+                    LIVE TRADES
+                </h1>
+            </div>
+
+            {/* CONTENT WRAPPER */}
+            <div className="flex flex-col gap-10 justify-center items-start w-full max-w-6xl mx-auto mt-20">
+                <div className="absolute top-46 left-2 lg:left-34 px-4 tracking-wide py-1 text-white font-bold text-2xl z-21">
+                    RECENT TRADES
+                </div>
+
+                {/* RECENT TRADES */}
+                <div className="relative h-[400px] overflow-hidden w-full lg:w-2/3 bg-[#510992]/70 rounded-xl mx-auto pt-10 px-6">
+
+                    {/* Fade сверху */}
+                    <div
+                        className="pointer-events-none absolute top-0 left-0 right-0 h-10 z-20"
+                        style={{
+                            background: 'linear-gradient(to bottom, rgba(20,0,50,1), rgba(20,0,50,0))',
+                        }}
+                    />
+
+                    {/* Лента */}
+                    <div className="absolute top-0 left-0 w-full animate-scroll" >
+                        <div>
+                            <ul className="space-y-3">
+                                {trades.map((t, i) => (
+                                    <TradeItem key={i} trade={t} />
+                                ))}
+                            </ul>
+                        </div>
+                        <div>
+                            <ul className="space-y-3">
+                                {trades.map((t, i) => (
+                                    <TradeItem key={`dup-${i}`} trade={t} />
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                {/* BEST TRADE */}
+                <div className="bg-[#30056f]/80 rounded-xl lg:px-6 px-2 py-6 w-full lg:w-2/3 mx-auto relative">
+                    <div className="absolute bottom-14 italic left-3 tracking-wide py-1 text-white font-bold text-2xl z-21 uppercase">
+                        Best Trade 24H
+                    </div>
+                    {!loading && (
+                        <div className="flex justify-between text-lg">
+                            <div className="flex lg:gap-4 gap-1">
+                                <span className="text-xl">{bestTrade.coin}</span>
+                                <span className="text-green-400 text-lg">{bestTrade.change}</span>
+                                <span className="flex gap-2 text-lg">
+                                            CM
+                                           <span className="text-green-400 text-lg">
+                                               {bestTrade.cm}
+                                           </span>
+                                        </span>
+                            </div>
+                            <span className="text-green-400 text-xl">{bestTrade.amount}</span>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const TradeItem = ({ trade }: { trade: Trade }) => {
+    return (
+        <li className="flex justify-between text-sm pb-1 lg:px-5 px-2 items-center text-center">
+            <div className="flex lg:gap-4 gap-1 items-center text-center">
+                <span className="text-xl">{trade.coin}</span>
+                <span className="text-green-400 text-lg">{trade.change}</span>
+                <span className="flex gap-2 text-lg">
+          CM
+          <span className="text-green-400 text-lg">{trade.cm}</span>
+        </span>
+            </div>
+            <span className="text-green-400 text-xl">{trade.amount}</span>
+        </li>
+    );
+};
+
+export default Trading;
