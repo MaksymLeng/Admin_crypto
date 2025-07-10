@@ -20,7 +20,7 @@ const Trading = () => {
 
             {/* CONTENT WRAPPER */}
             <div className="flex flex-col gap-10 justify-center items-start w-full max-w-6xl mx-auto mt-20">
-                <div className="absolute top-46 left-2 lg:left-34 px-4 tracking-wide py-1 text-white font-bold text-2xl z-21">
+                <div className="absolute top-46 left-2 md:left-1/4 lg:left-46 xl:left-1/3 px-4 tracking-wide py-1 text-white font-bold text-3xl z-21">
                     RECENT TRADES
                 </div>
 
