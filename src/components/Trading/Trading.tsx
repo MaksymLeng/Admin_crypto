@@ -10,10 +10,10 @@ const Trading = () => {
     );
 
     return (
-        <div className="relative min-h-screen w-full text-white px-4 py-16 bg-linear-110 from-[#a70866] to-[#340575] via-[#79156b] rounded-2xl">
+        <div className="relative md:h-[100%] h-screen w-full text-white px-4 py-16 bg-linear-110 from-[#a70866] to-[#340575] via-[#79156b] rounded-2xl">
             {/* LIVE TRADES LABEL */}
             <div className="relative bg-[#340575]/70 py-8 rounded-2xl">
-                <h1 className="absolute lg:top-7 top-9 left-1/2 -translate-x-1/2 text-5xl tracking-wide font-bold  text-white z-10 whitespace-nowrap text-shadow-lg">
+                <h1 className="absolute lg:top-7 top-9 left-1/2 -translate-x-1/2 lg:text-6xl text-5xl tracking-wider font-bold  text-white z-10 whitespace-nowrap text-shadow-lg">
                     LIVE TRADES
                 </h1>
             </div>
