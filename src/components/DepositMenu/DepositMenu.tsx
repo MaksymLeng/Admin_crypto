@@ -3,13 +3,13 @@ import Logo from '../../assets/N.svg'
 
 const DepositMenu = () => {
     return (
-        <div className="flex gap-6 h-screen items-center justify-center">
+        <div className="flex lg:flex-row flex-col gap-20 lg:gap-6 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
             {/* Левая карточка */}
-            <div className="relative bg-black/30 rounded-xl p-6 w-[40%] shadow-md text-white flex flex-col justify-between">
+            <div className="relative bg-black/30 rounded-xl p-6 lg:w-[40%] w-[90%] shadow-md text-white flex flex-col justify-between">
                 {/* Верхняя карточка с ID */}
                 <div className=" absolute -top-12 inset-x-6 bg-linear-130 from-[#af5505] to-[#1c0740] rounded-xl p-4 mb-6 text-white">
                     <div className="flex flex-col gap-3">
-                        <div className="flex text-center justify-between">
+                        <div className="flex text-left lg:text-center justify-between">
                             <div className="flex gap-3">
                                 <img src={Logo} alt="Logo" className="w-6 h-6"/>
                                 <div className="leading-none text-left font-light opacity-50 uppercase text-sm">
@@ -19,7 +19,7 @@ const DepositMenu = () => {
                             </div>
                             <Eye/>
                         </div>
-                        <div className="flex mx-auto gap-15">
+                        <div className="flex mx-auto gap-10 xl:gap-15">
                             <div className="text-2xl font-light opacity-70">ID:</div>
                             <div className="text-2xl font-bold">0021 3157</div>
                         </div>
@@ -47,8 +47,8 @@ const DepositMenu = () => {
             </div>
 
             {/* Правая часть */}
-            <div className="relative bg-black/30 rounded-2xl py-6 px-5 w-[60%] shadow-md text-white flex flex-col justify-between">
-                <h2 className="absolute font-montserrat -top-7 -left-0 text-4xl opacity-80 font-extrabold text-center italic mb-6 tracking-wider">
+            <div className="relative bg-black/30 rounded-2xl py-6 px-5 lg:w-[60%] w-[90%] shadow-md text-white flex flex-col justify-between">
+                <h2 className="absolute font-montserrat -top-7 left-1/2 lg:-left-0 -translate-x-1/2 lg:-translate-0 text-4xl opacity-80 font-extrabold text-center italic mb-6 tracking-wider">
                     DEPOSIT/WITHDRAW
                 </h2>
 

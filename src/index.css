@@ -15,15 +15,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-@font-face {
-  font-family: 'EurostileExtended';
-  src: url('/src/assets/fonts/EurostileExtendedBlack.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 @theme {
-  --font-primary: 'EurostileExtended';
   --font-montserrat: 'Montserrat';
 }
 
