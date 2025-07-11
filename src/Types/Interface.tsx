@@ -6,8 +6,8 @@ export interface AppRoute {
     name: string
 }
 
-export interface RecoveryModalProps {
+export interface ModalProps {
     isOpen: boolean,
     onClose: () => void,
-    recoveryPhrase: string[]
+    recoveryPhrase?: string[]
 }

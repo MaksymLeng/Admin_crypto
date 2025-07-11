@@ -13,3 +13,9 @@ export const setRate = (rate: string): Action<string> => {
         payload: rate
     }
 }
+
+export const setRecovery = (): Action => {
+    return {
+        type: 'SET_RECOVERY'
+    }
+}

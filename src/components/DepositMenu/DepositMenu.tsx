@@ -1,14 +1,16 @@
 import {useState} from "react";
 import type {Dispatch} from "redux";
 import {useDispatch, useSelector} from "react-redux";
-import { Eye, EyeOff } from "lucide-react";
-import type {RootState, UserType} from "../../Types/Types.tsx";
+import { Eye, EyeOff} from "lucide-react";
+import type {RootState} from "../../Types/Types.tsx";
 import type { Action } from '../../Types/Types.tsx';
 import {setShow} from "../../actions";
 import Logo from '../../assets/N.svg'
 import {RecoveryModal} from "../RecoveryModal/RecoveryModal.tsx";
+import {User} from '../../data/User.ts'
 import {splitInHalf} from "../../Helpers/function.tsx";
 import { TransactionRateDropdown } from "../RateList/RateList.tsx";
+import {ExtraModal} from "../Extramodal/ExtraModal.tsx";
 
 
 const DepositMenu = () => {
@@ -16,39 +18,24 @@ const DepositMenu = () => {
     const dispatch = useDispatch<Dispatch<Action>>();
     const [isOpen, setIsOpen] = useState(false);
 
-    const onClickBtn = (id:number) => {
+    const onClickShow = (id:number) => {
         dispatch(setShow(id));
-        if(id) {
+        if(id === 1) {
             setIsOpen(!isOpen);
         }
     };
 
-    const User: UserType = {
-        id: '0021 3157',
-        Balance: 0,
-        Available: 0,
-        DepositAddress: '0x86C399b68B73dEbBf3f7B491755144461A9b9151',
-        WithdrawalAddress: '0x87D3a489bADCcC15f59BF055632DC63da7B07823',
-        WithdrawalDate: '11/07/2025',
-        RecoveryPhrase: [
-            "moon",
-            "cable",
-            "genius",
-            "tiger",
-            "surface",
-            "vanish",
-            "cradle",
-            "glory",
-            "siren",
-            "manual",
-            "fortune",
-            "border"
-        ]
-    }
-
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-6 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
             {/* Левая карточка */}
+            <RecoveryModal
+                isOpen={isOpen}
+                onClose={() => onClickShow(1)}
+                recoveryPhrase={User.RecoveryPhrase}/>
+
+            <ExtraModal isOpen={showArr[2]}
+                        onClose={() => onClickShow(2)}/>
+
             <div className="relative bg-black/30 rounded-xl p-6 lg:w-[40%] w-[90%] shadow-md text-white flex flex-col justify-between">
                 {/* Верхняя карточка с ID */}
                 <div className=" absolute -top-12 inset-x-6 bg-linear-130 from-[#af5505] to-[#1c0740] rounded-xl p-4 mb-6 text-white">
@@ -61,7 +48,7 @@ const DepositMenu = () => {
                                     Banking System
                                 </div>
                             </div>
-                            <button onClick={() =>onClickBtn(0)}>
+                            <button onClick={() =>onClickShow(0)}>
                                 {showArr[0]
                                     ? <Eye className="text-gray-300 hover:scale-105 transition-transform hover:text-shadow-lg cursor-pointer"/>
                                     : <EyeOff className="text-gray-300 hover:scale-105 transition-transform hover:text-shadow-lg cursor-pointer"/>}
@@ -78,7 +65,7 @@ const DepositMenu = () => {
                         </div>
                     </div>
                 </div>
-                <RecoveryModal isOpen={isOpen} onClose={() => onClickBtn(1)} recoveryPhrase={User.RecoveryPhrase}/>
+
                 <div className="space-y-8 py-15 text-lg font-semibold">
                     <div className="flex justify-between items-center">
                         <span className="text-xl font-bold">BALANCE:</span>
@@ -149,7 +136,7 @@ const DepositMenu = () => {
                     <div className="flex items-center justify-between">
                         <span className="font-bold text-xl">RECOVERY PHRASE:</span>
                         <div className="flex">
-                            <button onClick={() => onClickBtn(1)}>
+                            <button onClick={() => onClickShow(1)}>
                                 {showArr[1]
                                     ? <Eye className="text-gray-300 hover:scale-105 transition-transform hover:text-shadow-lg cursor-pointer"/>
                                     : <EyeOff className="text-gray-300 hover:scale-105 transition-transform hover:text-shadow-lg cursor-pointer"/>
@@ -159,7 +146,7 @@ const DepositMenu = () => {
                     </div>
                 </div>
 
-                <button className="mt-5 bg-linear-100 from-[#79362e] via-[#7a3433] to-[#52232d] text-white font-bold py-3 rounded-xl cursor-pointer hover:shadow-lg">
+                <button className="mt-5 bg-linear-100 from-[#79362e] via-[#7a3433] to-[#52232d] text-white font-bold py-3 rounded-xl cursor-pointer hover:shadow-lg" onClick={() => onClickShow(2)}>
                     <span className="opacity-80">EXTRA SETTINGS</span>
 
                 </button>

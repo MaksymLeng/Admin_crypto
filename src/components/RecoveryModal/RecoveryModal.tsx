@@ -1,4 +1,4 @@
-import {type FC, useState} from "react";
+import {type FC} from "react";
 import {
     Dialog,
     DialogPanel,
@@ -8,16 +8,20 @@ import {
 } from '@headlessui/react'
 import { Fragment } from 'react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import type {RecoveryModalProps} from "../../Types/Interface.tsx";
+import type {ModalProps} from "../../Types/Interface.tsx";
 import {Eye} from "lucide-react";
+import {useDispatch, useSelector} from "react-redux";
+import type {Action, RootState} from "../../Types/Types.tsx";
+import type {Dispatch} from "redux";
+import {setRecovery} from "../../actions";
 
 
 
-export const RecoveryModal: FC<RecoveryModalProps> = ({isOpen, onClose, recoveryPhrase}) => {
-    const [show, setShow] = useState(false);
+export const RecoveryModal: FC<ModalProps> = ({isOpen, onClose, recoveryPhrase}) => {
+    const {showRecovery} = useSelector((state: RootState) => state);
+    const dispatch = useDispatch<Dispatch<Action>>();
 
-    const onClickGlass = () => setShow(!show);
-
+    const onClickGlass = () => {dispatch(setRecovery())};
 
     return (
     <Transition show={isOpen} as={Fragment}>
@@ -46,12 +50,12 @@ export const RecoveryModal: FC<RecoveryModalProps> = ({isOpen, onClose, recovery
                 >
                     <DialogPanel
                         className="lg:w-[calc((100%-15rem)*0.6)] w-full h-[60%] max-w-full bg-[#1e1e1e]/40 text-white rounded-t-3xl shadow-lg border-t border-[#2e2e2e]">
-                        <div className="flex flex-col gap-20">
-                            <div className="flex justify-between items-center mb-6  pt-7 p-6 pb-7 rounded-t-3xl">
+                        <div className="flex flex-col lg:gap-20 gap-10">
+                            <div className="flex justify-between items-center mb-6 pt-7 p-6 pb-7 rounded-t-3xl">
                                 <DialogTitle className="text-2xl text-gray-300 font-extrabold font-montserrat">Recovery
                                     phrase</DialogTitle>
-                                <button onClick={() => {onClose(); setShow(false);}}>
-                                    <XMarkIcon className="w-5 h-5 text-gray-400"/>
+                                <button onClick={() => {onClose();}}>
+                                    <XMarkIcon className="w-5 h-5 text-gray-400 cursor-pointer"/>
                                 </button>
                             </div>
                             <div className="flex flex-col items-center h-80 justify-center bg-gradient-to-br from-[#1c0740] to-[#af5505] mx-6 rounded-2xl p-6">
@@ -62,12 +66,12 @@ export const RecoveryModal: FC<RecoveryModalProps> = ({isOpen, onClose, recovery
                                     />
                                 </button>
 
-                                {show && (
-                                    <div className="grid grid-flow-col grid-rows-4 gap-3 pb-5 gap-x-10 mt-6">
-                                        {recoveryPhrase.map((word, index) => (
+                                {showRecovery && (
+                                    <div className="grid grid-flow-col grid-rows-4 gap-3 pb-5 lg:gap-x-10 mt-6">
+                                        {recoveryPhrase && recoveryPhrase.map((word, index) => (
                                             <div
                                                 key={index}
-                                                className="bg-black/20 px-5 py-3 rounded-lg text-gray-100 font-medium text-center text-sm min-w-[100px]"
+                                                className="bg-black/20 lg:px-5 px-4 py-3 rounded-lg text-gray-100 font-medium text-center text-sm min-w-[100px]"
                                             >
                                                 {index + 1}. {word}
                                             </div>

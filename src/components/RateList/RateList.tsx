@@ -22,9 +22,7 @@ export const TransactionRateDropdown = () => {
                         <ListboxOption
                             key={rate}
                             value={rate}
-                            className={({ active }) =>
-                                `cursor-pointer px-4 w-full py-2 ${active ? "bg-white/10" : ""}`
-                            }
+                            className="cursor-pointer px-4 w-full py-2 data-focus:bg-white/10"
                         >
                             {rate}
                         </ListboxOption>
