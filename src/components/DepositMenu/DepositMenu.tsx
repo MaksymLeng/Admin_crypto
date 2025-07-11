@@ -1,7 +1,26 @@
-import { Eye } from "lucide-react";
+import {useState} from "react";
+import type {Dispatch} from "redux";
+import {useDispatch, useSelector} from "react-redux";
+import { Eye, EyeOff } from "lucide-react";
+import type { RootState } from "../../Types/Types.tsx";
+import type { Action } from '../../Types/Types.tsx';
+import {setShow} from "../../actions";
 import Logo from '../../assets/N.svg'
+import {RecoveryModal} from "../RecoveryModal/RecoveryModal.tsx";
+
 
 const DepositMenu = () => {
+    const {showArr} = useSelector((state: RootState) => state);
+    const dispatch = useDispatch<Dispatch<Action>>();
+    const [isOpen, setIsOpen] = useState(false);
+
+    const onClickBtn = (id:number) => {
+        dispatch(setShow(id));
+        if(id) {
+            setIsOpen(!isOpen);
+        }
+    };
+
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-6 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
             {/* Левая карточка */}
@@ -17,7 +36,11 @@ const DepositMenu = () => {
                                     Banking System
                                 </div>
                             </div>
-                            <Eye/>
+                            <button onClick={() =>onClickBtn(0)}>
+                                {showArr[0]
+                                    ? <Eye className="hover:scale-103 hover:text-shadow-lg cursor-pointer"/>
+                                    : <EyeOff className="hover:scale-103 hover:text-shadow-lg cursor-pointer"/>}
+                            </button>
                         </div>
                         <div className="flex mx-auto gap-10 xl:gap-15">
                             <div className="text-2xl font-light opacity-70">ID:</div>
@@ -25,7 +48,7 @@ const DepositMenu = () => {
                         </div>
                     </div>
                 </div>
-
+                <RecoveryModal isOpen={isOpen} onClose={() => onClickBtn(1)}/>
                 <div className="space-y-8 py-15 text-lg font-semibold">
                     <div className="flex justify-between items-center">
                         <span className="text-xl font-bold">BALANCE:</span>
@@ -48,7 +71,7 @@ const DepositMenu = () => {
 
             {/* Правая часть */}
             <div className="relative bg-black/30 rounded-2xl py-6 lg:px-5 px-3 lg:w-[60%] w-[100%] shadow-md text-white flex flex-col justify-between">
-                <h2 className="absolute font-montserrat -top-7 left-1/2 lg:-left-0 -translate-x-1/2 lg:-translate-0 text-3xl lg:text-4xl opacity-80 font-extrabold text-center italic mb-6 tracking-wider">
+                <h2 className="absolute font-montserrat -top-7 left-1/2 lg:-left-0 lg:-right-0 -translate-x-1/2 lg:-translate-0 text-3xl lg:text-4xl opacity-80 font-extrabold text-center italic mb-6 tracking-wider">
                     DEPOSIT/WITHDRAW
                 </h2>
 
@@ -83,9 +106,11 @@ const DepositMenu = () => {
 
                     <div className="flex items-center justify-between">
                         <span className="font-bold text-xl">RECOVERY PHRASE:</span>
-                        <span className="text-xl">
-                            <Eye/>
-                        </span>
+                        <div className="flex">
+                            <button onClick={() => onClickBtn(1)}>
+                                {showArr[1] ? <Eye className="hover:scale-105 hover:shadow-2xl"/> : <EyeOff/>}
+                            </button>
+                        </div>
                     </div>
                 </div>
 

@@ -1,11 +1,19 @@
-import {store} from "../store";
+import store from "../store";
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>;
 
 export type Trade = {
     coin: string;
     change: string;
     cm: string;
     amount: string;
+};
+
+export type Action<T = any> = {
+    type: string;
+    payload?: T;
+}
+
+export type ModalState = {
+    showArr: boolean[];
 };

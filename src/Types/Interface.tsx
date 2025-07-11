@@ -5,3 +5,8 @@ export interface AppRoute {
     element: JSX.Element
     name: string
 }
+
+export interface RecoveryModalProps {
+    isOpen: boolean,
+    onClose: () => void
+}
