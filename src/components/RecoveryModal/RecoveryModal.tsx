@@ -14,7 +14,8 @@ import {Eye} from "lucide-react";
 
 
 export const RecoveryModal: FC<RecoveryModalProps> = ({isOpen, onClose}) => {
-    const [show, setShow] = useState(true);
+    const [show, setShow] = useState(false);
+
     const recoveryPhrase = [
         "moon",
         "cable",
@@ -29,6 +30,8 @@ export const RecoveryModal: FC<RecoveryModalProps> = ({isOpen, onClose}) => {
         "fortune",
         "border"
     ];
+
+    const onClickGlass = () => setShow(!show);
 
 
     return (
@@ -62,24 +65,32 @@ export const RecoveryModal: FC<RecoveryModalProps> = ({isOpen, onClose}) => {
                             <div className="flex justify-between items-center mb-6  pt-7 p-6 pb-7 rounded-t-3xl">
                                 <DialogTitle className="text-2xl text-gray-300 font-extrabold font-montserrat">Recovery
                                     phrase</DialogTitle>
-                                <button onClick={onClose}>
+                                <button onClick={() => {onClose(); setShow(false);}}>
                                     <XMarkIcon className="w-5 h-5 text-gray-400"/>
                                 </button>
                             </div>
-                            <div className="flex items-center justify-center bg-linear-130 to-[#af5505] from-[#1c0740] mx-6 rounded-2xl h-75">
-                                <button>
-                                <Eye size={40}
-                                     className="text-gray-500 hover:scale-103 hover:text-shadow-lg cursor-pointer"/>
+                            <div className="flex flex-col items-center h-80 justify-center bg-gradient-to-br from-[#1c0740] to-[#af5505] mx-6 rounded-2xl p-6">
+                                <button onClick={onClickGlass}>
+                                    <Eye
+                                        size={40}
+                                        className="text-gray-300 hover:scale-105 transition-transform hover:text-shadow-lg cursor-pointer"
+                                    />
                                 </button>
-                                {show
-                                    ? <div className="grid-cols-12">
-                                        {recoveryPhrase.map(phrase => {
-                                           return <span>{phrase}</span>;
-                                        })}
+
+                                {show && (
+                                    <div className="grid grid-flow-col grid-rows-4 gap-3 pb-5 gap-x-10 mt-6">
+                                        {recoveryPhrase.map((word, index) => (
+                                            <div
+                                                key={index}
+                                                className="bg-black/20 px-5 py-3 rounded-lg text-gray-100 font-medium text-center text-sm min-w-[100px]"
+                                            >
+                                                {index + 1}. {word}
+                                            </div>
+                                        ))}
                                     </div>
-                                    : null
-                                }
+                                )}
                             </div>
+
                         </div>
                     </DialogPanel>
                 </TransitionChild>

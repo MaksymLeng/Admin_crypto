@@ -38,8 +38,8 @@ const DepositMenu = () => {
                             </div>
                             <button onClick={() =>onClickBtn(0)}>
                                 {showArr[0]
-                                    ? <Eye className="hover:scale-103 hover:text-shadow-lg cursor-pointer"/>
-                                    : <EyeOff className="hover:scale-103 hover:text-shadow-lg cursor-pointer"/>}
+                                    ? <Eye className="text-gray-300 hover:scale-105 transition-transform hover:text-shadow-lg cursor-pointer"/>
+                                    : <EyeOff className="text-gray-300 hover:scale-105 transition-transform hover:text-shadow-lg cursor-pointer"/>}
                             </button>
                         </div>
                         <div className="flex mx-auto gap-10 xl:gap-15">
@@ -108,7 +108,10 @@ const DepositMenu = () => {
                         <span className="font-bold text-xl">RECOVERY PHRASE:</span>
                         <div className="flex">
                             <button onClick={() => onClickBtn(1)}>
-                                {showArr[1] ? <Eye className="hover:scale-105 hover:shadow-2xl"/> : <EyeOff/>}
+                                {showArr[1]
+                                    ? <Eye className="text-gray-300 hover:scale-105 transition-transform hover:text-shadow-lg cursor-pointer"/>
+                                    : <EyeOff className="text-gray-300 hover:scale-105 transition-transform hover:text-shadow-lg cursor-pointer"/>
+                                }
                             </button>
                         </div>
                     </div>
