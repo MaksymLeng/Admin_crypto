@@ -6,3 +6,10 @@ export const setShow = (id: number): Action<number> => {
        payload: id
    }
 }
+
+export const setRate = (rate: string): Action<string> => {
+    return {
+        type: 'SET_RATE',
+        payload: rate
+    }
+}

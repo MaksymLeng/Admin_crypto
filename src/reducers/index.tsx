@@ -2,6 +2,8 @@ import type {Action, ModalState} from '../Types/Types'
 
 const initialState:ModalState  = {
     showArr: [true, false],
+    rates: ["LOW", "MEDIUM", "HIGH"],
+    selectedRate: "LOW"
 }
 
 const reducer = (state = initialState, action: Action) => {
@@ -12,6 +14,11 @@ const reducer = (state = initialState, action: Action) => {
             return {
                 ...state,
                 showArr: newShowArr,
+            }
+        case 'SET_RATE':
+            return {
+                ...state,
+                selectedRate: action.payload,
             }
         default:
             return state;

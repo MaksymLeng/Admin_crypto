@@ -7,6 +7,8 @@ import type { Action } from '../../Types/Types.tsx';
 import {setShow} from "../../actions";
 import Logo from '../../assets/N.svg'
 import {RecoveryModal} from "../RecoveryModal/RecoveryModal.tsx";
+import {splitInHalf} from "../../Helpers/function.tsx";
+import { TransactionRateDropdown } from "../RateList/RateList.tsx";
 
 
 const DepositMenu = () => {
@@ -67,7 +69,12 @@ const DepositMenu = () => {
                         </div>
                         <div className="flex mx-auto gap-10 xl:gap-15">
                             <div className="text-2xl font-light opacity-70">ID:</div>
-                            <div className="text-2xl w-[120px] font-bold text-center">{showArr[0] ? User.id: '**** ****'}</div>
+                            <div className="text-2xl w-[120px] font-bold text-center">
+                                {showArr[0]
+                                    ? User.id
+                                    : User.id.replace(/\S/g, '*')
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -75,15 +82,19 @@ const DepositMenu = () => {
                 <div className="space-y-8 py-15 text-lg font-semibold">
                     <div className="flex justify-between items-center">
                         <span className="text-xl font-bold">BALANCE:</span>
-                        <span className="text-3xl">0$</span>
+                        <span className="text-3xl">
+                            {`${User.Balance}$`}
+                        </span>
                     </div>
                     <div className="flex justify-between items-center">
                         <span className="text-xl font-light opacity-50">AVAILABLE:</span>
-                        <span className="text-3xl">0$</span>
+                        <span className="text-3xl">
+                            {`${User.Available}$`}
+                        </span>
                     </div>
                     <div className="flex justify-between text-md font-light items-end">
                         <span className="text-left opacity-50">WITHDRAWAL<br/>DATE:</span>
-                        <span className=" font-bold text-white text-lg">27/12/2024</span>
+                        <span className=" font-bold text-white text-lg">{User.WithdrawalDate}</span>
                     </div>
                 </div>
 
@@ -101,30 +112,38 @@ const DepositMenu = () => {
                 <div className="text-sm space-y-5 pt-2">
                     <div className="flex justify-between items-center">
                         <span className="font-bold text-xl">OWNER ID:</span>
-                        <span className="font-bold text-xl lg:text-3xl px-4">0021 3157</span>
+                        <span className="font-bold text-xl lg:text-3xl px-4">{showArr[0]
+                            ? User.id
+                            : User.id.replace(/\S/g, '*')
+                        }</span>
                     </div>
 
                     <div className="flex justify-between items-center opacity-60">
                         <div className="font-light
                          text-left text-lg leading-none">DEPOSIT<br/>ADDRESS:</div>
                         <div className="break-all text-right">
-                            0x86C399b68B73dEbBf3f7<br/>B491755144461A9b9151
+                            {showArr[0]
+                                ? splitInHalf(User.DepositAddress)
+                                : splitInHalf(User.DepositAddress.replace(/\S/g, '*'))
+                            }
                         </div>
                     </div>
 
                     <div className="flex justify-between items-center opacity-60 ">
                         <div className="font-light leading-none text-lg text-left">WITHDRAWAL<br/>ADDRESS:</div>
                         <div className="break-all text-right">
-                            0x87D3a489bADCcC15f59B<br/>F055632DC63da7B07823
+                            {showArr[0]
+                                ? splitInHalf(User.WithdrawalAddress)
+                                : splitInHalf(User.WithdrawalAddress.replace(/\S/g, '*'))
+                            }
                         </div>
                     </div>
 
                     <div className="flex justify-between items-center opacity-60 py-5">
-                        <span className="font-light text-xl leading-none">TRANSACTION RATE:<br/> (DEFAULT)</span>
-                        <span className="uppercase text-xl font-light">
-                            LOW
-                            <span className="text-sm"> ▼</span>
+                        <span className="font-light text-xl leading-none">
+                            TRANSACTION RATE:<br /> (DEFAULT)
                         </span>
+                        <TransactionRateDropdown />
                     </div>
 
                     <div className="flex items-center justify-between">

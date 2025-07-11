@@ -15,7 +15,9 @@ export type Action<T = any> = {
 }
 
 export type ModalState = {
-    showArr: boolean[];
+    showArr: boolean[],
+    rates: string[],
+    selectedRate: string
 };
 
 export type UserType = {
