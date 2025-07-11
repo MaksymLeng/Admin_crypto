@@ -11,6 +11,7 @@ import {User} from '../../data/User.ts'
 import {splitInHalf} from "../../Helpers/function.tsx";
 import { TransactionRateDropdown } from "../RateList/RateList.tsx";
 import {ExtraModal} from "../Extramodal/ExtraModal.tsx";
+import {DepositModal} from "../DepositModal/DepositModal.tsx";
 
 
 const DepositMenu = () => {
@@ -36,6 +37,7 @@ const DepositMenu = () => {
             <ExtraModal isOpen={showArr[2]}
                         onClose={() => onClickShow(2)}/>
 
+            <DepositModal isOpen={showArr[3]} onClose={() => onClickShow(3)}/>
             <div className="relative bg-black/30 rounded-xl p-6 lg:w-[40%] w-[90%] shadow-md text-white flex flex-col justify-between">
                 {/* Верхняя карточка с ID */}
                 <div className=" absolute -top-12 inset-x-6 bg-linear-130 from-[#af5505] to-[#1c0740] rounded-xl p-4 mb-6 text-white">
@@ -85,7 +87,7 @@ const DepositMenu = () => {
                     </div>
                 </div>
 
-                <button className=" bg-white/20 text-white font-bold py-5 rounded-md cursor-pointer hover:shadow-lg">
+                <button className=" bg-white/20 text-white font-bold py-5 rounded-md cursor-pointer hover:shadow-lg" onClick={() => onClickShow(3)}>
                     <span className="opacity-80">DEPOSIT/WITHDRAW</span>
                 </button>
             </div>

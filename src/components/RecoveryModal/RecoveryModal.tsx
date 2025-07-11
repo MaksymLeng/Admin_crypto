@@ -52,7 +52,7 @@ export const RecoveryModal: FC<ModalProps> = ({isOpen, onClose, recoveryPhrase})
                         className="lg:w-[calc((100%-15rem)*0.6)] w-full h-[60%] max-w-full bg-[#1e1e1e]/40 text-white rounded-t-3xl shadow-lg border-t border-[#2e2e2e]">
                         <div className="flex flex-col lg:gap-20 gap-10">
                             <div className="flex justify-between items-center mb-6 pt-7 p-6 pb-7 rounded-t-3xl">
-                                <DialogTitle className="text-2xl text-gray-300 font-extrabold font-montserrat">Recovery
+                                <DialogTitle className="text-2xl text-gray-300 font-extrabold font-montserrat uppercase">Recovery
                                     phrase</DialogTitle>
                                 <button onClick={() => {onClose();}}>
                                     <XMarkIcon className="w-5 h-5 text-gray-400 cursor-pointer"/>
@@ -67,11 +67,11 @@ export const RecoveryModal: FC<ModalProps> = ({isOpen, onClose, recoveryPhrase})
                                 </button>
 
                                 {showRecovery && (
-                                    <div className="grid grid-flow-col grid-rows-4 gap-3 pb-5 lg:gap-x-10 mt-6">
+                                    <div className="grid grid-flow-col grid-rows-4 gap-3 pb-5 md:gap-x-10 mt-6">
                                         {recoveryPhrase && recoveryPhrase.map((word, index) => (
                                             <div
                                                 key={index}
-                                                className="bg-black/20 lg:px-5 px-4 py-3 rounded-lg text-gray-100 font-medium text-center text-sm min-w-[100px]"
+                                                className="bg-black/20 md:px-5 px-4 py-3 rounded-lg text-gray-100 font-medium text-center text-sm min-w-[100px]"
                                             >
                                                 {index + 1}. {word}
                                             </div>

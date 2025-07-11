@@ -1,7 +1,7 @@
 import type {Action, ModalState} from '../Types/Types'
 
 const initialState:ModalState  = {
-    showArr: [true, false, false],
+    showArr: [true, false, false, false],
     rates: ["LOW", "MEDIUM", "HIGH"],
     selectedRate: "LOW",
     showRecovery: false

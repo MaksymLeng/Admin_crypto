@@ -51,30 +51,30 @@ export const ExtraModal: FC<ModalProps> = ({isOpen, onClose}) => {
                                         <XMarkIcon className="w-5 h-5 text-gray-400 cursor-pointer"/>
                                     </button>
                                 </div>
-                                <div className="w-full lg:max-w-xl max-w-[23rem] mx-auto h-95 lg:h-110 flex flex-col gap-7 lg:gap-12 bg-gradient-to-br from-[#1c0740] to-[#af5505] p-6 rounded-2xl">
+                                <div className="w-full md:max-w-xl max-w-[23rem] mx-auto h-95 lg:h-110 flex flex-col gap-7 lg:gap-12 bg-gradient-to-br from-[#1c0740] to-[#af5505] p-6 rounded-2xl">
                                         {/* Toggle: Show Recovery Phrase */}
                                         <div className="flex justify-between items-center">
-                                            <span className="text-lg font-medium">Show Recovery Phrase</span>
+                                            <span className="text-lg font-light uppercase">Show Recovery Phrase</span>
                                             <label className="relative inline-flex items-center cursor-pointer">
                                                 <input type="checkbox" className="sr-only peer" onChange={() => dispatch(setRecovery())}/>
                                                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-purple-500 rounded-full peer peer-checked:bg-purple-600 transition-all"/>
-                                                <span className="ml-2 text-sm text-gray-400">Enable</span>
+                                                <span className="ml-2 text-sm text-gray-400 uppercase">Enable</span>
                                             </label>
                                         </div>
 
                                         {/* Toggle: Enable Notifications */}
                                         <div className="flex justify-between items-center">
-                                            <span className="text-lg font-medium">Enable Notifications</span>
+                                            <span className="text-lg font-light uppercase">Enable Notifications</span>
                                             <label className="relative inline-flex items-center cursor-pointer">
                                                 <input type="checkbox" className="sr-only peer" />
                                                 <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-500 transition-all" />
-                                                <span className="ml-2 text-sm text-gray-400">On</span>
+                                                <span className="ml-2 text-sm text-gray-400">ON</span>
                                             </label>
                                         </div>
 
                                         {/* Input: Custom Nickname */}
                                         <div className="flex flex-col gap-3">
-                                            <label className="text-lg mb-1">Custom Nickname</label>
+                                            <label className="text-lg mb-1 uppercase font-light">Custom Nickname</label>
                                             <input
                                                 type="text"
                                                 placeholder="Enter nickname"
@@ -84,7 +84,7 @@ export const ExtraModal: FC<ModalProps> = ({isOpen, onClose}) => {
 
                                         {/* Input: API Key */}
                                         <div className="flex flex-col gap-3">
-                                            <label className="text-lg mb-1">API Key</label>
+                                            <label className="text-lg mb-1 uppercase font-light">API Key</label>
                                             <input
                                                 type="text"
                                                 placeholder="Paste your key"
