@@ -17,3 +17,13 @@ export type Action<T = any> = {
 export type ModalState = {
     showArr: boolean[];
 };
+
+export type UserType = {
+    id: string;
+    Balance: number;
+    Available: number;
+    DepositAddress: string;
+    WithdrawalAddress: string;
+    WithdrawalDate: string; // можно заменить на Date, если парсишь дату
+    RecoveryPhrase: string[];
+};

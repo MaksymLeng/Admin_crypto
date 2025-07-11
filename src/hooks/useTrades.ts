@@ -9,7 +9,7 @@ export const useTrades = () => {
         const timer = setTimeout(() => {
             setData(trades);
             setLoading(false);
-        }, 300); // имитация запроса
+        }, 100); // имитация запроса
 
         return () => clearTimeout(timer);
     }, []);

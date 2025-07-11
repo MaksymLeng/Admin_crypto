@@ -2,7 +2,7 @@ import {useState} from "react";
 import type {Dispatch} from "redux";
 import {useDispatch, useSelector} from "react-redux";
 import { Eye, EyeOff } from "lucide-react";
-import type { RootState } from "../../Types/Types.tsx";
+import type {RootState, UserType} from "../../Types/Types.tsx";
 import type { Action } from '../../Types/Types.tsx';
 import {setShow} from "../../actions";
 import Logo from '../../assets/N.svg'
@@ -20,6 +20,29 @@ const DepositMenu = () => {
             setIsOpen(!isOpen);
         }
     };
+
+    const User: UserType = {
+        id: '0021 3157',
+        Balance: 0,
+        Available: 0,
+        DepositAddress: '0x86C399b68B73dEbBf3f7B491755144461A9b9151',
+        WithdrawalAddress: '0x87D3a489bADCcC15f59BF055632DC63da7B07823',
+        WithdrawalDate: '11/07/2025',
+        RecoveryPhrase: [
+            "moon",
+            "cable",
+            "genius",
+            "tiger",
+            "surface",
+            "vanish",
+            "cradle",
+            "glory",
+            "siren",
+            "manual",
+            "fortune",
+            "border"
+        ]
+    }
 
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-6 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
@@ -44,11 +67,11 @@ const DepositMenu = () => {
                         </div>
                         <div className="flex mx-auto gap-10 xl:gap-15">
                             <div className="text-2xl font-light opacity-70">ID:</div>
-                            <div className="text-2xl font-bold">0021 3157</div>
+                            <div className="text-2xl w-[120px] font-bold text-center">{showArr[0] ? User.id: '**** ****'}</div>
                         </div>
                     </div>
                 </div>
-                <RecoveryModal isOpen={isOpen} onClose={() => onClickBtn(1)}/>
+                <RecoveryModal isOpen={isOpen} onClose={() => onClickBtn(1)} recoveryPhrase={User.RecoveryPhrase}/>
                 <div className="space-y-8 py-15 text-lg font-semibold">
                     <div className="flex justify-between items-center">
                         <span className="text-xl font-bold">BALANCE:</span>
@@ -71,7 +94,7 @@ const DepositMenu = () => {
 
             {/* Правая часть */}
             <div className="relative bg-black/30 rounded-2xl py-6 lg:px-5 px-3 lg:w-[60%] w-[100%] shadow-md text-white flex flex-col justify-between">
-                <h2 className="absolute font-montserrat -top-7 left-1/2 lg:-left-0 lg:-right-0 -translate-x-1/2 lg:-translate-0 text-3xl lg:text-4xl opacity-80 font-extrabold text-center italic mb-6 tracking-wider">
+                <h2 className="absolute font-montserrat -top-7 left-1/2 lg:-left-0 lg:-right-0 -translate-x-1/2 lg:-translate-0 text-3xl lg:text-5xl opacity-80 font-extrabold text-center italic mb-6 tracking-wider">
                     DEPOSIT/WITHDRAW
                 </h2>
 

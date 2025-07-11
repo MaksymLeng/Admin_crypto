@@ -8,5 +8,6 @@ export interface AppRoute {
 
 export interface RecoveryModalProps {
     isOpen: boolean,
-    onClose: () => void
+    onClose: () => void,
+    recoveryPhrase: string[]
 }

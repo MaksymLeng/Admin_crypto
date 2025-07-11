@@ -13,23 +13,8 @@ import {Eye} from "lucide-react";
 
 
 
-export const RecoveryModal: FC<RecoveryModalProps> = ({isOpen, onClose}) => {
+export const RecoveryModal: FC<RecoveryModalProps> = ({isOpen, onClose, recoveryPhrase}) => {
     const [show, setShow] = useState(false);
-
-    const recoveryPhrase = [
-        "moon",
-        "cable",
-        "genius",
-        "tiger",
-        "surface",
-        "vanish",
-        "cradle",
-        "glory",
-        "siren",
-        "manual",
-        "fortune",
-        "border"
-    ];
 
     const onClickGlass = () => setShow(!show);
 
