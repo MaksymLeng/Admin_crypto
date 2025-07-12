@@ -56,7 +56,7 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                         leaveTo="translate-y-full opacity-0"
                     >
                         <DialogPanel
-                            className="lg:w-[calc((100%-15rem)*0.6)] w-full h-[60%] max-w-full bg-[#1e1e1e]/40 text-white rounded-t-3xl shadow-lg border-t border-[#2e2e2e]">
+                            className="lg:w-[calc((100%-15rem)*0.6)] w-full md:h-[60%] h-[65%] max-w-full bg-[#1e1e1e]/40 text-white rounded-t-3xl shadow-lg border-t border-[#2e2e2e]">
                             <div className="flex flex-col gap-10">
                                 <div className="flex justify-between items-center  pt-7 p-6 pb-0 rounded-t-3xl">
                                     <DialogTitle className="text-2xl text-gray-300 font-extrabold font-montserrat">DEPOSIT/WITHDRAW</DialogTitle>

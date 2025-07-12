@@ -1,16 +1,27 @@
 import { useTrades } from "../../hooks/useTrades";
 import type {Trade} from "../../Types/Types.tsx";
+import {useEffect, useState} from "react";
 
 const Trading = () => {
     const { data: trades, loading } = useTrades();
+    const [isMobile, setIsMobile] = useState(false);
 
     const bestTrade = trades.reduce(
         (max, t) => (t.rawAmount > max.rawAmount ? t : max),
         trades[0] || { rawAmount: 0 }
     );
 
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
+
+
     return (
-        <div className="relative md:h-[100%] h-screen w-full text-white px-4 py-16 rounded-2xl">
+        <div className="relative md:h-[100%] h-screen w-full text-white md:px-4 py-16 rounded-2xl">
             {/* LIVE TRADES LABEL */}
             <div className="relative  bg-linear-150 from-[#340575] to-[#340575]/30 py-8 rounded-2xl">
                 <h1 className="absolute lg:top-7 top-9 left-1/2 -translate-x-1/2 lg:text-6xl text-5xl tracking-wider font-bold  text-white z-10 whitespace-nowrap text-shadow-lg italic">
@@ -24,19 +35,24 @@ const Trading = () => {
                     RECENT TRADES
                 </div>
 
-                {/* RECENT TRADES */}
-                <div className="relative h-[400px] overflow-hidden w-full lg:w-2/3 bg-[#510992]/70 rounded-xl mx-auto pt-10 px-6">
-
-                    {/* Fade сверху */}
+                {/* RECENT TRADES LIST */}
+                <div className="relative h-[400px] w-full lg:w-2/3 bg-[#510992]/70 rounded-xl mx-auto pt-10 lg:px-6 px-2 overflow-hidden">
                     <div
                         className="pointer-events-none absolute top-0 left-0 right-0 h-10 z-20"
                         style={{
-                            background: 'linear-gradient(to bottom, rgba(20,0,50,1), rgba(20,0,50,0))',
+                            background:
+                                "linear-gradient(to bottom, rgba(20,0,50,1), rgba(20,0,50,0))",
                         }}
                     />
 
-                    {/* Лента */}
-                    <div className="absolute top-0 left-0 w-full animate-scroll" >
+                    {/* Auto scroll on desktop, manual on mobile */}
+                    <div
+                        className={`${
+                            isMobile
+                                ? "overflow-y-auto max-h-[340px] pr-2"
+                                : "absolute top-0 left-0 w-full animate-scroll"
+                        }`}
+                    >
                         <div>
                             <ul className="space-y-3">
                                 {trades.map((t, i) => (
@@ -44,13 +60,16 @@ const Trading = () => {
                                 ))}
                             </ul>
                         </div>
-                        <div>
-                            <ul className="space-y-3">
-                                {trades.map((t, i) => (
-                                    <TradeItem key={`dup-${i}`} trade={t} />
-                                ))}
-                            </ul>
-                        </div>
+
+                        {!isMobile && (
+                            <div>
+                                <ul className="space-y-3">
+                                    {trades.map((t, i) => (
+                                        <TradeItem key={`dup-${i}`} trade={t} />
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                     </div>
                 </div>
 
