@@ -25,14 +25,11 @@ export type UserType = {
     id: string;
     name: string;
     avatar?: string;
-    xp: number;
-    xpGoal: number;
-    level: number;
+    depositSum: number;
     referralCount: number;
     Balance: number;
     Available: number;
     DepositAddress: string;
     WithdrawalAddress: string;
     WithdrawalDate: string;
-    RecoveryPhrase: string[];
 };

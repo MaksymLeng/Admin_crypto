@@ -24,14 +24,14 @@ const Trading = () => {
         <div className="relative md:h-[100%] h-screen w-full text-white md:px-4 py-16 rounded-2xl">
             {/* LIVE TRADES LABEL */}
             <div className="relative  bg-linear-150 from-[#340575] to-[#340575]/30 py-8 rounded-2xl">
-                <h1 className="absolute lg:top-7 top-9 left-1/2 -translate-x-1/2 lg:text-6xl text-5xl tracking-wider font-bold  text-white z-10 whitespace-nowrap text-shadow-lg italic">
+                <h1 className="absolute lg:top-7 top-9 left-1/2 -translate-x-1/2 lg:text-6xl text-5xl tracking-wider font-bold text-white z-10 whitespace-nowrap text-shadow-lg italic">
                     LIVE TRADES
                 </h1>
             </div>
 
             {/* CONTENT WRAPPER */}
             <div className="flex flex-col gap-10 justify-center items-start w-full max-w-6xl mx-auto mt-20">
-                <div className="absolute top-46 left-2 md:left-1/4 lg:left-46 xl:left-1/3 px-4 tracking-wide py-1 text-white font-bold text-3xl z-21">
+                <div className="absolute top-46 left-0 md:left-1/4 lg:left-46 xl:left-1/3 px-4 tracking-wide py-1 text-white font-bold text-3xl z-21">
                     RECENT TRADES
                 </div>
 

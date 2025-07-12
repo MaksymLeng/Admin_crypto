@@ -4,8 +4,8 @@ import Logo from '../../assets/N.svg'
 
 const NavMenu = () => {
     return (
-        <aside className="fixed top-0 left-0 lg:h-full w-full lg:w-60 bg-black/30 text-white flex  flex-row lg:flex-col items-center py-4 lg:py-6 gap-2 lg:gap-0 px-1 lg:px-5 z-50 backdrop-blur-sm">
-            <img src={Logo} alt="Logo" className="w-12 h-12 lg:mb-6" />
+        <aside className="fixed top-0 left-0 lg:h-full w-full lg:w-60 bg-black/30 text-white flex  flex-row lg:flex-col items-center py-4 lg:py-6 gap-4 lg:gap-0 px-2 lg:px-5 z-50 backdrop-blur-sm">
+            <img src={Logo} alt="Logo" className="w-14 h-14 lg:mb-6" />
 
             <div className="w-full">
                 <hr className="text-[#B886F9] opacity-40 shadow-lg mb-4 lg:mb-6" />
@@ -18,7 +18,7 @@ const NavMenu = () => {
                                     to={path}
                                     className={({ isActive }) =>
                                         [
-                                            'block italic text-lg text-white',
+                                            'block italic text-lg text-white font-sans',
                                             isActive ? 'font-extrabold' : 'font-light opacity-30 hover:opacity-100',
                                             isDeposit ? 'leading-none' : '',
                                         ].join(' ')
