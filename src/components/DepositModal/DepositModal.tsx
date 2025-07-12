@@ -1,4 +1,7 @@
-import {type FC, useState} from "react";
+import {type MouseEvent, type FC, useState} from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from 'zod';
 import {
     Dialog,
     DialogPanel,
@@ -9,26 +12,47 @@ import {
 import { Fragment } from 'react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import type {ModalProps} from "../../Types/Interface.tsx";
-import type {MouseEvent} from "react";
 
+
+export const depositSchema = z.object({
+    amount: z
+        .string()
+        .regex(/^\d+(\.\d{1,2})?$/, "Only numbers allowed")
+        .min(1, "Amount is required"),
+});
+
+export const withdrawSchema = z.object({
+    wallet: z.string().min(8, "Wallet address too short"),
+});
+
+type DepositValues = z.infer<typeof depositSchema>;
+type WithdrawValues = z.infer<typeof withdrawSchema>;
 
 export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
     const [active, setActive] = useState('Deposit');
 
+    const schema = active === "Deposit" ? depositSchema : withdrawSchema;
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset,
+    } = useForm<DepositValues | WithdrawValues>({
+        resolver: zodResolver(schema),
+        mode: "onSubmit",
+    });
+
     const onActiveMode = (e: MouseEvent) => {
         const value = (e.target as HTMLButtonElement).value;
-        
-        switch (value) {
-            case 'Deposit':
-                setActive('Deposit');
-                break;
-            case 'Withdraw':
-                setActive('Withdraw');
-                break;
-            default:
-                setActive('');
-        }
-    }
+        setActive(value === "Deposit" ? "Deposit" : "Withdraw");
+    };
+
+    const onSubmit = (data: DepositValues | WithdrawValues) => {
+        console.log("SUBMIT", data);
+        reset();
+        // можно дальше обрабатывать
+    };
 
     return (
         <Transition show={isOpen} as={Fragment}>
@@ -67,7 +91,7 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                                 <div className="w-full md:max-w-xl max-w-[23rem] mx-auto h-95 lg:h-110 flex flex-col gap-7 lg:gap-12 bg-gradient-to-br justify-between from-[#1c0740] to-[#af5505] p-6 rounded-2xl">
                                     <div className="flex justify-start">
                                         <button
-                                            className={`p-4 text-lg rounded-xl font-bold shadow-lg cursor-pointer transition ${
+                                            className={`p-4 text-lg rounded-xl font-bold shadow-lg cursor-pointer transition  ${
                                                 active === 'Deposit'
                                                     ? 'bg-[#af5505]/30 text-gray-500 cursor-not-allowed'
                                                     : 'bg-[#af5505]/70 text-white hover:bg-[#af5505]/90'
@@ -79,34 +103,38 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                                             DEPOSIT
                                         </button>
                                     </div>
-                                    {active === 'Deposit' && (
-                                        <div className="flex-grow flex items-center justify-center text-white text-lg">
-                                            <div className="flex gap-3">
+                                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+                                        {active === "Deposit" && (
+                                            <div className="flex flex-col gap-2">
                                                 <input
                                                     type="text"
-                                                    placeholder="amount"
-                                                    className="bg-[#1e1e1e]/80 border border-gray-600 rounded-md px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 lg:w-100"
+                                                    placeholder="Amount"
+                                                    {...register("amount")}
+                                                    className="input"
                                                 />
-                                                <button className="p-4 text-lg bg-green-800/70 shadow-lg rounded-xl font-bold cursor-pointer">
-                                                    Deposit
-                                                </button>
+                                                {"amount" in errors && errors.amount && <p className="text-red-500">{errors.amount.message}</p>}
                                             </div>
-                                        </div>
-                                    )}
-                                    {active === 'Withdraw' && (
-                                        <div className="flex-grow flex items-center justify-center text-white text-lg">
-                                            <div className="flex gap-3">
+                                        )}
+
+                                        {active === "Withdraw" && (
+                                            <div className="flex flex-col gap-2">
                                                 <input
                                                     type="text"
                                                     placeholder="Wallet"
-                                                    className="bg-[#1e1e1e]/80 border border-gray-600 rounded-md px-3 py-2 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 lg:w-100"
+                                                    {...register("wallet")}
+                                                    className="input"
                                                 />
-                                                <button className="p-4 text-lg bg-red-800/70 shadow-lg rounded-xl font-bold cursor-pointer">
-                                                    Withdraw
-                                                </button>
+                                                {"wallet" in errors && errors.wallet && <p className="text-red-500">{errors.wallet.message}</p>}
                                             </div>
-                                        </div>
-                                    )}
+                                        )}
+
+                                        <button
+                                            type="submit"
+                                            className="bg-purple-700 text-white px-4 py-2 rounded-xl hover:bg-purple-800 transition"
+                                        >
+                                            Submit
+                                        </button>
+                                    </form>
                                     <div className="flex justify-end">
                                         <button
                                             className={`p-4 text-lg rounded-xl font-bold shadow-lg cursor-pointer transition ${
