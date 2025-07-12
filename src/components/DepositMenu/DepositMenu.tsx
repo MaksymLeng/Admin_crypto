@@ -7,7 +7,7 @@ import type { Action } from '../../Types/Types.tsx';
 import {setShow} from "../../actions";
 import Logo from '../../assets/N.svg'
 import {RecoveryModal} from "../RecoveryModal/RecoveryModal.tsx";
-import {User} from '../../data/User.ts'
+import {RecoveryPhrase, User} from '../../data/User.ts'
 import {splitInHalf} from "../../Helpers/function.tsx";
 import { TransactionRateDropdown } from "../RateList/RateList.tsx";
 import {ExtraModal} from "../Extramodal/ExtraModal.tsx";
@@ -32,7 +32,7 @@ const DepositMenu = () => {
             <RecoveryModal
                 isOpen={isOpen}
                 onClose={() => onClickShow(1)}
-                recoveryPhrase={User.RecoveryPhrase}/>
+                recoveryPhrase={RecoveryPhrase}/>
 
             <ExtraModal isOpen={showArr[2]}
                         onClose={() => onClickShow(2)}/>

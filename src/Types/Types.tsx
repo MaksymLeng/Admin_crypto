@@ -23,10 +23,13 @@ export type ModalState = {
 
 export type UserType = {
     id: string;
+    name: string;
+    avatar?: string;
+    depositSum: number;
+    referralCount: number;
     Balance: number;
     Available: number;
     DepositAddress: string;
     WithdrawalAddress: string;
-    WithdrawalDate: string; // можно заменить на Date, если парсишь дату
-    RecoveryPhrase: string[];
+    WithdrawalDate: string;
 };

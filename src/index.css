@@ -17,7 +17,7 @@
 
 @theme {
   --font-montserrat: 'Montserrat';
-  --animate-scroll: scroll 30s linear infinite;
+  --animate-scroll: scroll 60s linear infinite;
 }
 
 @keyframes scroll {
