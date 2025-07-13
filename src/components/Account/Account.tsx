@@ -1,7 +1,9 @@
 import {User} from "../../data/User.ts";
 import {useLeveling} from "../../hooks/useLeveling.ts";
 import { Star, Medal, Trophy } from "lucide-react";
-import { type JSX } from "react";
+import {type JSX, useEffect, useState} from "react";
+import {getTelegramUser} from "../../hooks/useTelegramUser.ts";
+import type {TelegramUser} from "../../Types/Types.tsx";
 
 
 export const getLevelIcon = (level: number): JSX.Element => {
@@ -12,6 +14,14 @@ export const getLevelIcon = (level: number): JSX.Element => {
 
 const Account = () => {
     const { level, totalXp, progressPercent, xpGoal} = useLeveling(User.depositSum);
+    const [user, setUser] = useState<TelegramUser | null>(null);
+
+    useEffect(() => {
+        const tgUser = getTelegramUser();
+        if(tgUser) {
+            setUser(tgUser);
+        }
+    }, []);
 
     return (
         <>
@@ -20,12 +30,14 @@ const Account = () => {
                     {/* Аватарка и ник */}
                     <div className="relative flex flex-col items-center mt-25">
                         <div className="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg">
-                            {User?.name[0].toUpperCase()}
+                            {user?
+                                user.username ? user?.username[0].toUpperCase() : '?'
+                                :User?.name[0].toUpperCase()}
                         </div>
                         <div className="absolute top-11 -right-0 bg-[#d2a679] text-white px-1 py-1 text-xs rounded-full font-bold border-2 border-black">
                             {getLevelIcon(level)}
                         </div>
-                        <h2 className="text-2xl font-bold mt-2 text-transparent bg-clip-text bg-gradient-to-br from-gray-100 to-purple-600">{User?.name}</h2>
+                        <h2 className="text-2xl font-bold mt-2 text-transparent bg-clip-text bg-gradient-to-br from-gray-100 to-purple-600">{user ? user?.username : User?.name}</h2>
                     </div>
 
                     {/* Прогрессбар */}
