@@ -10,7 +10,7 @@ import {
     TransitionChild
 } from '@headlessui/react'
 import { Fragment } from 'react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, ArrowUpIcon, PlusIcon } from '@heroicons/react/24/outline'
 import type {ModalProps} from "../../Types/Interface.tsx";
 
 
@@ -84,7 +84,7 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                             <div className="flex flex-col gap-10">
                                 <div className="flex justify-between items-center  pt-7 p-6 pb-0 rounded-t-3xl">
                                     <DialogTitle className="text-2xl text-gray-300 font-extrabold font-montserrat">DEPOSIT/WITHDRAW</DialogTitle>
-                                    <button onClick={() => {onClose();}}>
+                                    <button onClick={() => {onClose()}}>
                                         <XMarkIcon className="w-5 h-5 text-gray-400 cursor-pointer"/>
                                     </button>
                                 </div>
@@ -98,9 +98,11 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                                             }`}
                                             value="Deposit"
                                             onClick={(e) => onActiveMode(e)}
-                                            disabled={active === 'Deposit'}
                                         >
-                                            DEPOSIT
+                                            <div className="flex justify-center items-center gap-2 pointer-events-none">
+                                                <div>DEPOSIT</div>
+                                                <PlusIcon className="w-6 h-6 text-[#1c0740] cursor-pointer"></PlusIcon>
+                                            </div>
                                         </button>
                                     </div>
                                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
@@ -144,9 +146,11 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                                             }`}
                                             value="Withdraw"
                                             onClick={(e) => onActiveMode(e)}
-                                            disabled={active === 'Withdraw'}
                                         >
-                                            WITHDRAW
+                                            <div className="flex justify-center items-center gap-2">
+                                                <div>WITHDRAW</div>
+                                                <ArrowUpIcon className="w-6 h-6 text-[#af5505] cursor-pointer"></ArrowUpIcon>
+                                            </div>
                                         </button>
                                     </div>
                                 </div>

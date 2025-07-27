@@ -29,8 +29,6 @@ export type UserType = {
     referralCount: number;
     Balance: number;
     Available: number;
-    DepositAddress: string;
-    WithdrawalAddress: string;
     WithdrawalDate: string;
 };
 

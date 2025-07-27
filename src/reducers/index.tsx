@@ -1,34 +1,8 @@
-import type {Action, ModalState} from '../Types/Types'
+import { combineReducers } from '@reduxjs/toolkit';
+import modalReducer from './modalSlice';
 
-const initialState:ModalState  = {
-    showArr: [true, false, false, false],
-    rates: ["LOW", "MEDIUM", "HIGH"],
-    selectedRate: "LOW",
-    showRecovery: false
-}
+const rootReducer = combineReducers({
+    modal: modalReducer
+});
 
-const reducer = (state = initialState, action: Action) => {
-    switch (action.type) {
-        case 'SET_SHOW':
-            let newShowArr = state.showArr;
-            newShowArr[action.payload] = !newShowArr[action.payload];
-            return {
-                ...state,
-                showArr: newShowArr,
-            }
-        case 'SET_RATE':
-            return {
-                ...state,
-                selectedRate: action.payload,
-            }
-        case 'SET_RECOVERY':
-            return {
-                ...state,
-                showRecovery: !state.showRecovery,
-            }
-        default:
-            return state;
-    }
-}
-
-export default reducer
+export default rootReducer;

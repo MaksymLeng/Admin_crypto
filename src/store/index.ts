@@ -1,9 +1,20 @@
-import { createStore } from 'redux'
+import {configureStore, type Middleware} from "@reduxjs/toolkit";
 import reducer from "../reducers";
 
+const stringMiddleware: Middleware = () => (next) => (action) => {
+    if(typeof action === 'string') {
+        return next({
+            type: action
+        });
+    }
+    return next(action);
+}
 
-// @ts-ignore
-const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const store = configureStore({
+    reducer,
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(stringMiddleware),
+    devTools: process.env.NODE_ENV !== "production",
+});
 
 export default store;
 
