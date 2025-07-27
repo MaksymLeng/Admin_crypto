@@ -7,6 +7,7 @@ import {setShow} from '../../reducers/modalSlice.ts';
 import Logo from '../../assets/N.svg'
 import {User} from '../../data/User.ts'
 import {DepositModal} from "../DepositModal/DepositModal.tsx";
+import {ArrowUpIcon, PlusIcon} from "@heroicons/react/24/outline";
 
 
 const DepositMenu = () => {
@@ -20,7 +21,7 @@ const DepositMenu = () => {
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-10 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
             <DepositModal isOpen={showArr[1]} onClose={() => onClickShow(1)}/>
-            <div className="relative bg-black/30 rounded-xl p-6 lg:w-[65%] w-[90%] shadow-md text-white flex flex-col justify-between">
+            <div className="relative bg-black/30 rounded-xl p-6 lg:w-[65%] w-[100%] shadow-md text-white flex flex-col justify-between">
                 {/* Верхняя карточка с ID */}
                 <div className=" absolute -top-12 inset-x-6 bg-linear-130 from-[#af5505] to-[#1c0740] rounded-xl p-4 mb-6 text-white">
                     <div className="flex flex-col gap-3">
@@ -68,10 +69,20 @@ const DepositMenu = () => {
                         <span className=" font-bold text-white text-lg">{User.WithdrawalDate}</span>
                     </div>
                 </div>
-
-                <button className=" bg-white/20 text-white font-bold py-5 rounded-md cursor-pointer hover:shadow-lg" onClick={() => onClickShow(1)}>
-                    <span className="opacity-80">DEPOSIT/WITHDRAW</span>
-                </button>
+                <div className="grid grid-cols-2 gap-4">
+                    <button className="bg-white text-white px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg" onClick={() => onClickShow(1)}>
+                        <div className="w-full flex justify-center items-center gap-1 pointer-events-none">
+                            <div className="text-black">DEPOSIT</div>
+                            <PlusIcon className="w-6 h-6 text-[#1c0740] cursor-pointer"></PlusIcon>
+                        </div>
+                    </button>
+                    <button className="bg-white/20 text-white px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg" onClick={() => onClickShow(2)}>
+                        <div className="w-full flex justify-center items-center gap-1 pointer-events-none">
+                            <div className="opacity-80">WITHDRAW</div>
+                            <ArrowUpIcon className="w-6 h-6 text-white cursor-pointer"></ArrowUpIcon>
+                        </div>
+                    </button>
+                </div>
             </div>
         </div>
     )

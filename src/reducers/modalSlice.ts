@@ -1,14 +1,8 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-
-interface ModalState {
-    showArr: boolean[];
-    rates: string[];
-    selectedRate: string;
-    showRecovery: boolean;
-}
+import type {ModalState} from "../Types/Types.tsx";
 
 const initialState: ModalState = {
-    showArr: [true, false],
+    showArr: [true, false,false],
     rates: ["LOW", "MEDIUM", "HIGH"],
     selectedRate: "LOW",
     showRecovery: false
