@@ -90,7 +90,7 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                                         </div>
                                     </div>
 
-                                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center items-center gap-4 text-5xl text-white font-bold">
+                                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center items-center gap-6 text-5xl text-white font-bold">
                                         <div className="flex gap-1 justify-center items-center">
                                               <span>
                                                 <input
