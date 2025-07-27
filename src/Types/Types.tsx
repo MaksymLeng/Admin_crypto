@@ -16,14 +16,11 @@ export type Action<T = any> = {
 
 export type ModalState = {
     showArr: boolean[],
-    rates: string[],
-    selectedRate: string,
-    showRecovery: boolean,
 };
 
 export type UserType = {
     id: string;
-    name: string;
+    username: string;
     avatar?: string;
     depositSum: number;
     referralCount: number;

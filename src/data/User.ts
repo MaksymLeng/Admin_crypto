@@ -2,7 +2,7 @@ import type {UserType} from "../Types/Types.tsx";
 
 export const User: UserType = {
     id: '0021 3157',
-    name: 'Ivan24',
+    username: 'Ivan24',
     referralCount: 0,
     depositSum: 0,
     Balance: 0,

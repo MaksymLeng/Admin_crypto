@@ -8,11 +8,16 @@ import Logo from '../../assets/N.svg'
 import {User} from '../../data/User.ts'
 import {DepositModal} from "../DepositModal/DepositModal.tsx";
 import {ArrowUpIcon, PlusIcon} from "@heroicons/react/24/outline";
+import {useTelegramUser} from "../../hooks/useTelegramUser.ts";
 
 
 const DepositMenu = () => {
     const showArr= useSelector((state: RootState) => state.modal.showArr);
     const dispatch = useDispatch<Dispatch<Action>>();
+    const user  = useTelegramUser();
+    const id = user?.id?.toString() ?? User.id.toString();
+    const masked = id.replace(/\S/g, '*');
+
 
     const onClickShow = (id:number) => {
         dispatch(setShow(id));
@@ -42,10 +47,7 @@ const DepositMenu = () => {
                         <div className="flex mx-auto gap-10 xl:gap-15">
                             <div className="text-2xl font-light opacity-70">ID:</div>
                             <div className="text-2xl w-[120px] font-bold text-center">
-                                {showArr[0]
-                                    ? User.id
-                                    : User.id.replace(/\S/g, '*')
-                                }
+                                {showArr[0] ? id : masked}
                             </div>
                         </div>
                     </div>

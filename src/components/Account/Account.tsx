@@ -1,17 +1,20 @@
 import {User} from "../../data/User.ts";
 import {useLeveling} from "../../hooks/useLeveling.ts";
+import { useTelegramUser } from "../../hooks/useTelegramUser.ts";
 import { Star, Medal, Trophy } from "lucide-react";
 import { type JSX } from "react";
 
 
-export const getLevelIcon = (level: number): JSX.Element => {
-    if (level <= 2) return <Star size={20} className="text-yellow-400 mx-auto w-4 h-4" />;
-    if (level <= 5) return <Medal size={20} className="text-orange-500 mx-auto w-4 h-4" />;
-    return <Trophy size={20} className="text-purple-600 mx-auto w-4 h-4" />;
-};
-
 const Account = () => {
+    const user  = useTelegramUser();
     const { level, totalXp, progressPercent, xpGoal} = useLeveling(User.depositSum);
+
+    const getLevelIcon = (level: number): JSX.Element => {
+        if (level <= 2) return <Star size={20} className="text-yellow-400 mx-auto w-4 h-4" />;
+        if (level <= 5) return <Medal size={20} className="text-orange-500 mx-auto w-4 h-4" />;
+        return <Trophy size={20} className="text-purple-600 mx-auto w-4 h-4" />;
+    };
+
 
     return (
         <>
@@ -20,12 +23,18 @@ const Account = () => {
                     {/* Аватарка и ник */}
                     <div className="relative flex flex-col items-center mt-25">
                         <div className="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg">
-                            {User?.name[0].toUpperCase()}
+                            {user?.username
+                                ? user.username[0].toUpperCase()
+                                : User?.username?.[0]?.toUpperCase() ?? "?"}
                         </div>
                         <div className="absolute top-11 -right-0 bg-[#d2a679] text-white px-1 py-1 text-xs rounded-full font-bold border-2 border-black">
                             {getLevelIcon(level)}
                         </div>
-                        <h2 className="text-2xl font-bold mt-2 text-transparent bg-clip-text bg-gradient-to-br from-gray-100 to-purple-600">{User?.name}</h2>
+                        <h2 className="text-2xl font-bold mt-2 text-transparent bg-clip-text bg-gradient-to-br from-gray-100 to-purple-600">
+                            {user ?
+                             user.username
+                            :User?.username}
+                        </h2>
                     </div>
 
                     {/* Прогрессбар */}

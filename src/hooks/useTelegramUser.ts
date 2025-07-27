@@ -1,6 +1,12 @@
-export const getTelegramUser = () => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
+import type {TelegramUser} from "../Types/Types.tsx";
+
+export const useTelegramUser = (): TelegramUser | null => {
     const tg = window.Telegram?.WebApp;
-    return tg?.initDataUnsafe?.user || null;
+    const user = tg?.initDataUnsafe?.user;
+
+    if (!user) return null;
+
+    return {
+        ...user,
+    };
 };
