@@ -3,10 +3,10 @@ import { ChevronDown } from "lucide-react";
 import {useDispatch, useSelector} from "react-redux";
 import type {Action, RootState} from "../../Types/Types.tsx";
 import type {Dispatch} from "redux";
-import {setRate} from "../../actions";
+import {setRate} from "../../reducers/modalSlice.ts";
 
 export const TransactionRateDropdown = () => {
-    const {rates,selectedRate} = useSelector((state: RootState) => state);
+    const {rates,selectedRate} = useSelector((state: RootState) => state.modal);
     const dispatch = useDispatch<Dispatch<Action>>();
 
 
