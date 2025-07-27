@@ -24,7 +24,7 @@ const Trading = () => {
         <div className="relative md:h-[100%] h-screen w-full text-white md:px-4 py-16 rounded-2xl">
             {/* LIVE TRADES LABEL */}
             <div className="relative  bg-linear-150 from-[#340575] to-[#340575]/30 py-8 rounded-2xl">
-                <h1 className="absolute lg:top-7 top-9 left-1/2 -translate-x-1/2 lg:text-6xl text-5xl tracking-wider font-bold text-white z-10 whitespace-nowrap text-shadow-lg italic">
+                <h1 className="absolute lg:top-7 top-9 left-1/2 -translate-x-1/2 lg:text-6xl text-5xl tracking-wider font-extrabold text-white z-10 whitespace-nowrap text-shadow-lg italic opacity-80">
                     LIVE TRADES
                 </h1>
             </div>

@@ -29,7 +29,12 @@ export type UserType = {
     referralCount: number;
     Balance: number;
     Available: number;
-    DepositAddress: string;
-    WithdrawalAddress: string;
     WithdrawalDate: string;
+};
+
+export type TelegramUser = {
+    id: number;
+    first_name?: string;
+    last_name?: string;
+    username?: string;
 };
