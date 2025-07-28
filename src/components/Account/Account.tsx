@@ -6,7 +6,7 @@ import {useAppSelector} from "../../store/hooks.ts";
 
 
 const Account = () => {
-    const user = useAppSelector((state) => state.user.tgUser);
+    const user = useAppSelector((state) => state.user.telegramUser);
     const { level, totalXp, progressPercent, xpGoal} = useLeveling(User.depositSum);
 
     const getLevelIcon = (level: number): JSX.Element => {

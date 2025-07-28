@@ -1,49 +1,44 @@
-import { createSlice, type PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import type {TelegramUser, UserType} from "../Types/Types.tsx";
-import type {ServerUserData, UserState} from "../Types/Interface.tsx";
+import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
+import type {UserType} from "../Types/Types.tsx"; // Это тип с бэка
+// Это тип с бэка
+import type {TelegramUser} from "../Types/Types"; // Это тип Telegram WebApp
+// Это тип Telegram WebApp
+
+interface UserState {
+    telegramUser: TelegramUser | null;
+    userData: UserType | null;
+}
 
 const initialState: UserState = {
-    tgUser: null,
-    serverUser: null,
-    loading: false,
-    error: null,
+    telegramUser: null,
+    userData: null,
 };
 
-// async thunk
-export const fetchUser = createAsyncThunk(
-    "user/fetchUser",
+export const fetchUserData = createAsyncThunk(
+    "user/fetchUserData",
     async (telegramUser: TelegramUser) => {
-        const res = await fetch(`http://localhost:3000/api/user?id=${telegramUser.id}&username=${telegramUser.username}`);
-        if (!res.ok) throw new Error("Ошибка запроса");
-        const data = await res.json();
-        return data as UserType;
+        const res = await fetch(
+            `http://localhost:3000/api/user?id=${telegramUser.id}&username=${telegramUser.username}`
+        );
+        const data: UserType = await res.json();
+        return data;
     }
 );
 
 const userSlice = createSlice({
-    name: 'user',
+    name: "user",
     initialState,
     reducers: {
-        setTgUser: (state, action: PayloadAction<TelegramUser>) => {
-            state.tgUser = action.payload;
+        setTelegramUser(state, action: PayloadAction<TelegramUser>) {
+            state.telegramUser = action.payload;
         },
     },
     extraReducers: (builder) => {
-        builder
-            .addCase(fetchUser.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(fetchUser.fulfilled, (state, action: PayloadAction<ServerUserData>) => {
-                state.loading = false;
-                state.serverUser = action.payload;
-            })
-            .addCase(fetchUser.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.error.message || 'Ошибка';
-            });
+        builder.addCase(fetchUserData.fulfilled, (state, action: PayloadAction<UserType>) => {
+            state.userData = action.payload;
+        });
     },
 });
 
-export const { setTgUser } = userSlice.actions;
+export const { setTelegramUser } = userSlice.actions;
 export default userSlice.reducer;

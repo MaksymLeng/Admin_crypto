@@ -14,7 +14,7 @@ import WithdrawModal  from "../WithdrawModal/WithdrawModal.tsx";
 const DepositMenu = () => {
     const showArr= useSelector((state: RootState) => state.modal.showArr);
     const dispatch = useDispatch<Dispatch<Action>>();
-    const user = useAppSelector((state) => state.user.tgUser);
+    const user = useAppSelector((state) => state.user.telegramUser);
 
 
 
