@@ -3,18 +3,21 @@ import {useDispatch, useSelector} from "react-redux";
 import { Eye, EyeOff} from "lucide-react";
 import type {RootState} from "../../Types/Types.tsx";
 import type { Action } from '../../Types/Types.tsx';
-import {setShow} from '../../reducers/modalSlice.ts';
+import {setShow} from '../../store/modalSlice.ts';
 import Logo from '../../assets/N.svg'
 import {User} from '../../data/User.ts'
 import {DepositModal} from "../DepositModal/DepositModal.tsx";
 import {ArrowUpIcon, PlusIcon} from "@heroicons/react/24/outline";
-import {useTelegramUser} from "../../hooks/useTelegramUser.ts";
-
+import { useAppSelector } from '../../store/hooks';
+import WithdrawModal  from "../WithdrawModal/WithdrawModal.tsx";
 
 const DepositMenu = () => {
     const showArr= useSelector((state: RootState) => state.modal.showArr);
     const dispatch = useDispatch<Dispatch<Action>>();
-    const user  = useTelegramUser();
+    const user = useAppSelector((state) => state.user.tgUser);
+
+
+
     const id = user?.id?.toString() ?? User.id.toString();
     const masked = id.replace(/\S/g, '*');
 
@@ -26,6 +29,7 @@ const DepositMenu = () => {
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-10 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
             <DepositModal isOpen={showArr[1]} onClose={() => onClickShow(1)}/>
+            <WithdrawModal isOpen={showArr[2]} onClose={() => onClickShow(2)} />
             <div className="relative bg-black/30 rounded-xl p-6 lg:w-[65%] w-[100%] shadow-md text-white flex flex-col justify-between">
                 {/* Верхняя карточка с ID */}
                 <div className=" absolute -top-12 inset-x-6 bg-linear-130 from-[#af5505] to-[#1c0740] rounded-xl p-4 mb-6 text-white">

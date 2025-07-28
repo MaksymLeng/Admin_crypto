@@ -8,5 +8,6 @@ export const useTelegramUser = (): TelegramUser | null => {
 
     return {
         ...user,
+        name: `${user.first_name} ${user.last_name ?? ''}`.trim(),
     };
 };

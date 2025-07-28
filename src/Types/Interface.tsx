@@ -1,12 +1,5 @@
 import type {JSX} from "react";
 
-export interface ModalState {
-    showArr: boolean[];
-    rates: string[];
-    selectedRate: string;
-    showRecovery: boolean;
-}
-
 export interface AppRoute {
     path: string
     element: JSX.Element
@@ -28,4 +21,17 @@ export interface TelegramUser {
     is_premium?: boolean;
     photo_url?: string;
     name: string; // свойство, которое ты используешь (если кастомное)
+}
+
+export interface ServerUserData {
+    depositSum: number;
+    level: number;
+    // другие поля
+}
+
+export interface UserState {
+    tgUser: TelegramUser | null;
+    serverUser: ServerUserData | null;
+    loading: boolean;
+    error: string | null;
 }

@@ -1,4 +1,6 @@
 interface TelegramWebAppUser {
+    last_name: string;
+    first_name: string;
     id: number;
     username?: string;
     language_code?: string;

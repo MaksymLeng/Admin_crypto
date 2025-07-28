@@ -1,10 +1,22 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { routes } from '../pages/pages'
 import NavMenu from "../NavMenu/NavMenu.tsx";
+import {useDispatch} from "react-redux";
+import {fetchUser} from '../../store/userSlice.ts';
+import {useTelegramUser} from "../../hooks/useTelegramUser.ts";
+import {useEffect} from "react";
 
 
 
 const App = () => {
+  const dispatch = useDispatch();
+  const user = useTelegramUser();
+
+    useEffect(() => {
+        if (user) {
+            dispatch(fetchUser(telegramUser));
+        }
+    }, [dispatch, user]);
 
   return (
       <Router>
