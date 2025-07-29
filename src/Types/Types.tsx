@@ -9,7 +9,7 @@ export type Trade = {
     amount: string;
 };
 
-export type Action<T> = {
+export type Action<T = unknown> = {
     type: string;
     payload?: T;
 }
