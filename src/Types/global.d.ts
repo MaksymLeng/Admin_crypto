@@ -1,13 +1,3 @@
-interface TelegramWebAppUser {
-    last_name: string;
-    first_name: string;
-    id: number;
-    username?: string;
-    language_code?: string;
-    is_premium?: boolean;
-    photo_url?: string;
-}
-
 interface TelegramWebAppInitDataUnsafe {
     user?: TelegramWebAppUser;
     [key: string]: never;

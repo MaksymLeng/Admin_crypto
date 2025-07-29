@@ -14,11 +14,12 @@ import WithdrawModal  from "../WithdrawModal/WithdrawModal.tsx";
 const DepositMenu = () => {
     const showArr= useSelector((state: RootState) => state.modal.showArr);
     const dispatch = useDispatch<Dispatch<Action>>();
-    const user = useAppSelector((state) => state.user.telegramUser);
+    const serverUser = useAppSelector((state) => state.user.userData);
 
 
 
-    const id = user?.id?.toString() ?? User.id.toString();
+
+    const id = serverUser?.id?.toString() ?? User.id.toString();
     const masked = id.replace(/\S/g, '*');
 
 
@@ -61,18 +62,18 @@ const DepositMenu = () => {
                     <div className="flex justify-between items-center">
                         <span className="text-xl font-bold">BALANCE:</span>
                         <span className="text-3xl">
-                            {`${User.Balance}$`}
+                            {serverUser?.Balance ?? 0}$
                         </span>
                     </div>
                     <div className="flex justify-between items-center">
                         <span className="text-xl font-light opacity-50">AVAILABLE:</span>
                         <span className="text-3xl">
-                            {`${User.Available}$`}
+                            {serverUser?.Available ?? 0}$
                         </span>
                     </div>
                     <div className="flex justify-between text-md font-light items-end">
                         <span className="text-left opacity-50">WITHDRAWAL<br/>DATE:</span>
-                        <span className=" font-bold text-white text-lg">{User.WithdrawalDate}</span>
+                        <span className=" font-bold text-white text-lg">{serverUser?.WithdrawalDate ?? '—'}</span>
                     </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">

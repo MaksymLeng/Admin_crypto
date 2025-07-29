@@ -1,4 +1,5 @@
 import type {JSX} from "react";
+import type {UserType} from "./Types.tsx";
 
 export interface AppRoute {
     path: string
@@ -12,9 +13,14 @@ export interface ModalProps {
     recoveryPhrase?: string[]
 }
 
+export interface WithdrawProps {
+    isOpen: boolean;
+    onClose: () => void;
+}
+
 export interface TelegramUser {
     id: number;
-    first_name: string;
+    first_name?: string;
     last_name?: string;
     username?: string;
     language_code?: string;
@@ -23,15 +29,7 @@ export interface TelegramUser {
     name: string; // свойство, которое ты используешь (если кастомное)
 }
 
-export interface ServerUserData {
-    depositSum: number;
-    level: number;
-    // другие поля
-}
-
 export interface UserState {
-    tgUser: TelegramUser | null;
-    serverUser: ServerUserData | null;
-    loading: boolean;
-    error: string | null;
+    telegramUser: TelegramUser | null;
+    userData: UserType | null;
 }

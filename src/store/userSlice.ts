@@ -1,13 +1,8 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
 import type {UserType} from "../Types/Types.tsx"; // Это тип с бэка
-// Это тип с бэка
-import type {TelegramUser} from "../Types/Types"; // Это тип Telegram WebApp
-// Это тип Telegram WebApp
+import type {TelegramUser} from "../Types/Interface.tsx"; // Это тип Telegram WebApp
+import type {UserState} from "../Types/Interface.tsx"
 
-interface UserState {
-    telegramUser: TelegramUser | null;
-    userData: UserType | null;
-}
 
 const initialState: UserState = {
     telegramUser: null,

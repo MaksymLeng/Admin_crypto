@@ -1,4 +1,4 @@
-import type {TelegramUser} from "../Types/Types.tsx";
+import type {TelegramUser} from "../Types/Interface.tsx";
 
 export const useTelegramUser = (): TelegramUser | null => {
     const tg = window.Telegram?.WebApp;
