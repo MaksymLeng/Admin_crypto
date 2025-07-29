@@ -10,15 +10,15 @@ import {DepositModal} from "../DepositModal/DepositModal.tsx";
 import {ArrowUpIcon, PlusIcon} from "@heroicons/react/24/outline";
 import { useAppSelector } from '../../store/hooks';
 import WithdrawModal  from "../WithdrawModal/WithdrawModal.tsx";
+import {useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
 
 const DepositMenu = () => {
     const showArr= useSelector((state: RootState) => state.modal.showArr);
     const dispatch = useDispatch<Dispatch<Action>>();
     const serverUser = useAppSelector((state) => state.user.userData);
 
-
-
-
+    const [tonConnectUI] = useTonConnectUI();
+    const wallet = useTonWallet();
     const id = serverUser?.id?.toString() ?? User.id.toString();
     const masked = id.replace(/\S/g, '*');
 
@@ -74,6 +74,17 @@ const DepositMenu = () => {
                     <div className="flex justify-between text-md font-light items-end">
                         <span className="text-left opacity-50">WITHDRAWAL<br/>DATE:</span>
                         <span className=" font-bold text-white text-lg">{serverUser?.WithdrawalDate ?? '—'}</span>
+                    </div>
+                    <div className="flex justify-between text-md font-light items-end">
+                        <span className="text-left opacity-50 uppercase">
+                            {wallet?.account?.address
+                                ? `Your wallet ${wallet.account.address.slice(0, 4)}...${wallet.account.address.slice(-4)}`
+                                : 'Wallet not connected'}
+                        </span>
+                        <button className="flex items-center justify-center gap-1 font-semibold cursor-pointer" onClick={() => tonConnectUI.openModal()}>
+                            <span>Connect</span>
+                            <PlusIcon className="w-5 h-5 text-white cursor-pointer"></PlusIcon>
+                        </button>
                     </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
