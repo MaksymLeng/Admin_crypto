@@ -18,8 +18,8 @@ const DepositMenu = () => {
 
     const [tonConnectUI] = useTonConnectUI();
     const wallet = useTonWallet();
-    const friendly  = wallet?.account?.address;
-    const id = userData?.id?.toString() ?? telegramUser?.id?.toString();
+    const raw  = wallet?.account?.address;
+    const id = userData?.id ?? telegramUser?.id.toString();
     const masked = id?.replace(/\S/g, '*');
 
     const onClickShow = (id:number) => {
@@ -31,13 +31,13 @@ const DepositMenu = () => {
     }
     
     useEffect(() => {
-        if (friendly  && userData?.id) {
+        if (raw  && id) {
             dispatch(updateWallet({
-                id: +userData.id,
-                address: friendly
+                id: +id,
+                address: raw
             }));
         }
-    }, [userData?.id, dispatch, friendly]);
+    }, [userData?.id, dispatch, raw, id]);
 
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-10 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
@@ -89,7 +89,7 @@ const DepositMenu = () => {
                     </div>
                     <div className="flex justify-between text-md font-light items-end">
                         <div className="flex gap-1 items-center">
-                            {friendly
+                            {raw
                                 ? (
                                     <>
                                     <img src={tonIcon} className="w-7 h-7" alt="wallet" />
@@ -104,8 +104,8 @@ const DepositMenu = () => {
                             }
                         </div>
 
-                        {friendly  ? (
-                            <WalletBalance address = {walletFriendly}/>
+                        {raw  ? (
+                            <WalletBalance address = {raw}/>
                         ) : (
                             <button
                                 className="flex items-center justify-center gap-1 font-semibold cursor-pointer"
