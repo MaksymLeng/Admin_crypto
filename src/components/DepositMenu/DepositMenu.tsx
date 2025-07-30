@@ -1,32 +1,28 @@
-import type {Dispatch} from "redux";
-import {useDispatch, useSelector} from "react-redux";
+import { useEffect } from 'react';
 import { Eye, EyeOff} from "lucide-react";
-import type {RootState} from "../../Types/Types.tsx";
-import type { Action } from '../../Types/Types.tsx';
 import {setShow} from '../../store/modalSlice.ts';
 import {DepositModal} from "../DepositModal/DepositModal.tsx";
 import {ArrowUpIcon, PlusIcon} from "@heroicons/react/24/outline";
-import { useAppSelector } from '../../store/hooks';
+import {useAppDispatch, useAppSelector} from '../../store/hooks';
+import { updateWallet } from '../../store/userSlice';
 import WithdrawModal  from "../WithdrawModal/WithdrawModal.tsx";
 import {useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
-import {Address} from "@ton/core";
 import WalletBalance from "../WalletBalance/WalletBalance.tsx";
 import Logo from '../../assets/N.svg'
 import tonIcon from '../../assets/wallet.svg'
 
 const DepositMenu = () => {
-    const showArr= useSelector((state: RootState) => state.modal.showArr);
-    const dispatch = useDispatch<Dispatch<Action>>();
+    const showArr= useAppSelector((state) => state.modal.showArr);
+    const dispatch = useAppDispatch();
     const serverUser = useAppSelector((state) => state.user.userData);
+    const telegramUser = useAppSelector((state) => state.user.telegramUser);
+    const walletFriendly = useAppSelector((state) => state.user.walletFriendly);
 
     const [tonConnectUI] = useTonConnectUI();
     const wallet = useTonWallet();
     const raw = wallet?.account?.address;
-    const friendlyAddress   = raw ?
-        Address.parse(raw).toString()
-        : '';
-    const id = serverUser?.id?.toString() ?? '00000000';
-    const masked = id.replace(/\S/g, '*');
+    const id = serverUser?.id?.toString() ?? telegramUser?.id?.toString();
+    const masked = id?.replace(/\S/g, '*');
 
     const onClickShow = (id:number) => {
         dispatch(setShow(id));
@@ -35,6 +31,15 @@ const DepositMenu = () => {
     const formatAddress = (address: string) => {
         return `${address.slice(0, 4)}...${address.slice(-4)}`;
     }
+    
+    useEffect(() => {
+        if (raw && serverUser?.id) {
+            dispatch(updateWallet({
+                id: +serverUser.id,
+                address: raw
+            }));
+        }
+    }, [wallet?.account?.address, serverUser?.id, dispatch, raw]);
 
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-10 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
@@ -91,7 +96,7 @@ const DepositMenu = () => {
                                     <>
                                     <img src={tonIcon} className="w-7 h-7" alt="wallet" />
                                     <span className="text-left opacity-50 uppercase">
-                                        {`Your wallet ${formatAddress(friendlyAddress)}`}
+                                        {`Your wallet ${formatAddress(walletFriendly)}`}
                                     </span>
                                     </>)
                                 : (
@@ -102,7 +107,7 @@ const DepositMenu = () => {
                         </div>
 
                         {raw ? (
-                            <WalletBalance address = {friendlyAddress}/>
+                            <WalletBalance address = {walletFriendly}/>
                         ) : (
                             <button
                                 className="flex items-center justify-center gap-1 font-semibold cursor-pointer"

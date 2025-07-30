@@ -7,6 +7,8 @@ import type {UserState} from "../Types/Interface.tsx"
 const initialState: UserState = {
     telegramUser: null,
     userData: null,
+    walletRaw: '',
+    walletFriendly: '',
 };
 
 export const fetchUserData = createAsyncThunk(
@@ -17,6 +19,25 @@ export const fetchUserData = createAsyncThunk(
         );
         const data: UserType = await res.json();
         return data;
+    }
+);
+
+export const updateWallet = createAsyncThunk(
+    'user/updateWallet',
+    async ({ id, address }: { id: number; address: string }, thunkAPI) => {
+        try {
+            const response = await fetch('http://localhost:3000/api/user/setWallet', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, address }),
+            });
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error(error);
+            return thunkAPI.rejectWithValue('Ошибка при обновлении кошелька');
+        }
     }
 );
 
@@ -31,6 +52,10 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchUserData.fulfilled, (state, action: PayloadAction<UserType>) => {
             state.userData = action.payload;
+        });
+        builder.addCase(updateWallet.fulfilled, (state, action) => {
+            state.walletRaw = action.payload.walletRaw;
+            state.walletFriendly = action.payload.walletFriendly;
         });
     },
 });
