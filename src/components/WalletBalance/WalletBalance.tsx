@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react';
 import {fetchTonBalance} from "../../FetchHelper/fetchTonBalance.ts";
+import { useTonConnectUI } from "@tonconnect/ui-react";
 import {ChevronRightIcon} from "lucide-react";
 
 const WalletBalance = ({ address }: { address: string }) => {
     const [balance, setBalance] = useState<string>('0.00');
+    const [tonConnectUi] = useTonConnectUI(); // подключение хука
+
+    const handleDisconnect = () => {
+        tonConnectUi.disconnect(); // отключение кошелька
+    };
 
     useEffect(() => {
         if (address) {
@@ -12,8 +18,8 @@ const WalletBalance = ({ address }: { address: string }) => {
     }, [address]);
 
     return (
-        <button className="flex items-center text-white font-semibold text-sm gap-1 cursor-pointer">
-            <span className="font-bold text-md">{balance} TON</span>
+        <button onClick={handleDisconnect} className="flex items-center text-white font-semibold text-xl gap-1 cursor-pointer">
+            <span className="font-bold">{balance} TON</span>
             <ChevronRightIcon className="w-5 h-5" />
         </button>
     );

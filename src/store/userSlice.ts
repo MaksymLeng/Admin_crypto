@@ -48,7 +48,7 @@ const userSlice = createSlice({
             state.userData = action.payload;
         });
         builder.addCase(updateWallet.fulfilled, (state, action) => {
-            state.walletFriendly = action.payload.walletRaw;
+            state.walletFriendly = action.payload.friendly;
         });
     },
 });

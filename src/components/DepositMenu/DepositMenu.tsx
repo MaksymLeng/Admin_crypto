@@ -85,7 +85,7 @@ const DepositMenu = () => {
                     </div>
                     <div className="flex justify-between text-md font-light items-end">
                         <span className="text-left opacity-50">WITHDRAWAL<br/>DATE:</span>
-                        <span className=" font-bold text-white text-lg">{userData?.WithdrawalDate ?? '—'}</span>
+                        <span className=" font-bold text-white text-xl">{userData?.WithdrawalDate ?? '—'}</span>
                     </div>
                     <div className="flex justify-between text-md font-light items-end">
                         <div className="flex gap-1 items-center">
