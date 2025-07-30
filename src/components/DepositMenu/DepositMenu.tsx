@@ -1,6 +1,6 @@
 import type {Dispatch} from "redux";
 import {useDispatch, useSelector} from "react-redux";
-import {ChevronRightIcon, Eye, EyeOff} from "lucide-react";
+import { Eye, EyeOff} from "lucide-react";
 import type {RootState} from "../../Types/Types.tsx";
 import type { Action } from '../../Types/Types.tsx';
 import {setShow} from '../../store/modalSlice.ts';
@@ -11,6 +11,7 @@ import {ArrowUpIcon, PlusIcon} from "@heroicons/react/24/outline";
 import { useAppSelector } from '../../store/hooks';
 import WithdrawModal  from "../WithdrawModal/WithdrawModal.tsx";
 import {useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
+import WalletBalance from "../WalletBalance/WalletBalance.tsx";
 
 const DepositMenu = () => {
     const showArr= useSelector((state: RootState) => state.modal.showArr);
@@ -32,20 +33,6 @@ const DepositMenu = () => {
     const formatAddress = (address: string) => {
         return `${address.slice(0, 4)}...${address.slice(-4)}`;
     }
-
-    const fetchTonBalance = async (address: string): Promise<string> => {
-        try {
-            const res = await fetch(`https://toncenter.com/api/v2/getAddressBalance?address=${address}`);
-            const data = await res.json();
-            if (data.ok && data.result) {
-                const ton = Number(data.result) / 1e9;
-                return ton.toFixed(2); // например, 9.40
-            }
-        } catch (err) {
-            console.error('Failed to fetch TON balance:', err);
-        }
-        return '0.00';
-    };
 
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-10 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
@@ -103,12 +90,7 @@ const DepositMenu = () => {
                        </span>
 
                         {address ? (
-                            <button className="flex items-center justify-center gap-1 font-semibold cursor-pointer">
-                                <span className="text-white text-sm font-semibold">
-                                    {fetchTonBalance(address)} TON
-                                </span>
-                                <ChevronRightIcon className="w-4 h-4 text-white" />
-                            </button>
+                            <WalletBalance address = {address}/>
                         ) : (
                             <button
                                 className="flex items-center justify-center gap-1 font-semibold cursor-pointer"
