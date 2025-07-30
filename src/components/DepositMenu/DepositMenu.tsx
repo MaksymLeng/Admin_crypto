@@ -27,6 +27,7 @@ const DepositMenu = () => {
     };
 
     const formatAddress = (address: string) => {
+        if (!address) return '-';
         return `${address.slice(0, 4)}...${address.slice(-4)}`;
     }
     
@@ -37,7 +38,7 @@ const DepositMenu = () => {
                 address: raw
             }));
         }
-    }, [userData?.id, dispatch, raw, id]);
+    }, [dispatch, raw, id]);
 
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-10 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
