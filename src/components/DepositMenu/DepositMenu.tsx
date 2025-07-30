@@ -14,14 +14,12 @@ import tonIcon from '../../assets/wallet.svg'
 const DepositMenu = () => {
     const showArr= useAppSelector((state) => state.modal.showArr);
     const dispatch = useAppDispatch();
-    const serverUser = useAppSelector((state) => state.user.userData);
-    const telegramUser = useAppSelector((state) => state.user.telegramUser);
-    const walletFriendly = useAppSelector((state) => state.user.walletFriendly);
+    const { userData , telegramUser, walletFriendly } = useAppSelector((state) => state.user);
 
     const [tonConnectUI] = useTonConnectUI();
     const wallet = useTonWallet();
     const friendly  = wallet?.account?.address;
-    const id = serverUser?.id?.toString() ?? telegramUser?.id?.toString();
+    const id = userData?.id?.toString() ?? telegramUser?.id?.toString();
     const masked = id?.replace(/\S/g, '*');
 
     const onClickShow = (id:number) => {
@@ -33,13 +31,13 @@ const DepositMenu = () => {
     }
     
     useEffect(() => {
-        if (friendly  && serverUser?.id) {
+        if (friendly  && userData?.id) {
             dispatch(updateWallet({
-                id: +serverUser.id,
+                id: +userData.id,
                 address: friendly
             }));
         }
-    }, [wallet?.account?.address, serverUser?.id, dispatch, friendly ]);
+    }, [userData?.id, dispatch, friendly]);
 
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-10 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
@@ -76,18 +74,18 @@ const DepositMenu = () => {
                     <div className="flex justify-between items-center">
                         <span className="text-xl font-bold">BALANCE:</span>
                         <span className="text-3xl">
-                            {serverUser?.Balance ?? 0}$
+                            {userData?.Balance ?? 0}$
                         </span>
                     </div>
                     <div className="flex justify-between items-center">
                         <span className="text-xl font-light opacity-50">AVAILABLE:</span>
                         <span className="text-3xl">
-                            {serverUser?.Available ?? 0}$
+                            {userData?.Available ?? 0}$
                         </span>
                     </div>
                     <div className="flex justify-between text-md font-light items-end">
                         <span className="text-left opacity-50">WITHDRAWAL<br/>DATE:</span>
-                        <span className=" font-bold text-white text-lg">{serverUser?.WithdrawalDate ?? '—'}</span>
+                        <span className=" font-bold text-white text-lg">{userData?.WithdrawalDate ?? '—'}</span>
                     </div>
                     <div className="flex justify-between text-md font-light items-end">
                         <div className="flex gap-1 items-center">
