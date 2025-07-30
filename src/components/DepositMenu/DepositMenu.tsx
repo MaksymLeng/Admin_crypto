@@ -1,6 +1,6 @@
 import type {Dispatch} from "redux";
 import {useDispatch, useSelector} from "react-redux";
-import { Eye, EyeOff} from "lucide-react";
+import {ChevronRightIcon, Eye, EyeOff} from "lucide-react";
 import type {RootState} from "../../Types/Types.tsx";
 import type { Action } from '../../Types/Types.tsx';
 import {setShow} from '../../store/modalSlice.ts';
@@ -19,12 +19,32 @@ const DepositMenu = () => {
 
     const [tonConnectUI] = useTonConnectUI();
     const wallet = useTonWallet();
+    const address = wallet?.account?.address;
     const id = serverUser?.id?.toString() ?? User.id.toString();
     const masked = id.replace(/\S/g, '*');
 
+    console.log(address);
 
     const onClickShow = (id:number) => {
         dispatch(setShow(id));
+    };
+
+    const formatAddress = (address: string) => {
+        return `${address.slice(0, 4)}...${address.slice(-4)}`;
+    }
+
+    const fetchTonBalance = async (address: string): Promise<string> => {
+        try {
+            const res = await fetch(`https://toncenter.com/api/v2/getAddressBalance?address=${address}`);
+            const data = await res.json();
+            if (data.ok && data.result) {
+                const ton = Number(data.result) / 1e9;
+                return ton.toFixed(2); // например, 9.40
+            }
+        } catch (err) {
+            console.error('Failed to fetch TON balance:', err);
+        }
+        return '0.00';
     };
 
     return (
@@ -76,15 +96,28 @@ const DepositMenu = () => {
                         <span className=" font-bold text-white text-lg">{serverUser?.WithdrawalDate ?? '—'}</span>
                     </div>
                     <div className="flex justify-between text-md font-light items-end">
-                        <span className="text-left opacity-50 uppercase">
-                            {wallet?.account?.address
-                                ? `Your wallet ${wallet.account.address.slice(0, 4)}...${wallet.account.address.slice(-4)}`
-                                : 'Wallet not connected'}
-                        </span>
-                        <button className="flex items-center justify-center gap-1 font-semibold cursor-pointer" onClick={() => tonConnectUI.openModal()}>
-                            <span>Connect</span>
-                            <PlusIcon className="w-5 h-5 text-white cursor-pointer"></PlusIcon>
-                        </button>
+                       <span className="text-left opacity-50 uppercase">
+                         {address
+                            ? formatAddress(address)
+                            : 'Wallet not connected'}
+                       </span>
+
+                        {address ? (
+                            <button className="flex items-center justify-center gap-1 font-semibold cursor-pointer">
+                                <span className="text-white text-sm font-semibold">
+                                    {fetchTonBalance(address)} TON
+                                </span>
+                                <ChevronRightIcon className="w-4 h-4 text-white" />
+                            </button>
+                        ) : (
+                            <button
+                                className="flex items-center justify-center gap-1 font-semibold cursor-pointer"
+                                onClick={() => tonConnectUI.openModal()}
+                            >
+                                <span>Connect</span>
+                                <PlusIcon className="w-5 h-5 text-white" />
+                            </button>
+                        )}
                     </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
