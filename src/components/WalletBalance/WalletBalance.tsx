@@ -12,10 +12,10 @@ const WalletBalance = ({ address }: { address: string }) => {
     }, [address]);
 
     return (
-        <div className="flex items-center text-white font-semibold text-sm gap-1">
-            {balance} TON
-            <ChevronRightIcon className="w-4 h-4" />
-        </div>
+        <button className="flex items-center text-white font-semibold text-sm gap-1 cursor-pointer">
+            <span className="font-bold text-md">{balance} TON</span>
+            <ChevronRightIcon className="w-5 h-5" />
+        </button>
     );
 };
 

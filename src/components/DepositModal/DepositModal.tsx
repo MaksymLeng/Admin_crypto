@@ -13,6 +13,7 @@ import { Fragment } from 'react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import type {ModalProps} from "../../Types/Interface.tsx";
 import tonIcon from "../../assets/ton_icon.png";
+import type {DepositValues} from "../../Types/Types.tsx";
 
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -22,8 +23,6 @@ export const depositSchema = z.object({
         .regex(/^\d+(\.\d{1,2})?$/, "Only numbers allowed")
         .min(1, "Amount is required"),
 });
-
-type DepositValues = z.infer<typeof depositSchema>;
 
 export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
 

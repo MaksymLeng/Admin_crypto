@@ -4,14 +4,15 @@ import { Eye, EyeOff} from "lucide-react";
 import type {RootState} from "../../Types/Types.tsx";
 import type { Action } from '../../Types/Types.tsx';
 import {setShow} from '../../store/modalSlice.ts';
-import Logo from '../../assets/N.svg'
-import {User} from '../../data/User.ts'
 import {DepositModal} from "../DepositModal/DepositModal.tsx";
 import {ArrowUpIcon, PlusIcon} from "@heroicons/react/24/outline";
 import { useAppSelector } from '../../store/hooks';
 import WithdrawModal  from "../WithdrawModal/WithdrawModal.tsx";
 import {useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
+import {Address} from "@ton/core";
 import WalletBalance from "../WalletBalance/WalletBalance.tsx";
+import Logo from '../../assets/N.svg'
+import tonIcon from '../../assets/wallet.svg'
 
 const DepositMenu = () => {
     const showArr= useSelector((state: RootState) => state.modal.showArr);
@@ -20,11 +21,12 @@ const DepositMenu = () => {
 
     const [tonConnectUI] = useTonConnectUI();
     const wallet = useTonWallet();
-    const address = wallet?.account?.address;
-    const id = serverUser?.id?.toString() ?? User.id.toString();
+    const raw = wallet?.account?.address;
+    const friendlyAddress   = raw ?
+        Address.parse(raw).toString()
+        : '';
+    const id = serverUser?.id?.toString() ?? '00000000';
     const masked = id.replace(/\S/g, '*');
-
-    console.log(address);
 
     const onClickShow = (id:number) => {
         dispatch(setShow(id));
@@ -83,14 +85,24 @@ const DepositMenu = () => {
                         <span className=" font-bold text-white text-lg">{serverUser?.WithdrawalDate ?? '—'}</span>
                     </div>
                     <div className="flex justify-between text-md font-light items-end">
-                       <span className="text-left opacity-50 uppercase">
-                         {address
-                            ? formatAddress(address)
-                            : 'Wallet not connected'}
-                       </span>
+                        <div className="flex gap-1 items-center">
+                            {raw
+                                ? (
+                                    <>
+                                    <img src={tonIcon} className="w-7 h-7" alt="wallet" />
+                                    <span className="text-left opacity-50 uppercase">
+                                        {`Your wallet ${formatAddress(friendlyAddress)}`}
+                                    </span>
+                                    </>)
+                                : (
+                                    <span className="text-left opacity-50 uppercase">
+                                        Wallet not connected
+                                    </span>)
+                            }
+                        </div>
 
-                        {address ? (
-                            <WalletBalance address = {address}/>
+                        {raw ? (
+                            <WalletBalance address = {friendlyAddress}/>
                         ) : (
                             <button
                                 className="flex items-center justify-center gap-1 font-semibold cursor-pointer"

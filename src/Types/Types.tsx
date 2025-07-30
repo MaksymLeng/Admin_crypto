@@ -1,4 +1,6 @@
 import store from "../store";
+import { z } from 'zod';
+import {depositSchema} from "../components/DepositModal/DepositModal.tsx";
 
 export type RootState = ReturnType<typeof store.getState>;
 
@@ -28,3 +30,5 @@ export type UserType = {
     Available: number;
     WithdrawalDate: string;
 };
+
+export type DepositValues = z.infer<typeof depositSchema>;
