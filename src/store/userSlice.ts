@@ -2,20 +2,22 @@ import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/tool
 import type {UserType} from "../Types/Types.tsx"; // Это тип с бэка
 import type {TelegramUser} from "../Types/Interface.tsx"; // Это тип Telegram WebApp
 import type {UserState} from "../Types/Interface.tsx"
+import axios from 'axios';
 
 
 const initialState: UserState = {
     telegramUser: null,
     userData: null,
-    walletRaw: '',
     walletFriendly: '',
 };
+
+const API = 'http://localhost:3000';
 
 export const fetchUserData = createAsyncThunk(
     "user/fetchUserData",
     async (telegramUser: TelegramUser) => {
         const res = await fetch(
-            `http://localhost:3000/api/user?id=${telegramUser.id}&username=${telegramUser.username}`
+            `${API}/api/user?id=${telegramUser.id}&username=${telegramUser.username}`
         );
         const data: UserType = await res.json();
         return data;
@@ -24,20 +26,12 @@ export const fetchUserData = createAsyncThunk(
 
 export const updateWallet = createAsyncThunk(
     'user/updateWallet',
-    async ({ id, address }: { id: number; address: string }, thunkAPI) => {
-        try {
-            const response = await fetch('http://localhost:3000/api/user/setWallet', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id, address }),
-            });
-
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error(error);
-            return thunkAPI.rejectWithValue('Ошибка при обновлении кошелька');
-        }
+    async ({ id, address }: { id: number, address: string }) => {
+        const response = await axios.post(`${API}/api/user/wallet`, {
+            id,
+            walletFriendly: address
+        });
+        return response.data; // вернётся { walletRaw: 'EQ...', id: ... }
     }
 );
 
@@ -54,8 +48,7 @@ const userSlice = createSlice({
             state.userData = action.payload;
         });
         builder.addCase(updateWallet.fulfilled, (state, action) => {
-            state.walletRaw = action.payload.walletRaw;
-            state.walletFriendly = action.payload.walletFriendly;
+            state.walletFriendly = action.payload.walletRaw;
         });
     },
 });

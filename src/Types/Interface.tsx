@@ -32,6 +32,5 @@ export interface TelegramUser {
 export interface UserState {
     telegramUser: TelegramUser | null;
     userData: UserType | null;
-    walletRaw: string;
     walletFriendly: string;
 }

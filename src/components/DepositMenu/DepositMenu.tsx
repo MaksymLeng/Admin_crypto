@@ -20,7 +20,7 @@ const DepositMenu = () => {
 
     const [tonConnectUI] = useTonConnectUI();
     const wallet = useTonWallet();
-    const raw = wallet?.account?.address;
+    const friendly  = wallet?.account?.address;
     const id = serverUser?.id?.toString() ?? telegramUser?.id?.toString();
     const masked = id?.replace(/\S/g, '*');
 
@@ -33,13 +33,13 @@ const DepositMenu = () => {
     }
     
     useEffect(() => {
-        if (raw && serverUser?.id) {
+        if (friendly  && serverUser?.id) {
             dispatch(updateWallet({
                 id: +serverUser.id,
-                address: raw
+                address: friendly
             }));
         }
-    }, [wallet?.account?.address, serverUser?.id, dispatch, raw]);
+    }, [wallet?.account?.address, serverUser?.id, dispatch, friendly ]);
 
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-10 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
@@ -91,7 +91,7 @@ const DepositMenu = () => {
                     </div>
                     <div className="flex justify-between text-md font-light items-end">
                         <div className="flex gap-1 items-center">
-                            {raw
+                            {friendly
                                 ? (
                                     <>
                                     <img src={tonIcon} className="w-7 h-7" alt="wallet" />
@@ -106,7 +106,7 @@ const DepositMenu = () => {
                             }
                         </div>
 
-                        {raw ? (
+                        {friendly  ? (
                             <WalletBalance address = {walletFriendly}/>
                         ) : (
                             <button
