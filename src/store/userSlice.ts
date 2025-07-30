@@ -27,7 +27,7 @@ export const fetchUserData = createAsyncThunk(
 export const updateWallet = createAsyncThunk(
     'user/updateWallet',
     async ({ id, address }: { id: number, address: string }) => {
-        const response = await axios.post(`${API}/api/user/wallet`, {
+        const response = await axios.post(`${API}/user/setWallet`, {
             id,
             walletFriendly: address
         });
