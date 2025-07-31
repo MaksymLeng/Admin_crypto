@@ -19,7 +19,7 @@ const DepositMenu = () => {
     const [tonConnectUI] = useTonConnectUI();
     const wallet = useTonWallet();
     const raw  = wallet?.account?.address;
-    const id = userData?.id ?? telegramUser?.id.toString() ?? '0000000';
+    const id = userData?.id ?? telegramUser?.id.toString() ?? '12345678';
     const masked = id?.replace(/\S/g, '*');
 
     const onClickShow = (id:number) => {

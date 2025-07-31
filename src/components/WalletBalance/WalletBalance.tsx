@@ -13,7 +13,7 @@ const WalletBalance = ({ address }: { address: string }) => {
 
     useEffect(() => {
         if (address) {
-            fetchTonBalance(address).then(setBalance.toString);
+            fetchTonBalance(address).then((res) => setBalance(res.toString()));
         }
     }, [address]);
 
