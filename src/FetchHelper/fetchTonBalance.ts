@@ -12,9 +12,12 @@ export const fetchTonBalance = async (address: string): Promise<number> => {
             return 0;
         }
 
-        const balance = Number(data.result);
+        const rawNano = Number(data.result); // nanoton
+        if (!Number.isFinite(rawNano)) return 0;
 
-        return Number.isFinite(balance) ? balance / 1e9 : 0;
+        const ton = rawNano / 1e9;
+        return Math.ceil(ton * 100) / 100;
+
     } catch (error) {
         console.error("Error fetching TON balance:", error);
         return 0;

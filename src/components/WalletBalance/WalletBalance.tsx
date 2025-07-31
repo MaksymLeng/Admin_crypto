@@ -19,7 +19,7 @@ const WalletBalance = ({ address }: { address: string }) => {
 
     return (
         <button onClick={handleDisconnect} className="flex items-center text-white font-semibold text-xl gap-1 cursor-pointer">
-            <span className="font-bold">{balance.toString()} TON</span>
+            <span>{balance.toString()} TON</span>
             <ChevronRightIcon className="w-5 h-5" />
         </button>
     );

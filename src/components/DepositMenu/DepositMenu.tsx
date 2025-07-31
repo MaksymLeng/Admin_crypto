@@ -84,20 +84,25 @@ const DepositMenu = () => {
                             {userData?.Available ?? 0}$
                         </span>
                     </div>
-                    <div className="flex justify-between text-md font-light items-end">
+                    <div className="flex justify-between text-md font-light items-center">
                         <span className="text-left opacity-50">WITHDRAWAL<br/>DATE:</span>
                         <span className=" font-bold text-white text-xl">{userData?.WithdrawalDate ?? '—'}</span>
                     </div>
                     <div className="flex justify-between text-md font-light items-end">
-                        <div className="flex gap-1 items-center">
+                        <div className="flex gap-1">
                             {raw
                                 ? (
-                                    <>
-                                    <img src={tonIcon} className="w-7 h-7" alt="wallet" />
-                                    <span className="text-left opacity-50 uppercase">
-                                        {`Your wallet ${formatAddress(walletFriendly)}`}
-                                    </span>
-                                    </>)
+                                    <div className="flex flex-col items-start">
+                                        <span className="text-left opacity-50 uppercase">
+                                            Your wallet:
+                                        </span>
+                                        <div className="flex gap-1 items-center">
+                                            <img src={tonIcon} className="w-5 h-5" alt="wallet" />
+                                            <span className="text-left opacity-50 uppercase">
+                                                 {formatAddress(walletFriendly)}
+                                            </span>
+                                        </div>
+                                    </div>)
                                 : (
                                     <span className="text-left opacity-50 uppercase">
                                         Wallet not connected
