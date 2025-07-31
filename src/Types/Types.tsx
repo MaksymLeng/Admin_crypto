@@ -1,4 +1,6 @@
 import store from "../store";
+import { z } from 'zod';
+import {depositSchema} from "../components/DepositModal/DepositModal.tsx";
 
 export type RootState = ReturnType<typeof store.getState>;
 
@@ -9,21 +11,18 @@ export type Trade = {
     amount: string;
 };
 
-export type Action<T = any> = {
+export type Action<T = unknown> = {
     type: string;
     payload?: T;
 }
 
 export type ModalState = {
     showArr: boolean[],
-    rates: string[],
-    selectedRate: string,
-    showRecovery: boolean,
 };
 
 export type UserType = {
     id: string;
-    name: string;
+    username: string;
     avatar?: string;
     depositSum: number;
     referralCount: number;
@@ -32,9 +31,4 @@ export type UserType = {
     WithdrawalDate: string;
 };
 
-export type TelegramUser = {
-    id: number;
-    first_name?: string;
-    last_name?: string;
-    username?: string;
-};
+export type DepositValues = z.infer<typeof depositSchema>;

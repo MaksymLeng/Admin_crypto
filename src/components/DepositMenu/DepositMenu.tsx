@@ -1,26 +1,49 @@
-import type {Dispatch} from "redux";
-import {useDispatch, useSelector} from "react-redux";
+import { useEffect } from 'react';
 import { Eye, EyeOff} from "lucide-react";
-import type {RootState} from "../../Types/Types.tsx";
-import type { Action } from '../../Types/Types.tsx';
-import {setShow} from '../../reducers/modalSlice.ts';
-import Logo from '../../assets/N.svg'
-import {User} from '../../data/User.ts'
+import {setShow} from '../../store/modalSlice.ts';
 import {DepositModal} from "../DepositModal/DepositModal.tsx";
 import {ArrowUpIcon, PlusIcon} from "@heroicons/react/24/outline";
-
+import {useAppDispatch, useAppSelector} from '../../store/hooks';
+import { updateWallet } from '../../store/userSlice';
+import WithdrawModal  from "../WithdrawModal/WithdrawModal.tsx";
+import {useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
+import WalletBalance from "../WalletBalance/WalletBalance.tsx";
+import Logo from '../../assets/N.svg'
+import tonIcon from '../../assets/wallet.svg'
 
 const DepositMenu = () => {
-    const showArr= useSelector((state: RootState) => state.modal.showArr);
-    const dispatch = useDispatch<Dispatch<Action>>();
+    const showArr= useAppSelector((state) => state.modal.showArr);
+    const dispatch = useAppDispatch();
+    const { userData , telegramUser, walletFriendly } = useAppSelector((state) => state.user);
+
+    const [tonConnectUI] = useTonConnectUI();
+    const wallet = useTonWallet();
+    const raw  = wallet?.account?.address;
+    const id = telegramUser?.id || Number(userData?.id);
+    const masked = id?.toString().replace(/\S/g, '*');
 
     const onClickShow = (id:number) => {
         dispatch(setShow(id));
     };
 
+    const formatAddress = (address: string) => {
+        if (!address) return '-';
+        return `${address.slice(0, 4)}...${address.slice(-4)}`;
+    }
+    
+    useEffect(() => {
+        if (raw  && id) {
+            dispatch(updateWallet({
+                id: id,
+                address: raw
+            }));
+        }
+    }, [dispatch, raw, id]);
+
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-10 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
             <DepositModal isOpen={showArr[1]} onClose={() => onClickShow(1)}/>
+            <WithdrawModal isOpen={showArr[2]} onClose={() => onClickShow(2)} />
             <div className="relative bg-black/30 rounded-xl p-6 lg:w-[65%] w-[100%] shadow-md text-white flex flex-col justify-between">
                 {/* Верхняя карточка с ID */}
                 <div className=" absolute -top-12 inset-x-6 bg-linear-130 from-[#af5505] to-[#1c0740] rounded-xl p-4 mb-6 text-white">
@@ -42,10 +65,7 @@ const DepositMenu = () => {
                         <div className="flex mx-auto gap-10 xl:gap-15">
                             <div className="text-2xl font-light opacity-70">ID:</div>
                             <div className="text-2xl w-[120px] font-bold text-center">
-                                {showArr[0]
-                                    ? User.id
-                                    : User.id.replace(/\S/g, '*')
-                                }
+                                {showArr[0] ? id : masked}
                             </div>
                         </div>
                     </div>
@@ -55,18 +75,52 @@ const DepositMenu = () => {
                     <div className="flex justify-between items-center">
                         <span className="text-xl font-bold">BALANCE:</span>
                         <span className="text-3xl">
-                            {`${User.Balance}$`}
+                            {userData?.Balance ?? 0}$
                         </span>
                     </div>
                     <div className="flex justify-between items-center">
                         <span className="text-xl font-light opacity-50">AVAILABLE:</span>
                         <span className="text-3xl">
-                            {`${User.Available}$`}
+                            {userData?.Available ?? 0}$
                         </span>
                     </div>
-                    <div className="flex justify-between text-md font-light items-end">
+                    <div className="flex justify-between text-md font-light items-center">
                         <span className="text-left opacity-50">WITHDRAWAL<br/>DATE:</span>
-                        <span className=" font-bold text-white text-lg">{User.WithdrawalDate}</span>
+                        <span className=" font-bold text-white text-xl">{userData?.WithdrawalDate ?? '—'}</span>
+                    </div>
+                    <div className="flex justify-between text-md font-light items-center">
+                        <div className="flex gap-1">
+                            {raw
+                                ? (
+                                    <div className="flex flex-col items-start">
+                                        <span className="text-left opacity-50 uppercase">
+                                            Your wallet:
+                                        </span>
+                                        <div className="flex gap-1 items-center">
+                                            <img src={tonIcon} className="w-5 h-5" alt="wallet" />
+                                            <span className="text-left opacity-50 uppercase">
+                                                 {formatAddress(walletFriendly)}
+                                            </span>
+                                        </div>
+                                    </div>)
+                                : (
+                                    <span className="text-left opacity-50 uppercase">
+                                        Wallet not connected
+                                    </span>)
+                            }
+                        </div>
+
+                        {raw  ? (
+                            <WalletBalance address = {raw}/>
+                        ) : (
+                            <button
+                                className="flex items-center justify-center gap-1 font-semibold cursor-pointer"
+                                onClick={() => tonConnectUI.openModal()}
+                            >
+                                <span>Connect</span>
+                                <PlusIcon className="w-5 h-5 text-white" />
+                            </button>
+                        )}
                     </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">

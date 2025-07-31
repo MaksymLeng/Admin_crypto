@@ -13,6 +13,7 @@ import { Fragment } from 'react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import type {ModalProps} from "../../Types/Interface.tsx";
 import tonIcon from "../../assets/ton_icon.png";
+import type {DepositValues} from "../../Types/Types.tsx";
 
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -22,8 +23,6 @@ export const depositSchema = z.object({
         .regex(/^\d+(\.\d{1,2})?$/, "Only numbers allowed")
         .min(1, "Amount is required"),
 });
-
-type DepositValues = z.infer<typeof depositSchema>;
 
 export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
 
@@ -72,7 +71,7 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                         leaveTo="translate-y-full opacity-0"
                     >
                         <DialogPanel
-                            className="lg:w-[calc((100%-15rem)*0.6)] w-full md:h-[60%] h-[65%] max-w-full bg-[#1e1e1e]/40 text-white rounded-t-3xl shadow-lg border-t border-[#2e2e2e]">
+                            className="lg:w-[calc((100%-15rem)*0.6)] w-full md:h-[60%] h-[70%] max-w-full bg-[#1e1e1e]/40 text-white rounded-t-3xl shadow-lg border-t border-[#2e2e2e]">
                             <div className="flex flex-col gap-10">
                                 <div className="flex justify-between items-center  pt-7 p-6 pb-0 rounded-t-3xl">
                                     <DialogTitle className="text-2xl text-gray-300 font-extrabold font-montserrat">DEPOSIT</DialogTitle>
@@ -80,7 +79,7 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                                         <XMarkIcon className="w-5 h-5 text-gray-400 cursor-pointer"/>
                                     </button>
                                 </div>
-                                <div className="w-full md:max-w-xl max-w-[23rem] mx-auto h-95 lg:h-110 flex flex-col gap-7 lg:gap-12 bg-gradient-to-br justify-between from-[#1c0740] to-[#af5505] py-6 px-10 rounded-2xl">
+                                <div className="w-full md:max-w-xl max-w-[23rem] mx-auto h-95 xl:h-110 flex flex-col gap-7 lg:gap-12 bg-gradient-to-br justify-between from-[#1c0740] to-[#af5505] py-6 px-10 rounded-2xl">
                                     <div className="flex justify-start text-gray-400/80">Top-up only in TON</div>
                                     <div className="flex flex-col gap-2 text-sm">
                                         <p className="text-gray-400/80 text-center text-lg">Your connected wallet</p>
@@ -90,8 +89,8 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                                         </div>
                                     </div>
 
-                                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center items-center gap-4 text-5xl text-white font-bold">
-                                        <div className="flex gap-1 justify-center items-center">
+                                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center items-center gap-6 text-5xl text-white font-bold">
+                                        <div className="flex gap-1 mb-8 justify-center items-center">
                                               <span>
                                                 <input
                                                     type="text"

@@ -1,0 +1,7 @@
+{
+  "name": "NDeposit",
+  "url": "https://ndepositdev.netlify.app/",
+  "iconUrl": "https://ndepositdev.netlify.app/Logo_N.svg",
+  "network": "testnet",
+  "bridgeUrl": "https://bridge.tonapi.io/bridge"
+}
