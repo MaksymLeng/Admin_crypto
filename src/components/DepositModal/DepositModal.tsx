@@ -14,6 +14,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import type {ModalProps} from "../../Types/Interface.tsx";
 import tonIcon from "../../assets/ton_icon.png";
 import type {DepositValues} from "../../Types/Types.tsx";
+import { useAppSelector } from '../../store/hooks';
 
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -25,7 +26,7 @@ export const depositSchema = z.object({
 });
 
 export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
-
+    const { walletFriendly } = useAppSelector((state) => state.user);
     const {
         register,
         handleSubmit,
@@ -85,7 +86,9 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                                         <p className="text-gray-400/80 text-center text-lg">Your connected wallet</p>
                                         <div className="flex items-center justify-center gap-2 text-white font-semibold">
                                             <img src={tonIcon} className="w-7 h-7" alt="wallet" />
-                                            <span className="text-xl">UQD...g0t</span>
+                                            <span className="text-xl">
+                                              {walletFriendly ? `${walletFriendly.slice(0, 4)}...${walletFriendly.slice(-3)}` : 'Not connected'}
+                                            </span>
                                         </div>
                                     </div>
 

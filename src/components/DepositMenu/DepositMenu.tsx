@@ -124,10 +124,10 @@ const DepositMenu = () => {
                     </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                    <button className="bg-white text-white px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg" onClick={() => onClickShow(1)}>
+                    <button className={`${raw ? 'bg-white' : "bg-white/40"} px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg`} onClick={() => onClickShow(1)} disabled={!raw}>
                         <div className="w-full flex justify-center items-center gap-1 pointer-events-none">
-                            <div className="text-black">DEPOSIT</div>
-                            <PlusIcon className="w-6 h-6 text-[#1c0740] cursor-pointer"></PlusIcon>
+                            <div className={`${raw ? 'text-black' : 'text-black/70'}`}>DEPOSIT</div>
+                            <PlusIcon className={`w-6 h-6 cursor-pointer ${raw ? 'text-[#1c0740]' : 'text-[#1c0740]/70'}`}></PlusIcon>
                         </div>
                     </button>
                     <button className="bg-white/20 text-white px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg" onClick={() => onClickShow(2)}>
