@@ -4,7 +4,7 @@ import { useTonConnectUI } from "@tonconnect/ui-react";
 import {ChevronRightIcon} from "lucide-react";
 
 const WalletBalance = ({ address }: { address: string }) => {
-    const [balance, setBalance] = useState<string | number>('0.00');
+    const [balance, setBalance] = useState<number>(0.00);
     const [tonConnectUi] = useTonConnectUI(); // подключение хука
 
     const handleDisconnect = () => {
@@ -19,7 +19,7 @@ const WalletBalance = ({ address }: { address: string }) => {
 
     return (
         <button onClick={handleDisconnect} className="flex items-center text-white font-semibold text-xl gap-1 cursor-pointer">
-            <span className="font-bold">{balance} TON</span>
+            <span className="font-bold">{balance.toString()} TON</span>
             <ChevronRightIcon className="w-5 h-5" />
         </button>
     );
