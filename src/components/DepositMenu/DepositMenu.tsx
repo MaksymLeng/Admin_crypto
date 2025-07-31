@@ -19,8 +19,9 @@ const DepositMenu = () => {
     const [tonConnectUI] = useTonConnectUI();
     const wallet = useTonWallet();
     const raw  = wallet?.account?.address;
-    const id = userData?.id ?? telegramUser?.id.toString() ?? '12345678';
-    const masked = id?.replace(/\S/g, '*');
+    const id = telegramUser?.id || Number(userData?.id) || 1267519011;
+
+    const masked = id?.toString().replace(/\S/g, '*');
 
     const onClickShow = (id:number) => {
         dispatch(setShow(id));
@@ -34,7 +35,7 @@ const DepositMenu = () => {
     useEffect(() => {
         if (raw  && id) {
             dispatch(updateWallet({
-                id: +id,
+                id: id,
                 address: raw
             }));
         }

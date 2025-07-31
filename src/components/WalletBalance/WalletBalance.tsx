@@ -4,7 +4,7 @@ import { useTonConnectUI } from "@tonconnect/ui-react";
 import {ChevronRightIcon} from "lucide-react";
 
 const WalletBalance = ({ address }: { address: string }) => {
-    const [balance, setBalance] = useState<string>('0.00');
+    const [balance, setBalance] = useState<string | number>('0.00');
     const [tonConnectUi] = useTonConnectUI(); // подключение хука
 
     const handleDisconnect = () => {
@@ -13,7 +13,7 @@ const WalletBalance = ({ address }: { address: string }) => {
 
     useEffect(() => {
         if (address) {
-            fetchTonBalance(address).then((res) => setBalance(res.toString()));
+            fetchTonBalance(address).then(setBalance);
         }
     }, [address]);
 
