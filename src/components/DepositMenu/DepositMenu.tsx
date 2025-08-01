@@ -32,13 +32,13 @@ const DepositMenu = () => {
     }
     
     useEffect(() => {
-        if (raw  && id) {
+        if (raw  && id && walletFriendly === '') {
             dispatch(updateWallet({
                 id: id,
                 address: raw
             }));
         }
-    }, [dispatch, raw, id]);
+    }, [dispatch, raw, id, walletFriendly]);
 
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-10 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
@@ -130,7 +130,7 @@ const DepositMenu = () => {
                             <PlusIcon className={`w-6 h-6 cursor-pointer ${raw ? 'text-[#1c0740]' : 'text-[#1c0740]/70'}`}></PlusIcon>
                         </div>
                     </button>
-                    <button className="bg-white/20 text-white px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg" onClick={() => onClickShow(2)}>
+                    <button className="bg-white/20 text-white px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg" onClick={() => onClickShow(2)} disabled={!raw}>
                         <div className="w-full flex justify-center items-center gap-1 pointer-events-none">
                             <div className="opacity-80">WITHDRAW</div>
                             <ArrowUpIcon className="w-6 h-6 text-white cursor-pointer"></ArrowUpIcon>

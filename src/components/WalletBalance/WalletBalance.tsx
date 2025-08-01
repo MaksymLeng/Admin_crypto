@@ -2,13 +2,17 @@ import { useEffect, useState } from 'react';
 import {fetchTonBalance} from "../../FetchHelper/fetchTonBalance.ts";
 import { useTonConnectUI } from "@tonconnect/ui-react";
 import {ChevronRightIcon} from "lucide-react";
+import {useAppDispatch} from "../../store/hooks.ts";
+import { clearWallet } from "../../store/userSlice";
 
 const WalletBalance = ({ address }: { address: string }) => {
     const [balance, setBalance] = useState<number>(0.00);
     const [tonConnectUi] = useTonConnectUI(); // подключение хука
+    const dispatch = useAppDispatch();
 
     const handleDisconnect = () => {
-        tonConnectUi.disconnect(); // отключение кошелька
+        tonConnectUi.disconnect();
+        dispatch(clearWallet());
     };
 
     useEffect(() => {

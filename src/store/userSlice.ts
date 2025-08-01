@@ -42,6 +42,9 @@ const userSlice = createSlice({
         setTelegramUser(state, action: PayloadAction<TelegramUser>) {
             state.telegramUser = action.payload;
         },
+        clearWallet: (state) => {
+            state.walletFriendly = "";
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchUserData.fulfilled, (state, action: PayloadAction<UserType>) => {
@@ -53,5 +56,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { setTelegramUser } = userSlice.actions;
+export const { setTelegramUser,clearWallet } = userSlice.actions;
 export default userSlice.reducer;
