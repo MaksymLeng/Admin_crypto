@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const fetchTonBalance = async (address: string): Promise<number> => {
+export const getTonBalance = async (address: string): Promise<number> => {
     try {
         const response = await axios.get(
             `https://toncenter.com/api/v2/getAddressBalance?address=${address}`

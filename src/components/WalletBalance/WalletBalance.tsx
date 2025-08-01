@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import {fetchTonBalance} from "../../FetchHelper/fetchTonBalance.ts";
+import {getTonBalance} from "../../FetchHelper/getTonBalance.ts";
 import { useTonConnectUI } from "@tonconnect/ui-react";
 import {ChevronRightIcon} from "lucide-react";
 import {useAppDispatch} from "../../store/hooks.ts";
@@ -17,7 +17,7 @@ const WalletBalance = ({ address }: { address: string }) => {
 
     useEffect(() => {
         if (address) {
-            fetchTonBalance(address).then(setBalance);
+            getTonBalance(address).then(setBalance);
         }
     }, [address]);
 

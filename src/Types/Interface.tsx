@@ -34,3 +34,11 @@ export interface UserState {
     userData: UserType | null;
     walletFriendly: string;
 }
+
+export interface Trade {
+    coin: string
+    change: string
+    cm: string
+    amount: string
+    rawAmount: number
+}

@@ -15,7 +15,8 @@ import type {ModalProps} from "../../Types/Interface.tsx";
 import tonIcon from "../../assets/ton_icon.png";
 import type {DepositValues} from "../../Types/Types.tsx";
 import { useAppSelector } from '../../store/hooks';
-
+import { createDeposit } from '../../FetchHelper/createDeposit';
+import {useTonConnectUI} from "@tonconnect/ui-react";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const depositSchema = z.object({
@@ -26,7 +27,9 @@ export const depositSchema = z.object({
 });
 
 export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
-    const { walletFriendly } = useAppSelector((state) => state.user);
+    const { userData , telegramUser, walletFriendly } = useAppSelector((state) => state.user);
+    const [tonConnectUI] = useTonConnectUI();
+
     const {
         register,
         handleSubmit,
@@ -38,10 +41,35 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
         mode: "onChange",
     });
 
-    const onSubmit = (data: DepositValues) => {
-        console.log("SUBMIT", data);
-        reset();
-        // можно дальше обрабатывать
+    const onSubmit = async (data: DepositValues) => {
+        const amount = Number(data.amount);
+        const userId = telegramUser?.id || userData?.id;
+
+        if (!walletFriendly || !userId || isNaN(amount)) {
+            console.error('❌ Missing wallet, userId or invalid amount');
+            return;
+        }
+
+        try {
+            // 🔁 Запрашиваем адрес и payload с сервера
+            const { depositAddress, comment } = await createDeposit(Number(userId), amount);
+
+            // 🚀 Отправляем перевод через TonConnect
+            await tonConnectUI.sendTransaction({
+                validUntil: Math.floor(Date.now() / 1000) + 600,
+                messages: [{
+                    address: depositAddress,
+                    amount: String(BigInt(amount * 1e9)),
+                    payload: comment
+                }]
+            });
+
+            // ✅ После успеха
+            reset();       // очищаем форму
+            onClose();     // закрываем модалку
+        } catch (err) {
+            console.error('❌ Deposit failed:', err);
+        }
     };
 
     const amount = watch("amount");
