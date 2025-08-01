@@ -22,8 +22,12 @@ import {useTonConnectUI} from "@tonconnect/ui-react";
 export const depositSchema = z.object({
     amount: z
         .string()
-        .regex(/^\d+(\.\d{1,2})?$/, "Only numbers allowed")
-        .min(1, "Amount is required"),
+        .refine(val => {
+            const num = parseFloat(val);
+            return !isNaN(num) && num >= 0.1;
+        }, {
+            message: "Minimum amount is 0.1 TON"
+        }),
 });
 
 export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
