@@ -56,7 +56,8 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
 
         try {
             // 🔁 Запрашиваем адрес и payload с сервера
-            const { depositAddress, comment } = await createDeposit(Number(userId), amount);
+            const { depositAddress, payload } = await createDeposit(Number(userId), amount);
+
 
             // 🚀 Отправляем перевод через TonConnect
             await tonConnectUI.sendTransaction({
@@ -64,7 +65,7 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                 messages: [{
                     address: depositAddress,
                     amount: String(BigInt(amount * 1e9)),
-                    payload: comment
+                    payload
                 }]
             });
 

@@ -45,6 +45,6 @@ export interface Trade {
 
 export interface CreateDepositResponse {
     depositAddress: string;
-    comment: string;
+    payload: string;
     expiresAt: number;
 }
