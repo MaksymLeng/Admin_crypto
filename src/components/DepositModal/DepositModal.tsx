@@ -134,7 +134,7 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                                                     defaultValue="0"
                                                     {...register("amount")}
                                                     inputMode="decimal"
-                                                    pattern="[0-9]*"
+                                                    pattern="^\d*\.?\d*$"
                                                     className="bg-transparent text-white text-5xl font-bold outline-none text-center w-auto max-w-[160px]"
                                                     style={{ width: `${(amount?.length || 1) + 0.5}ch` }}
                                                     onInput={(e) => {
