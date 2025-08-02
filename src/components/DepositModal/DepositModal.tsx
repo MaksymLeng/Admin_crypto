@@ -1,21 +1,14 @@
-import { type FC} from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from 'zod';
-import {
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-    Transition,
-    TransitionChild
-} from '@headlessui/react'
-import { Fragment } from 'react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import {type FC, Fragment} from "react";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {z} from 'zod';
+import {Dialog, DialogPanel, DialogTitle, Transition, TransitionChild} from '@headlessui/react'
+import {XMarkIcon} from '@heroicons/react/24/outline'
 import type {ModalProps} from "../../Types/Interface.tsx";
 import tonIcon from "../../assets/ton_icon.png";
 import type {DepositValues} from "../../Types/Types.tsx";
-import { useAppSelector } from '../../store/hooks';
-import { createDeposit } from '../../FetchHelper/createDeposit';
+import {useAppSelector} from '../../store/hooks';
+import {createDeposit} from '../../FetchHelper/createDeposit';
 import {useTonConnectUI} from "@tonconnect/ui-react";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -24,10 +17,10 @@ export const depositSchema = z.object({
         .string()
         .refine(val => {
             const num = parseFloat(val);
-            return !isNaN(num) && num >= 0.1;
+            return !isNaN(num) && num >= 0.1 && num <= 99999;
         }, {
-            message: "Minimum amount is 0.1 TON"
-        }),
+            message: "Amount must be between 0.1 and 99999 TON"
+        })
 });
 
 export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
@@ -134,7 +127,7 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                                                     defaultValue="0"
                                                     {...register("amount")}
                                                     inputMode="decimal"
-                                                    pattern="^\d*\.?\d*$"
+                                                    pattern="[0-9]*"
                                                     className="bg-transparent text-white text-5xl font-bold outline-none text-center w-auto max-w-[160px]"
                                                     style={{ width: `${(amount?.length || 1) + 0.5}ch` }}
                                                     onInput={(e) => {
@@ -142,26 +135,39 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                                                         let value = input.value.replace(/[^\d.]/g, '');
 
                                                         // Удаляем лишние точки
-                                                        const parts = value.split(".");
+                                                        const parts = value.split('.');
                                                         if (parts.length > 2) {
-                                                            value = parts[0] + "." + parts[1]; // только первая точка
+                                                            value = parts[0] + '.' + parts[1];
                                                         }
 
-                                                        // Удалить ведущие нули, но оставить одиночный 0
-                                                        value = value.replace(/^0+(?=\d)/, "");
-
-                                                        // Ограничить до 5 цифр до точки
-                                                        const [whole, decimal] = value.split(".");
-                                                        if (whole.length > 5) {
-                                                            value = whole.slice(0, 5) + (decimal ? "." + decimal : "");
+                                                        // Удаляем ведущие нули (кроме "0" и "0.")
+                                                        if (!/^0(\.|$)/.test(value)) {
+                                                            value = value.replace(/^0+/, '');
                                                         }
 
-                                                        // Если введено только "0" — автоматически добавить точку
-                                                        if (value === "0") {
-                                                            value = "0.";
+                                                        // Разделяем целую и дробную часть
+                                                        const [whole = '', decimal = ''] = value.split('.');
+
+                                                        // Ограничение целой части до 5 цифр (99999)
+                                                        let newValue = whole.slice(0, 5);
+
+                                                        // Ограничение дробной части до 6 цифр
+                                                        if (decimal) {
+                                                            newValue += '.' + decimal.slice(0, 6);
                                                         }
 
-                                                        input.value = value;
+                                                        // Преобразуем строку в число и проверяем диапазон
+                                                        const num = parseFloat(newValue);
+                                                        if (!isNaN(num) && num > 99999) {
+                                                            newValue = '99999';
+                                                        }
+
+                                                        // Если только "0" — превращаем в "0."
+                                                        if (newValue === '0') {
+                                                            newValue = '0.';
+                                                        }
+
+                                                        input.value = newValue;
                                                     }}
                                                 />
                                               </span>
