@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import {XP_PER_EURO} from "../data/XP_PER_EURO_toBackend.ts";
+import {XP_PER_EURO} from "../data/variables.ts";
 
 function getLevel(xp: number): number {
     return Math.floor(0.1 * Math.sqrt(xp));

@@ -3,6 +3,7 @@ import type {UserType} from "../Types/Types.tsx"; // Это тип с бэка
 import type {TelegramUser} from "../Types/Interface.tsx"; // Это тип Telegram WebApp
 import type {UserState} from "../Types/Interface.tsx"
 import axios from 'axios';
+import {API} from "../data/variables.ts";
 
 
 const initialState: UserState = {
@@ -11,16 +12,16 @@ const initialState: UserState = {
     walletFriendly: '',
 };
 
-const API = 'http://localhost:3000';
-
 export const fetchUserData = createAsyncThunk(
     "user/fetchUserData",
     async (telegramUser: TelegramUser) => {
-        const res = await fetch(
-            `${API}/api/user?id=${telegramUser.id}&username=${telegramUser.username}`
-        );
-        const data: UserType = await res.json();
-        return data;
+        const res = await axios.get<UserType>(`${API}/api/user`, {
+            params: {
+                id: telegramUser.id,
+                username: telegramUser.username,
+            },
+        });
+        return res.data;
     }
 );
 

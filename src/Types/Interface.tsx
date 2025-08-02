@@ -42,3 +42,9 @@ export interface Trade {
     amount: string
     rawAmount: number
 }
+
+export interface CreateDepositResponse {
+    depositAddress: string;
+    comment: string;
+    expiresAt: number;
+}
