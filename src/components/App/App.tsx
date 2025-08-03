@@ -12,10 +12,13 @@ const App = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
+        dispatch(fetchApiKey('1267519011'));
+    }, [dispatch]);
+
+    useEffect(() => {
         if (tgUser) {
             dispatch(setTelegramUser(tgUser));
             dispatch(fetchUserData(tgUser));
-            dispatch(fetchApiKey(tgUser.id.toString()));
         }
     }, [dispatch, tgUser]);
 
