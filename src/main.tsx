@@ -7,7 +7,7 @@ import './index.css'
 
 createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
-        <TonConnectUIProvider manifestUrl="https://ndepositdev.netlify.app/tonconnect-manifest.json">
+        <TonConnectUIProvider manifestUrl="https://ndeposit.app/tonconnect-manifest.json">
             <App />
         </TonConnectUIProvider>
     </Provider>

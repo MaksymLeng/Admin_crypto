@@ -51,7 +51,6 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
             // 🔁 Запрашиваем адрес и payload с сервера
             const { depositAddress, payload } = await createDeposit(Number(userId), amount);
 
-
             // 🚀 Отправляем перевод через TonConnect
             await tonConnectUI.sendTransaction({
                 validUntil: Math.floor(Date.now() / 1000) + 600,

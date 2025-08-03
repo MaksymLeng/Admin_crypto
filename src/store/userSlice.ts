@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/tool
 import type {UserType} from "../Types/Types.tsx"; // Это тип с бэка
 import type {TelegramUser} from "../Types/Interface.tsx"; // Это тип Telegram WebApp
 import type {UserState} from "../Types/Interface.tsx"
-import axios from 'axios';
 import {API} from "../data/variables.ts";
+import axiosInstance from "../FetchHelper/axiosInstance.ts";
 
 
 const initialState: UserState = {
@@ -15,7 +15,7 @@ const initialState: UserState = {
 export const fetchUserData = createAsyncThunk(
     "user/fetchUserData",
     async (telegramUser: TelegramUser) => {
-        const res = await axios.get<UserType>(`${API}/api/user`, {
+        const res = await axiosInstance.get<UserType>(`${API}/api/user`, {
             params: {
                 id: telegramUser.id,
                 username: telegramUser.username,
@@ -28,7 +28,7 @@ export const fetchUserData = createAsyncThunk(
 export const updateWallet = createAsyncThunk(
     'user/updateWallet',
     async ({ id, address }: { id: number, address: string }) => {
-        const response = await axios.post(`${API}/api/user/setWallet`, {
+        const response = await axiosInstance.post(`${API}/api/user/setWallet`, {
             id,
             address
         });
