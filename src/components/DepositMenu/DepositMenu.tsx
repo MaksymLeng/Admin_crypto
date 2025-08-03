@@ -116,7 +116,7 @@ const DepositMenu = () => {
                             showArr[0] ? (
                                 <WalletBalance address={raw} />
                             ) : (
-                                <span className="text-xl text-white font-bold">*****</span>
+                                <span className="text-xl text-white font-semibold">*****</span>
                             )
                         ) : (
                             <button
