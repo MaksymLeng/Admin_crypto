@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {getTonBalance} from "../../FetchHelper/getTonBalance.ts";
 import { useTonConnectUI } from "@tonconnect/ui-react";
 import {ChevronRightIcon} from "lucide-react";
-import {useAppDispatch} from "../../store/hooks.ts";
-import { clearWallet } from "../../store/userSlice";
+import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
+import {clearWallet, setTonBalance} from "../../store/userSlice";
 
 const WalletBalance = ({ address }: { address: string }) => {
-    const [balance, setBalance] = useState<number>(0.00);
+    const { balanceTon } = useAppSelector((state) => state.user);
     const [tonConnectUi] = useTonConnectUI(); // подключение хука
     const dispatch = useAppDispatch();
 
@@ -16,14 +16,14 @@ const WalletBalance = ({ address }: { address: string }) => {
     };
 
     useEffect(() => {
-        if (address) {
-            getTonBalance(address).then(setBalance);
+        if (address && balanceTon === 0) {
+            getTonBalance(address).then((value) => dispatch(setTonBalance(value)));
         }
-    }, [address]);
+    }, [address, balanceTon, dispatch]);
 
     return (
         <button onClick={handleDisconnect} className="flex items-center text-white font-semibold text-xl gap-1 cursor-pointer">
-            <span>{balance.toString()} TON</span>
+            <span>{balanceTon.toString()} TON</span>
             <ChevronRightIcon className="w-5 h-5" />
         </button>
     );

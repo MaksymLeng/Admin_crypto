@@ -33,6 +33,7 @@ export interface UserState {
     telegramUser: TelegramUser | null;
     userData: UserType | null;
     walletFriendly: string;
+    balanceTon: number;
 }
 
 export interface TradeState {

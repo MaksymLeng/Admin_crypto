@@ -9,6 +9,7 @@ const initialState: UserState = {
     telegramUser: null,
     userData: null,
     walletFriendly: '',
+    balanceTon: 0,
 };
 
 export const fetchUserData = createAsyncThunk(
@@ -51,6 +52,12 @@ const userSlice = createSlice({
         },
         clearWallet: (state) => {
             state.walletFriendly = "";
+        },
+        setTonBalance: (state, action) => {
+            state.balanceTon = action.payload;
+        },
+        clearTonBalance: (state) => {
+            state.balanceTon = 0;
         }
     },
     extraReducers: (builder) => {
@@ -63,5 +70,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { setTelegramUser,clearWallet } = userSlice.actions;
+export const { setTelegramUser,clearWallet, setTonBalance, clearTonBalance } = userSlice.actions;
 export default userSlice.reducer;

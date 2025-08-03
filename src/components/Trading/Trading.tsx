@@ -10,10 +10,12 @@ const Trading = () => {
     const { key } = useAppSelector((state) => state.apiKey);
 
     useEffect(() => {
-        dispatch(fetchTrades(key));
+        if (!data || data.length === 0) {
+            dispatch(fetchTrades(key));
+        }
         const interval = setInterval(() => dispatch(fetchTrades(key)), 120_000);
         return () => clearInterval(interval);
-    }, [dispatch, key]);
+    }, [data, dispatch, key]);
 
 
     const bestTrade = data.reduce(
