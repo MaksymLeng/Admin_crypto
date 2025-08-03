@@ -13,8 +13,10 @@ const App = () => {
     const { key } = useAppSelector((state) => state.apiKey);
     
     useEffect(() => {
-        dispatch(fetchApiKey('1267519011'));
-    }, [dispatch]); //перенести обратно
+        if(tgUser) {
+            dispatch(fetchApiKey(tgUser.id.toString()));
+        }
+    }, [dispatch, tgUser]);
 
     useEffect(() => {
         if (tgUser) {
