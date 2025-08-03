@@ -41,7 +41,7 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
 
     const onSubmit = async (data: DepositValues) => {
         const amount = Number(data.amount);
-        const userId = telegramUser?.id || userData?.id || 1267519011; //потом убрать
+        const userId = telegramUser?.id || userData?.id;
 
         if (!walletFriendly || !userId || isNaN(amount)) {
             console.error('❌ Missing wallet, userId or invalid amount');
