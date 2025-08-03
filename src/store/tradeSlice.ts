@@ -2,20 +2,16 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type {Trade} from '../Types/Types';
 import {userAPI} from "../data/variables.ts";
 import axios from 'axios';
+import type {TradeState} from "../Types/Interface.tsx";
 
 export const fetchTrades = createAsyncThunk('trades/fetch', async (apiKey : string) => {
-    const res = await axios.get<Trade[]>(`${userAPI}/api/trades`, {
+    const res = await axios.get<Trade[]>(`${userAPI}/trade/trades`, {
         headers: {
             "x-api-key": apiKey,
         },
     });
     return res.data;
 });
-
-interface TradeState {
-    data: Trade[];
-    loading: boolean;
-}
 
 const initialState: TradeState = {
     data: [],

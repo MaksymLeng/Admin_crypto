@@ -35,6 +35,11 @@ export interface UserState {
     walletFriendly: string;
 }
 
+export interface TradeState {
+    data: Trade[];
+    loading: boolean;
+}
+
 export interface Trade {
     coin: string
     change: string
