@@ -1,20 +1,13 @@
-import store from "../store";
 import { z } from 'zod';
 import {depositSchema} from "../components/DepositModal/DepositModal.tsx";
-
-export type RootState = ReturnType<typeof store.getState>;
 
 export type Trade = {
     coin: string;
     change: string;
     cm: string;
     amount: string;
+    rawAmount: number;
 };
-
-export type Action<T = unknown> = {
-    type: string;
-    payload?: T;
-}
 
 export type ModalState = {
     showArr: boolean[],

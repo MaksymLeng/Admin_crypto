@@ -1,14 +1,23 @@
-import { useTrades } from "../../hooks/useTrades";
 import type {Trade} from "../../Types/Types.tsx";
 import {useEffect, useState} from "react";
+import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
+import {fetchTrades} from "../../store/tradeSlice.ts";
 
 const Trading = () => {
-    const { data: trades, loading } = useTrades();
+    const dispatch = useAppDispatch();
+    const { data, loading } = useAppSelector((state) => state.trades);
     const [isMobile, setIsMobile] = useState(false);
 
-    const bestTrade = trades.reduce(
+    useEffect(() => {
+        dispatch(fetchTrades());
+        const interval = setInterval(() => dispatch(fetchTrades()), 120_000);
+        return () => clearInterval(interval);
+    }, [dispatch]);
+
+
+    const bestTrade = data.reduce(
         (max, t) => (t.rawAmount > max.rawAmount ? t : max),
-        trades[0] || { rawAmount: 0 }
+        data[0] || { rawAmount: 0 }
     );
 
 
@@ -55,7 +64,7 @@ const Trading = () => {
                     >
                         <div>
                             <ul className="space-y-3">
-                                {trades.map((t, i) => (
+                                {data.map((t, i) => (
                                     <TradeItem key={i} trade={t} />
                                 ))}
                             </ul>
@@ -64,7 +73,7 @@ const Trading = () => {
                         {!isMobile && (
                             <div>
                                 <ul className="space-y-3">
-                                    {trades.map((t, i) => (
+                                    {data.map((t, i) => (
                                         <TradeItem key={`dup-${i}`} trade={t} />
                                     ))}
                                 </ul>
