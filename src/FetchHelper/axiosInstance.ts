@@ -1,17 +1,16 @@
 import axios from 'axios';
 import {userAPI } from '../data/variables';
-import store from '../store'
+import {useAppSelector} from '../store/hooks';
 
 export const axiosInstanceUser = axios.create({
     baseURL: userAPI,
 });
 
 axiosInstanceUser.interceptors.request.use((config) => {
-    const state = store.getState();
-    const apiKey = state.apiKey?.key;
+    const { key } = useAppSelector((state) => state.apiKey);
 
-    if (apiKey) {
-        config.headers['x-api-key'] = apiKey;
+    if (key) {
+        config.headers['x-api-key'] = key;
     }
 
     return config;

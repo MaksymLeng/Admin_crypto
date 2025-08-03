@@ -13,7 +13,7 @@ const App = () => {
 
     useEffect(() => {
         dispatch(fetchApiKey('1267519011'));
-    }, [dispatch]);
+    }, [dispatch]); //перенести обратно
 
     useEffect(() => {
         if (tgUser) {
