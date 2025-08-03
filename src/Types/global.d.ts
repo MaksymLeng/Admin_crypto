@@ -1,12 +1,20 @@
 interface TelegramWebAppInitDataUnsafe {
     user?: TelegramWebAppUser;
+    start_param?: string;
     [key: string]: never;
 }
 
 interface TelegramWebApp {
+    ready: () => void;
+    BackButton: {
+        show: () => void;
+        hide: () => void;
+        onClick: (cb: () => void) => void;
+    };
+    close: () => void;
     initData: string;
     initDataUnsafe: TelegramWebAppInitDataUnsafe;
-    // ты можешь добавить сюда и другие методы (openLink, expand и т.д.)
+    [key: string]: never;
 }
 
 interface TelegramNamespace {

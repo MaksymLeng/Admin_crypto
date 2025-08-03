@@ -2,34 +2,42 @@ import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/tool
 import type {UserType} from "../Types/Types.tsx"; // Это тип с бэка
 import type {TelegramUser} from "../Types/Interface.tsx"; // Это тип Telegram WebApp
 import type {UserState} from "../Types/Interface.tsx"
+import {userAPI} from "../data/variables.ts";
 import axios from 'axios';
-
 
 const initialState: UserState = {
     telegramUser: null,
     userData: null,
     walletFriendly: '',
+    balanceTon: 0,
 };
-
-const API = 'http://localhost:3000';
 
 export const fetchUserData = createAsyncThunk(
     "user/fetchUserData",
-    async (telegramUser: TelegramUser) => {
-        const res = await fetch(
-            `${API}/api/user?id=${telegramUser.id}&username=${telegramUser.username}`
-        );
-        const data: UserType = await res.json();
-        return data;
+    async ({telegramUser, apiKey} : {telegramUser: TelegramUser, apiKey: string }) => {
+        const res = await axios.get<UserType>(`${userAPI}/api/user`, {
+            params: {
+                id: telegramUser.id,
+                username: telegramUser.username,
+            },
+            headers: {
+                'x-api-key': apiKey,
+            },
+        });
+        return res.data;
     }
 );
 
 export const updateWallet = createAsyncThunk(
     'user/updateWallet',
-    async ({ id, address }: { id: number, address: string }) => {
-        const response = await axios.post(`${API}/api/user/setWallet`, {
+    async ({ id, address, apiKey }: { id: number, address: string, apiKey: string}) => {
+        const response = await axios.post(`${userAPI}/api/user/setWallet`, {
             id,
             address
+        },{
+            headers: {
+                'x-api-key': apiKey,
+            },
         });
         return response.data;
     }
@@ -42,6 +50,15 @@ const userSlice = createSlice({
         setTelegramUser(state, action: PayloadAction<TelegramUser>) {
             state.telegramUser = action.payload;
         },
+        clearWallet: (state) => {
+            state.walletFriendly = "";
+        },
+        setTonBalance: (state, action) => {
+            state.balanceTon = action.payload;
+        },
+        clearTonBalance: (state) => {
+            state.balanceTon = 0;
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchUserData.fulfilled, (state, action: PayloadAction<UserType>) => {
@@ -53,5 +70,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { setTelegramUser } = userSlice.actions;
+export const { setTelegramUser,clearWallet, setTonBalance, clearTonBalance } = userSlice.actions;
 export default userSlice.reducer;

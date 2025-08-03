@@ -33,4 +33,24 @@ export interface UserState {
     telegramUser: TelegramUser | null;
     userData: UserType | null;
     walletFriendly: string;
+    balanceTon: number;
+}
+
+export interface TradeState {
+    data: Trade[];
+    loading: boolean;
+}
+
+export interface Trade {
+    coin: string
+    change: string
+    cm: string
+    amount: string
+    rawAmount: number
+}
+
+export interface CreateDepositResponse {
+    depositAddress: string;
+    payload: string;
+    expiresAt: number;
 }

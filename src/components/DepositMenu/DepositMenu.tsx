@@ -15,6 +15,7 @@ const DepositMenu = () => {
     const showArr= useAppSelector((state) => state.modal.showArr);
     const dispatch = useAppDispatch();
     const { userData , telegramUser, walletFriendly } = useAppSelector((state) => state.user);
+    const { key } = useAppSelector((state) => state.apiKey);
 
     const [tonConnectUI] = useTonConnectUI();
     const wallet = useTonWallet();
@@ -32,13 +33,14 @@ const DepositMenu = () => {
     }
     
     useEffect(() => {
-        if (raw  && id) {
+        if (raw  && id && walletFriendly === '') {
             dispatch(updateWallet({
                 id: id,
-                address: raw
+                address: raw,
+                apiKey: key
             }));
         }
-    }, [dispatch, raw, id]);
+    }, [dispatch, raw, id, walletFriendly, key]);
 
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-10 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
@@ -75,18 +77,18 @@ const DepositMenu = () => {
                     <div className="flex justify-between items-center">
                         <span className="text-xl font-bold">BALANCE:</span>
                         <span className="text-3xl">
-                            {userData?.Balance ?? 0}$
+                            {showArr[0] ? `${userData?.Balance ?? 0}$` : '*****'}
                         </span>
                     </div>
                     <div className="flex justify-between items-center">
                         <span className="text-xl font-light opacity-50">AVAILABLE:</span>
                         <span className="text-3xl">
-                            {userData?.Available ?? 0}$
+                            {showArr[0] ? `${userData?.Available ?? 0}$` : '*****'}
                         </span>
                     </div>
                     <div className="flex justify-between text-md font-light items-center">
                         <span className="text-left opacity-50">WITHDRAWAL<br/>DATE:</span>
-                        <span className=" font-bold text-white text-xl">{userData?.WithdrawalDate ?? '—'}</span>
+                        <span className=" font-bold text-white text-xl">{showArr[0] ? userData?.WithdrawalDate ?? '—' : '*****'}</span>
                     </div>
                     <div className="flex justify-between text-md font-light items-center">
                         <div className="flex gap-1">
@@ -111,7 +113,11 @@ const DepositMenu = () => {
                         </div>
 
                         {raw  ? (
-                            <WalletBalance address = {raw}/>
+                            showArr[0] ? (
+                                <WalletBalance address={raw} />
+                            ) : (
+                                <span className="text-xl text-white font-semibold">*****</span>
+                            )
                         ) : (
                             <button
                                 className="flex items-center justify-center gap-1 font-semibold cursor-pointer"
@@ -124,13 +130,13 @@ const DepositMenu = () => {
                     </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                    <button className="bg-white text-white px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg" onClick={() => onClickShow(1)}>
+                    <button className={`${raw ? 'bg-white' : "bg-white/40"} px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg`} onClick={() => onClickShow(1)} disabled={!raw}>
                         <div className="w-full flex justify-center items-center gap-1 pointer-events-none">
-                            <div className="text-black">DEPOSIT</div>
-                            <PlusIcon className="w-6 h-6 text-[#1c0740] cursor-pointer"></PlusIcon>
+                            <div className={`${raw ? 'text-black' : 'text-black/70'}`}>DEPOSIT</div>
+                            <PlusIcon className={`w-6 h-6 cursor-pointer ${raw ? 'text-[#1c0740]' : 'text-[#1c0740]/70'}`}></PlusIcon>
                         </div>
                     </button>
-                    <button className="bg-white/20 text-white px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg" onClick={() => onClickShow(2)}>
+                    <button className="bg-white/20 text-white px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg" onClick={() => onClickShow(2)} disabled={!raw}>
                         <div className="w-full flex justify-center items-center gap-1 pointer-events-none">
                             <div className="opacity-80">WITHDRAW</div>
                             <ArrowUpIcon className="w-6 h-6 text-white cursor-pointer"></ArrowUpIcon>
