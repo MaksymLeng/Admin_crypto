@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import {API} from "../data/variables.ts";
+import {botAPI} from "../data/variables.ts";
 
 export const fetchApiKey = createAsyncThunk(
     'apiKey/fetch',
     async (userId: string) => {
-        const response = await axios.post(`${API}/api/get-api-key`, { userId });
+        const response = await axios.post(`${botAPI}/api/get-api-key`, { userId });
         return response.data.apiKey;
     }
 );

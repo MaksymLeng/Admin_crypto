@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { API } from '../data/variables';
+import {userAPI } from '../data/variables';
 import store from '../store'
 
-const axiosInstance = axios.create({
-    baseURL: API,
+export const axiosInstanceUser = axios.create({
+    baseURL: userAPI,
 });
 
-axiosInstance.interceptors.request.use((config) => {
+axiosInstanceUser.interceptors.request.use((config) => {
     const state = store.getState();
     const apiKey = state.apiKey?.key;
 
@@ -17,4 +17,3 @@ axiosInstance.interceptors.request.use((config) => {
     return config;
 });
 
-export default axiosInstance;
