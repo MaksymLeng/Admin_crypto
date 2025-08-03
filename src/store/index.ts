@@ -13,7 +13,7 @@ const stringMiddleware: Middleware = () => (next) => (action) => {
 const store = configureStore({
     reducer,
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(stringMiddleware),
-    devTools: process.env.NODE_ENV !== "production",
+    devTools: true,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
