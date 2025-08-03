@@ -3,8 +3,7 @@ import type {UserType} from "../Types/Types.tsx"; // Это тип с бэка
 import type {TelegramUser} from "../Types/Interface.tsx"; // Это тип Telegram WebApp
 import type {UserState} from "../Types/Interface.tsx"
 import {userAPI} from "../data/variables.ts";
-import {axiosInstanceUser} from "../FetchHelper/axiosInstance.ts";
-
+import axios from 'axios';
 
 const initialState: UserState = {
     telegramUser: null,
@@ -14,11 +13,14 @@ const initialState: UserState = {
 
 export const fetchUserData = createAsyncThunk(
     "user/fetchUserData",
-    async (telegramUser: TelegramUser) => {
-        const res = await axiosInstanceUser.get<UserType>(`${userAPI}/api/user`, {
+    async ({telegramUser, apiKey} : {telegramUser: TelegramUser, apiKey: string }) => {
+        const res = await axios.get<UserType>(`${userAPI}/api/user`, {
             params: {
                 id: telegramUser.id,
                 username: telegramUser.username,
+            },
+            headers: {
+                'x-api-key': apiKey,
             },
         });
         return res.data;
@@ -27,10 +29,14 @@ export const fetchUserData = createAsyncThunk(
 
 export const updateWallet = createAsyncThunk(
     'user/updateWallet',
-    async ({ id, address }: { id: number, address: string }) => {
-        const response = await axiosInstanceUser.post(`${userAPI}/api/user/setWallet`, {
+    async ({ id, address, apiKey }: { id: number, address: string, apiKey: string}) => {
+        const response = await axios.post(`${userAPI}/api/user/setWallet`, {
             id,
             address
+        },{
+            headers: {
+                'x-api-key': apiKey,
+            },
         });
         return response.data;
     }

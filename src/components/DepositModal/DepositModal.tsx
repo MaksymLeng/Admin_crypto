@@ -25,6 +25,7 @@ export const depositSchema = z.object({
 
 export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
     const { userData , telegramUser, walletFriendly } = useAppSelector((state) => state.user);
+    const { key } = useAppSelector((state) => state.apiKey);
     const [tonConnectUI] = useTonConnectUI();
 
     const {
@@ -49,7 +50,7 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
 
         try {
             // 🔁 Запрашиваем адрес и payload с сервера
-            const { depositAddress, payload } = await createDeposit(Number(userId), amount);
+            const { depositAddress, payload } = await createDeposit(Number(userId), amount, key);
 
             // 🚀 Отправляем перевод через TonConnect
             await tonConnectUI.sendTransaction({

@@ -3,14 +3,15 @@ import { routes } from '../pages/pages'
 import NavMenu from "../NavMenu/NavMenu.tsx";
 import {useTelegramUser} from "../../hooks/useTelegramUser.ts";
 import {useEffect} from "react";
-import {useAppDispatch} from "../../store/hooks.ts";
+import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
 import {fetchUserData, setTelegramUser} from '../../store/userSlice.ts';
 import {fetchApiKey} from "../../store/apiKeySlice.ts";
 
 const App = () => {
     const tgUser = useTelegramUser();
     const dispatch = useAppDispatch();
-
+    const { key } = useAppSelector((state) => state.apiKey);
+    
     useEffect(() => {
         dispatch(fetchApiKey('1267519011'));
     }, [dispatch]); //перенести обратно
@@ -18,9 +19,12 @@ const App = () => {
     useEffect(() => {
         if (tgUser) {
             dispatch(setTelegramUser(tgUser));
-            dispatch(fetchUserData(tgUser));
+            dispatch(fetchUserData({
+                telegramUser: tgUser, 
+                apiKey: key
+            }));
         }
-    }, [dispatch, tgUser]);
+    }, [dispatch, key, tgUser]);
 
   return (
       <Router>

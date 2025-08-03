@@ -15,6 +15,7 @@ const DepositMenu = () => {
     const showArr= useAppSelector((state) => state.modal.showArr);
     const dispatch = useAppDispatch();
     const { userData , telegramUser, walletFriendly } = useAppSelector((state) => state.user);
+    const { key } = useAppSelector((state) => state.apiKey);
 
     const [tonConnectUI] = useTonConnectUI();
     const wallet = useTonWallet();
@@ -35,10 +36,11 @@ const DepositMenu = () => {
         if (raw  && id && walletFriendly === '') {
             dispatch(updateWallet({
                 id: id,
-                address: raw
+                address: raw,
+                apiKey: key
             }));
         }
-    }, [dispatch, raw, id, walletFriendly]);
+    }, [dispatch, raw, id, walletFriendly, key]);
 
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-10 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
