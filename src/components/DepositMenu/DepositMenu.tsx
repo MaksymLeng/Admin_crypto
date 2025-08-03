@@ -77,18 +77,18 @@ const DepositMenu = () => {
                     <div className="flex justify-between items-center">
                         <span className="text-xl font-bold">BALANCE:</span>
                         <span className="text-3xl">
-                            {userData?.Balance ?? 0}$
+                            {showArr[0] ? `${userData?.Balance ?? 0}$` : '*****'}
                         </span>
                     </div>
                     <div className="flex justify-between items-center">
                         <span className="text-xl font-light opacity-50">AVAILABLE:</span>
                         <span className="text-3xl">
-                            {userData?.Available ?? 0}$
+                            {showArr[0] ? `${userData?.Available ?? 0}$` : '*****'}
                         </span>
                     </div>
                     <div className="flex justify-between text-md font-light items-center">
                         <span className="text-left opacity-50">WITHDRAWAL<br/>DATE:</span>
-                        <span className=" font-bold text-white text-xl">{userData?.WithdrawalDate ?? '—'}</span>
+                        <span className=" font-bold text-white text-xl">{showArr[0] ? userData?.WithdrawalDate ?? '—' : '*****'}</span>
                     </div>
                     <div className="flex justify-between text-md font-light items-center">
                         <div className="flex gap-1">
@@ -113,7 +113,11 @@ const DepositMenu = () => {
                         </div>
 
                         {raw  ? (
-                            <WalletBalance address = {raw}/>
+                            showArr[0] ? (
+                                <WalletBalance address={raw} />
+                            ) : (
+                                <span className="text-xl text-white font-bold">*****</span>
+                            )
                         ) : (
                             <button
                                 className="flex items-center justify-center gap-1 font-semibold cursor-pointer"
