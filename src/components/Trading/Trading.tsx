@@ -7,12 +7,13 @@ const Trading = () => {
     const dispatch = useAppDispatch();
     const { data, loading } = useAppSelector((state) => state.trades);
     const [isMobile, setIsMobile] = useState(false);
+    const { key } = useAppSelector((state) => state.apiKey);
 
     useEffect(() => {
-        dispatch(fetchTrades());
-        const interval = setInterval(() => dispatch(fetchTrades()), 120_000);
+        dispatch(fetchTrades(key));
+        const interval = setInterval(() => dispatch(fetchTrades(key)), 120_000);
         return () => clearInterval(interval);
-    }, [dispatch]);
+    }, [dispatch, key]);
 
 
     const bestTrade = data.reduce(

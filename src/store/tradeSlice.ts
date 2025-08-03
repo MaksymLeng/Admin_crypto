@@ -3,8 +3,12 @@ import type {Trade} from '../Types/Types';
 import {userAPI} from "../data/variables.ts";
 import axios from 'axios';
 
-export const fetchTrades = createAsyncThunk('trades/fetch', async () => {
-    const res = await axios.get<Trade[]>(`${userAPI}/api/trades`);
+export const fetchTrades = createAsyncThunk('trades/fetch', async (apiKey : string) => {
+    const res = await axios.get<Trade[]>(`${userAPI}/api/trades`, {
+        headers: {
+            "x-api-key": apiKey,
+        },
+    });
     return res.data;
 });
 
