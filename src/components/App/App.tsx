@@ -6,6 +6,7 @@ import {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
 import {fetchUserData, setTelegramUser} from '../../store/userSlice.ts';
 import {fetchApiKey} from "../../store/apiKeySlice.ts";
+import {fetchTrades} from "../../store/tradeSlice.ts";
 
 const App = () => {
     const tgUser = useTelegramUser();
@@ -16,6 +17,7 @@ const App = () => {
         if(tgUser) {
             dispatch(fetchApiKey(tgUser.id.toString()));
         }
+        dispatch(fetchTrades(key));
     }, []);
 
     useEffect(() => {
