@@ -16,7 +16,7 @@ const App = () => {
         if(tgUser) {
             dispatch(fetchApiKey(tgUser.id.toString()));
         }
-    }, [dispatch, tgUser]);
+    });
 
     useEffect(() => {
         if (tgUser) {
