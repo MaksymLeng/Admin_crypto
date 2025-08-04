@@ -10,7 +10,7 @@ const Account = () => {
 
     const getLevelIcon = (level: number): JSX.Element => {
         if (level <= 2) return <Star size={20} className="text-yellow-400 mx-auto w-4 h-4" />;
-        if (level <= 5) return <Medal size={20} className="text-orange-500 mx-auto w-4 h-4" />;
+        if (level <= 4) return <Medal size={20} className="text-orange-500 mx-auto w-4 h-4" />;
         return <Trophy size={20} className="text-purple-600 mx-auto w-4 h-4" />;
     };
 

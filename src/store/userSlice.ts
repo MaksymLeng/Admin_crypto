@@ -12,33 +12,71 @@ const initialState: UserState = {
     balanceTon: 0,
 };
 
+// export const fetchUserData = createAsyncThunk(
+//     "user/fetchUserData",
+//     async ({telegramUser, apiKey} : {telegramUser: TelegramUser, apiKey: string }) => {
+//         const res = await axios.get<UserType>(`${userAPI}/api/user`, {
+//             params: {
+//                 id: telegramUser.id,
+//                 username: telegramUser.username,
+//             },
+//             headers: {
+//                 'x-api-key': apiKey,
+//             },
+//         });
+//         return res.data;
+//     }
+// );
+
 export const fetchUserData = createAsyncThunk(
     "user/fetchUserData",
     async ({telegramUser, apiKey} : {telegramUser: TelegramUser, apiKey: string }) => {
-        const res = await axios.get<UserType>(`${userAPI}/api/user`, {
+        const res = await axios<UserType>({
+            url: `${userAPI}/api/user`,
+            method: "GET",
             params: {
                 id: telegramUser.id,
                 username: telegramUser.username,
             },
             headers: {
                 'x-api-key': apiKey,
-            },
-        });
+            }
+        })
         return res.data;
     }
 );
 
+
+
+// export const updateWallet = createAsyncThunk(
+//     'user/updateWallet',
+//     async ({ id, address, apiKey }: { id: number, address: string, apiKey: string}) => {
+//         const response = await axios.post(`${userAPI}/api/user/setWallet`, {
+//             id,
+//             address
+//         },{
+//             headers: {
+//                 'x-api-key': apiKey,
+//             },
+//         });
+//         return response.data;
+//     }
+// );
+
 export const updateWallet = createAsyncThunk(
     'user/updateWallet',
     async ({ id, address, apiKey }: { id: number, address: string, apiKey: string}) => {
-        const response = await axios.post(`${userAPI}/api/user/setWallet`, {
-            id,
-            address
-        },{
+        const response = await axios({
+            url: `${userAPI}/api/user/setWallet`,
+            method: 'POST',
+            data: {
+                id,
+                address
+            },
             headers: {
                 'x-api-key': apiKey,
-            },
-        });
+            }
+        })
         return response.data;
     }
 );
