@@ -12,28 +12,11 @@ const initialState: UserState = {
     balanceTon: 0,
 };
 
-// export const fetchUserData = createAsyncThunk(
-//     "user/fetchUserData",
-//     async ({telegramUser, apiKey} : {telegramUser: TelegramUser, apiKey: string }) => {
-//         const res = await axios.get<UserType>(`${userAPI}/api/user`, {
-//             params: {
-//                 id: telegramUser.id,
-//                 username: telegramUser.username,
-//             },
-//             headers: {
-//                 'x-api-key': apiKey,
-//             },
-//         });
-//         return res.data;
-//     }
-// );
-
 export const fetchUserData = createAsyncThunk(
     "user/fetchUserData",
     async ({telegramUser, apiKey} : {telegramUser: TelegramUser, apiKey: string }) => {
         const res = await axios<UserType>({
             url: `${userAPI}/api/user`,
-            method: "GET",
             params: {
                 id: telegramUser.id,
                 username: telegramUser.username,
@@ -45,23 +28,6 @@ export const fetchUserData = createAsyncThunk(
         return res.data;
     }
 );
-
-
-
-// export const updateWallet = createAsyncThunk(
-//     'user/updateWallet',
-//     async ({ id, address, apiKey }: { id: number, address: string, apiKey: string}) => {
-//         const response = await axios.post(`${userAPI}/api/user/setWallet`, {
-//             id,
-//             address
-//         },{
-//             headers: {
-//                 'x-api-key': apiKey,
-//             },
-//         });
-//         return response.data;
-//     }
-// );
 
 export const updateWallet = createAsyncThunk(
     'user/updateWallet',
@@ -93,9 +59,6 @@ const userSlice = createSlice({
         },
         setTonBalance: (state, action) => {
             state.balanceTon = action.payload;
-        },
-        clearTonBalance: (state) => {
-            state.balanceTon = 0;
         }
     },
     extraReducers: (builder) => {
@@ -108,5 +71,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { setTelegramUser,clearWallet, setTonBalance, clearTonBalance } = userSlice.actions;
+export const { setTelegramUser,clearWallet, setTonBalance } = userSlice.actions;
 export default userSlice.reducer;

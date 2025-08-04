@@ -5,7 +5,8 @@ import axios from 'axios';
 import type {TradeState} from "../Types/Interface.tsx";
 
 export const fetchTrades = createAsyncThunk('trades/fetch', async (apiKey : string) => {
-    const res = await axios.get<Trade[]>(`${userAPI}/trade/trades`, {
+    const res = await axios<Trade[]>({
+        url:`${userAPI}/trade/trades`,
         headers: {
             "x-api-key": apiKey,
         },

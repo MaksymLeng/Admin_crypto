@@ -5,7 +5,13 @@ import {botAPI} from "../data/variables.ts";
 export const fetchApiKey = createAsyncThunk(
     'apiKey/fetch',
     async (userId: string) => {
-        const response = await axios.post(`${botAPI}/api/get-api-key`, { userId });
+        const response = await axios({
+            url:`${botAPI}/api/get-api-key`,
+            method: 'POST',
+            data: {
+                userId
+            }
+        });
         return response.data.apiKey;
     }
 );
