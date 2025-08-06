@@ -8,13 +8,21 @@ import {userAPI} from "../../data/variables.ts";
 
 const UpgradeModal = ({ isOpen, onClose }: UpgradeModalProps) => {
     const userId = useAppSelector((state) => state.user.telegramUser?.id);
+    const { key } = useAppSelector((state) => state.apiKey);
     const [result, setResult] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
     const handleUpgrade = async () => {
         setLoading(true);
         try {
-            const res = await axios.post(`${userAPI}/api/user/level/upgrade`, { userId });
+            const res = await axios({
+                url: `${userAPI}/api/user/level/upgrade`,
+                method: 'POST',
+                data: { userId },
+                headers: {
+                    'x-api-key': key,
+                }
+            });
             const level = res.data?.newLevel;
             setResult(`🎉 You’ve successfully reached level ${level}`);
         } catch (error) {
