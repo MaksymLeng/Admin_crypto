@@ -14,7 +14,7 @@ const UpgradeModal = ({ isOpen, onClose }: UpgradeModalProps) => {
     const handleUpgrade = async () => {
         setLoading(true);
         try {
-            const res = await axios.post(`${userAPI}/user/level/upgrade`, { userId });
+            const res = await axios.post(`${userAPI}/api/user/level/upgrade`, { userId });
             const level = res.data?.newLevel;
             setResult(`🎉 You’ve successfully reached level ${level}`);
         } catch (error) {
