@@ -50,7 +50,7 @@ const Account = () => {
                             {progressPercent >= 100 && locked ? (
                                 <button
                                     onClick={() => dispatch(setShow(3))}
-                                    className="mt-2 px-4 py-2 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700"
+                                    className="absolute inset-0 text-white text-lg font-bold rounded-md cursor-pointer"
                                 >
                                     Upgrade Level
                                 </button>
