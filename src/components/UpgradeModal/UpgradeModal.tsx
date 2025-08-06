@@ -104,7 +104,13 @@ const UpgradeModal = ({ isOpen, onClose }: UpgradeModalProps) => {
                                     type="button"
                                     disabled={loading}
                                     className="inline-flex justify-center rounded-md px-4 py-2 text-lg font-medium text-white bg-gradient-to-r from-blue-500 to-blue-300 hover:bg-indigo-700 disabled:opacity-50 cursor-pointer"
-                                    onClick={handleUpgrade}
+                                    onClick={() => {
+                                        handleUpgrade().then(() => {
+                                            if (result?.includes("successfully")) {
+                                                onCloseModal();
+                                            }
+                                        });
+                                    }}
                                 >
                                     {loading
                                         ? 'Checking...'
