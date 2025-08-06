@@ -19,7 +19,7 @@ const UpgradeModal = ({ isOpen, onClose }: UpgradeModalProps) => {
             setResult(`🎉 You’ve successfully reached level ${level}`);
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                const msg = error.response?.data?.errText || 'Upgrade failed';
+                const msg = error.response?.data?.error  || 'Upgrade failed';
                 setResult(`❌ ${msg}`);
             } else if (error instanceof Error) {
                 setResult(`❌ ${error.message}`);
