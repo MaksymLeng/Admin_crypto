@@ -5,12 +5,16 @@ import { useAppSelector } from '../../store/hooks';
 import {XMarkIcon} from '@heroicons/react/24/outline'
 import type { UpgradeModalProps } from "../../Types/Types.tsx";
 import {userAPI} from "../../data/variables.ts";
+import { useAppDispatch } from '../../store/hooks';
+import {fetchUserData} from '../../store/userSlice';
+
 
 const UpgradeModal = ({ isOpen, onClose }: UpgradeModalProps) => {
-    const userId = useAppSelector((state) => state.user.telegramUser?.id);
+    const tgUser = useAppSelector((state) => state.user.telegramUser);
     const { key } = useAppSelector((state) => state.apiKey);
     const [result, setResult] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const dispatch = useAppDispatch();
 
     const handleUpgrade = async () => {
         setLoading(true);
@@ -18,13 +22,19 @@ const UpgradeModal = ({ isOpen, onClose }: UpgradeModalProps) => {
             const res = await axios({
                 url: `${userAPI}/api/user/level/upgrade`,
                 method: 'POST',
-                data: { userId },
+                data: { userId: tgUser?.id },
                 headers: {
                     'x-api-key': key,
                 }
             });
             const level = res.data?.newLevel;
             setResult(`🎉 You’ve successfully reached level ${level}`);
+            if(tgUser) {
+                dispatch(fetchUserData({
+                    telegramUser: tgUser,
+                    apiKey: key
+                }));
+            }
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 const msg = error.response?.data?.error  || 'Upgrade failed';
@@ -92,11 +102,15 @@ const UpgradeModal = ({ isOpen, onClose }: UpgradeModalProps) => {
                             <div className="mt-6 flex justify-end gap-2">
                                 <button
                                     type="button"
-                                    disabled={loading || !!result}
+                                    disabled={loading}
                                     className="inline-flex justify-center rounded-md px-4 py-2 text-lg font-medium text-white bg-gradient-to-r from-blue-500 to-blue-300 hover:bg-indigo-700 disabled:opacity-50 cursor-pointer"
                                     onClick={handleUpgrade}
                                 >
-                                    {loading ? 'Checking...' : 'Confirm Upgrade'}
+                                    {loading
+                                        ? 'Checking...'
+                                        : result?.includes('successfully')
+                                            ? '✓ Confirmed'
+                                            : 'Confirm Upgrade'}
                                 </button>
                             </div>
                         </DialogPanel>
