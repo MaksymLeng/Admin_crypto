@@ -1,7 +1,6 @@
 import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
 import {levelName} from "../../data/variables.ts";
 import UpgradeModal from "../UpgradeModal/UpgradeModal";
-import {setShow} from "../../store/modalSlice.ts";
 import {onClickShow} from "../HelperFunction/onClickShow.ts";
 import {getLevelIcon} from "../HelperFunction/getLevelIcon.tsx";
 
@@ -49,7 +48,7 @@ const Account = () => {
                             ></div>
                             {progressPercent >= 100 && locked ? (
                                 <button
-                                    onClick={() => dispatch(setShow(3))}
+                                    onClick={() => onClickShow(3, dispatch)}
                                     className="absolute inset-0 text-white text-lg font-bold rounded-md cursor-pointer"
                                 >
                                     Upgrade Level

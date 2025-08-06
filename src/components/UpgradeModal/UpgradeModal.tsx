@@ -1,8 +1,8 @@
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { useState } from 'react';
+import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
+import {Fragment, useState } from 'react';
 import axios from 'axios';
 import { useAppSelector } from '../../store/hooks';
-import { X } from 'lucide-react';
+import {XMarkIcon} from '@heroicons/react/24/outline'
 import type { UpgradeModalProps } from "../../Types/Types.tsx";
 import {userAPI} from "../../data/variables.ts";
 
@@ -31,39 +31,71 @@ const UpgradeModal = ({ isOpen, onClose }: UpgradeModalProps) => {
         }
     };
 
+    const onCloseModal = () => {
+        setResult(null);
+        onClose();
+    }
+
     return (
-        <Dialog open={isOpen} onClose={onClose} className="relative z-50">
-            <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
-            <div className="fixed inset-0 flex items-center justify-center p-4">
-                <DialogPanel className="bg-[#1c0740] text-white rounded-xl p-6 w-[90%] max-w-md shadow-lg relative space-y-4">
-                    <button
-                        onClick={onClose}
-                        className="absolute top-2 right-2 text-white hover:text-gray-400"
+        <Transition show={isOpen} as={Fragment}>
+            <Dialog as="div" className="relative z-50" onClose={onCloseModal}>
+                <TransitionChild
+                    as={Fragment}
+                    enter="transition duration-500"
+                    enterFrom="translate-y-full opacity-0"
+                    enterTo="translate-y-0 opacity-100"
+                    leave="transition duration-300"
+                    leaveFrom="translate-y-0 opacity-100"
+                    leaveTo="translate-y-full opacity-0"
+                >
+                    <div className="fixed inset-0 bg-black/60" />
+                </TransitionChild>
+
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <TransitionChild
+                        as={Fragment}
+                        enter="transition duration-500"
+                        enterFrom="translate-y-full opacity-0"
+                        enterTo="translate-y-0 opacity-300"
+                        leave="transition duration-200"
+                        leaveFrom="translate-y-0 opacity-100"
+                        leaveTo="translate-y-full opacity-0"
                     >
-                        <X size={20} />
-                    </button>
+                        <DialogPanel className="relative w-full max-w-md transform overflow-hidden rounded-2xl bg-[#1e1e1e]/40 px-6 py-6 text-left shadow-lg">
+                            <div className="flex justify-between items-center">
+                                <DialogTitle as="h3" className="text-2xl font-bold text-white">
+                                    Confirm Upgrade
+                                </DialogTitle>
+                                <button onClick={onCloseModal}>
+                                    <XMarkIcon className="w-5 h-5 text-gray-400 cursor-pointer"/>
+                                </button>
+                            </div>
 
-                    <DialogTitle className="text-2xl font-bold text-center">LEVEL UPGRADE</DialogTitle>
+                            <div className="mt-4">
+                                {result ? (
+                                    <p className="text-xl font-bold text-white">{result}</p>
+                                ) : (
+                                    <p className="text-lg text-white">
+                                        Are you sure you want to upgrade your level?
+                                    </p>
+                                )}
+                            </div>
 
-                    {!result ? (
-                        <>
-                            <p className="text-center text-white/80">
-                                Check if you're eligible to upgrade your level and continue earning XP.
-                            </p>
-                            <button
-                                onClick={handleUpgrade}
-                                disabled={loading}
-                                className="w-full mt-4 bg-white text-[#1c0740] font-bold py-2 rounded-md hover:shadow-lg disabled:opacity-50"
-                            >
-                                {loading ? 'Checking...' : 'Confirm Upgrade'}
-                            </button>
-                        </>
-                    ) : (
-                        <p className="text-center text-white text-lg">{result}</p>
-                    )}
-                </DialogPanel>
-            </div>
-        </Dialog>
+                            <div className="mt-6 flex justify-end gap-2">
+                                <button
+                                    type="button"
+                                    disabled={loading || !!result}
+                                    className="inline-flex justify-center rounded-md px-4 py-2 text-lg font-medium text-white bg-gradient-to-r from-blue-500 to-blue-300 hover:bg-indigo-700 disabled:opacity-50 cursor-pointer"
+                                    onClick={handleUpgrade}
+                                >
+                                    {loading ? 'Checking...' : 'Confirm Upgrade'}
+                                </button>
+                            </div>
+                        </DialogPanel>
+                    </TransitionChild>
+                </div>
+            </Dialog>
+        </Transition>
     );
 };
 
