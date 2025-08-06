@@ -13,15 +13,26 @@ export type ModalState = {
     showArr: boolean[],
 };
 
+export type LevelInfo = {
+    level: number;
+    xp: number;
+    xpGoal: number;
+    locked: boolean;
+};
+
 export type UserType = {
     id: string;
     username: string;
-    avatar?: string;
     depositSum: number;
     referralCount: number;
     Balance: number;
-    Available: number;
-    WithdrawalDate: string;
+    deposits: string[];
+    levelInfo: LevelInfo;
+};
+
+export type UpgradeModalProps = {
+    isOpen: boolean;
+    onClose: () => void;
 };
 
 export type DepositValues = z.infer<typeof depositSchema>;

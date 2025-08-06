@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Eye, EyeOff} from "lucide-react";
-import {setShow} from '../../store/modalSlice.ts';
 import {DepositModal} from "../DepositModal/DepositModal.tsx";
 import {ArrowUpIcon, PlusIcon} from "@heroicons/react/24/outline";
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
@@ -10,6 +9,8 @@ import {useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
 import WalletBalance from "../WalletBalance/WalletBalance.tsx";
 import Logo from '../../assets/N.svg'
 import tonIcon from '../../assets/wallet.svg'
+import {levelName} from "../../data/variables.ts";
+import {onClickShow} from "../HelperFunction/onClickShow.ts";
 
 const DepositMenu = () => {
     const showArr= useAppSelector((state) => state.modal.showArr);
@@ -17,20 +18,16 @@ const DepositMenu = () => {
     const { userData , telegramUser, walletFriendly } = useAppSelector((state) => state.user);
     const { key } = useAppSelector((state) => state.apiKey);
 
+    const formatAddress = (address: string) => {
+        if (!address) return '-';
+        return `${address.slice(0, 4)}...${address.slice(-4)}`;
+    }
+
     const [tonConnectUI] = useTonConnectUI();
     const wallet = useTonWallet();
     const raw  = wallet?.account?.address;
     const id = telegramUser?.id || Number(userData?.id);
     const masked = id?.toString().replace(/\S/g, '*');
-
-    const onClickShow = (id:number) => {
-        dispatch(setShow(id));
-    };
-
-    const formatAddress = (address: string) => {
-        if (!address) return '-';
-        return `${address.slice(0, 4)}...${address.slice(-4)}`;
-    }
     
     useEffect(() => {
         if (raw  && id && walletFriendly === '') {
@@ -44,8 +41,8 @@ const DepositMenu = () => {
 
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-10 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
-            <DepositModal isOpen={showArr[1]} onClose={() => onClickShow(1)}/>
-            <WithdrawModal isOpen={showArr[2]} onClose={() => onClickShow(2)} />
+            <DepositModal isOpen={showArr[1]} onClose={() => onClickShow(1, dispatch)}/>
+            <WithdrawModal isOpen={showArr[2]} onClose={() => onClickShow(2, dispatch)} />
             <div className="relative bg-black/30 rounded-xl p-6 lg:w-[65%] w-[100%] shadow-md text-white flex flex-col justify-between">
                 {/* Верхняя карточка с ID */}
                 <div className=" absolute -top-12 inset-x-6 bg-linear-130 from-[#af5505] to-[#1c0740] rounded-xl p-4 mb-6 text-white">
@@ -58,7 +55,7 @@ const DepositMenu = () => {
                                     Banking System
                                 </div>
                             </div>
-                            <button onClick={() =>onClickShow(0)}>
+                            <button onClick={() =>onClickShow(0, dispatch)}>
                                 {showArr[0]
                                     ? <Eye className="text-gray-300 hover:scale-105 transition-transform hover:text-shadow-lg cursor-pointer"/>
                                     : <EyeOff className="text-gray-300 hover:scale-105 transition-transform hover:text-shadow-lg cursor-pointer"/>}
@@ -81,14 +78,18 @@ const DepositMenu = () => {
                         </span>
                     </div>
                     <div className="flex justify-between items-center">
-                        <span className="text-xl font-light opacity-50">AVAILABLE:</span>
+                        <span className="text-xl font-light opacity-50 uppercase">referral<br/>Count:</span>
                         <span className="text-3xl">
-                            {showArr[0] ? `${userData?.Available ?? 0}$` : '*****'}
+                            {showArr[0] ? `${userData?.referralCount ?? 0}` : '*****'}
                         </span>
                     </div>
                     <div className="flex justify-between text-md font-light items-center">
-                        <span className="text-left opacity-50">WITHDRAWAL<br/>DATE:</span>
-                        <span className=" font-bold text-white text-xl">{showArr[0] ? userData?.WithdrawalDate ?? '—' : '*****'}</span>
+                        <span className="text-left opacity-50 uppercase">Rank:</span>
+                        <span className=" font-bold text-white text-xl">
+                          {showArr[0]
+                              ? levelName[userData?.levelInfo?.level ?? 0] || 'Newbie'
+                              : '*****'}
+                        </span>
                     </div>
                     <div className="flex justify-between text-md font-light items-center">
                         <div className="flex gap-1">
@@ -130,13 +131,13 @@ const DepositMenu = () => {
                     </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                    <button className={`${raw ? 'bg-white' : "bg-white/40"} px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg`} onClick={() => onClickShow(1)} disabled={!raw}>
+                    <button className={`${raw ? 'bg-white' : "bg-white/40"} px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg`} onClick={() => onClickShow(1, dispatch)} disabled={!raw}>
                         <div className="w-full flex justify-center items-center gap-1 pointer-events-none">
                             <div className={`${raw ? 'text-black' : 'text-black/70'}`}>DEPOSIT</div>
                             <PlusIcon className={`w-6 h-6 cursor-pointer ${raw ? 'text-[#1c0740]' : 'text-[#1c0740]/70'}`}></PlusIcon>
                         </div>
                     </button>
-                    <button className="bg-white/20 text-white px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg" onClick={() => onClickShow(2)} disabled={!raw}>
+                    <button className="bg-white/20 text-white px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg" onClick={() => onClickShow(2, dispatch)} disabled={!raw}>
                         <div className="w-full flex justify-center items-center gap-1 pointer-events-none">
                             <div className="opacity-80">WITHDRAW</div>
                             <ArrowUpIcon className="w-6 h-6 text-white cursor-pointer"></ArrowUpIcon>
