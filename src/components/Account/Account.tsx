@@ -7,7 +7,7 @@ import {getLevelIcon} from "../HelperFunction/getLevelIcon.tsx";
 const Account = () => {
     const {userData , telegramUser, loading } = useAppSelector((state) => state.user);
 
-    const { level = 0, xp = 0, xpGoal = 1, locked = false } = userData?.levelInfo || {};
+    const { level, xp = 0, xpGoal = 1, locked = false } = userData?.levelInfo || {};
 
     const showArr = useAppSelector((state) => state.modal.showArr);
     const dispatch = useAppDispatch();
@@ -50,7 +50,7 @@ const Account = () => {
                     <div className="relative flex flex-col items-center mt-25">
                         <div className="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg relative">
                             <div className="absolute top-10 -right-3 bg-[#d2a679] text-white px-1 py-1 text-xs rounded-full font-bold border-2 border-black">
-                                {getLevelIcon(level)}
+                                {level ? getLevelIcon(level) : null}
                             </div>
                             {telegramUser?.username
                                 ? telegramUser.username[0].toUpperCase()
@@ -64,29 +64,29 @@ const Account = () => {
                     </div>
                     {loading
                         ? <LoadingText />
-                        : level === 0 ? <WelcomeNewbie />
+                        : !level ? <WelcomeNewbie />
                             : (
                             <>
-                            <div className="relative w-[250px] bg-gray-800 rounded-full h-8 overflow-hidden">
-                                <div
-                                    className="bg-gradient-to-r from-blue-500 to-blue-300 h-full"
-                                    style={{ width: `${progressPercent}%` }}
-                                />
-                                {progressPercent >= 100 && locked
-                                    ? <BtnUpgrade onClick={() => onClickShow(3, dispatch)} />
-                                    : <XpGoalPercent xp={xp} xpGoal={xpGoal} />
-                                }
-                            </div>
-                            <div className="relative">
-                                <div className="absolute -top-13 -right-40 bg-[#d2a679] text-white p-2 text-xs rounded-full font-bold border-2 border-gray-800">
-                                    {getLevelIcon(level)}
+                                <div className="relative w-[250px] bg-gray-800 rounded-full h-8 overflow-hidden">
+                                    <div
+                                        className="bg-gradient-to-r from-blue-500 to-blue-300 h-full"
+                                        style={{ width: `${progressPercent}%` }}
+                                    />
+                                    {progressPercent >= 100 && locked
+                                        ? <BtnUpgrade onClick={() => onClickShow(3, dispatch)} />
+                                        : <XpGoalPercent xp={xp} xpGoal={xpGoal} />
+                                    }
                                 </div>
-                            </div>
+                                <div className="relative">
+                                    <div className="absolute -top-13 -right-40 bg-[#d2a679] text-white p-2 text-xs rounded-full font-bold border-2 border-gray-800">
+                                        {getLevelIcon(level)}
+                                    </div>
+                                </div>
+                                <h2 className="text-2xl -mt-3 font-bold text-transparent bg-clip-text bg-gradient-to-br from-gray-100 to-blue-600">
+                                    {levelName[level]}
+                                </h2>
                             </>
                     )}
-                    <h2 className="text-2xl -mt-3 font-bold text-transparent bg-clip-text bg-gradient-to-br from-gray-100 to-blue-600">
-                        {levelName[level]}
-                    </h2>
                 </div>
             </div>
             <div className="flex flex-col mt-15 items-center h-[55%]">
