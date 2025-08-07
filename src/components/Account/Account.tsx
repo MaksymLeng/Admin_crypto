@@ -62,7 +62,7 @@ const Account = () => {
                             :'????'}
                         </h2>
                     </div>
-                    {loading || !level
+                    {loading || level === undefined
                         ? <LoadingText />
                         : level === 0 ? <WelcomeNewbie />
                             : (
