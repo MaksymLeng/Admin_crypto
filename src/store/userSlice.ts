@@ -10,6 +10,8 @@ const initialState: UserState = {
     userData: null,
     walletFriendly: '',
     balanceTon: 0,
+    loading: false,
+    error: null,
 };
 
 export const fetchUserData = createAsyncThunk(
@@ -56,18 +58,30 @@ const userSlice = createSlice({
         },
         clearWallet: (state) => {
             state.walletFriendly = "";
+            state.loading = false;
+            state.error = null;
         },
         setTonBalance: (state, action) => {
             state.balanceTon = action.payload;
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchUserData.fulfilled, (state, action: PayloadAction<UserType>) => {
+        builder
+            .addCase(fetchUserData.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchUserData.fulfilled, (state, action: PayloadAction<UserType>) => {
             state.userData = action.payload;
-        });
-        builder.addCase(updateWallet.fulfilled, (state, action) => {
+            })
+            .addCase(fetchUserData.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+            .addCase(updateWallet.fulfilled, (state, action) => {
             state.walletFriendly = action.payload.friendly;
-        });
+            });
+
     },
 });
 

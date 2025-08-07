@@ -34,6 +34,8 @@ export interface UserState {
     userData: UserType | null;
     walletFriendly: string;
     balanceTon: number;
+    loading: boolean;
+    error: string | null;
 }
 
 export interface TradeState {

@@ -5,7 +5,7 @@ import {onClickShow} from "../HelperFunction/onClickShow.ts";
 import {getLevelIcon} from "../HelperFunction/getLevelIcon.tsx";
 
 const Account = () => {
-    const {userData , telegramUser} = useAppSelector((state) => state.user);
+    const {userData , telegramUser, loading } = useAppSelector((state) => state.user);
 
     const { level = 0, xp = 0, xpGoal = 1, locked = false } = userData?.levelInfo || {};
 
@@ -13,6 +13,34 @@ const Account = () => {
     const dispatch = useAppDispatch();
 
     const progressPercent = Math.min((xp / xpGoal) * 100, 100);
+
+    const WelcomeNewbie = () => (
+        <div className="bg-black/20 rounded-md px-4 py-3 text-white text-center text-lg font-light tracking-wide">
+            Welcome, Newbie!<br />
+            Make your first deposit to unlock XP, rewards and ranking.
+        </div>
+    );
+
+    const BtnUpgrade = ({ onClick }: { onClick: () => void }) => (
+        <button
+            onClick={onClick}
+            className="absolute inset-0 text-white text-lg font-bold rounded-md cursor-pointer"
+        >
+            Upgrade Level
+        </button>
+    );
+
+    const XpGoalPercent = ({ xp, xpGoal }: { xp: number; xpGoal: number }) => (
+        <span className="absolute inset-0 text-white text-lg flex items-center justify-center font-bold">
+    {xp} / {xpGoal} XP
+  </span>
+    );
+
+    const LoadingText = () => (
+        <div className="bg-black/20 rounded-md px-4 py-3 text-white text-center text-lg font-light tracking-wide">
+            Loading...
+        </div>
+    );
 
     return (
         <>
@@ -34,39 +62,28 @@ const Account = () => {
                             :'????'}
                         </h2>
                     </div>
-                    {level === 0 ? (
-                        <div className="bg-black/20 rounded-md px-4 py-3 text-white text-center text-lg font-light tracking-wide">
-                            Welcome, Newbie!<br />
-                            Make your first deposit to unlock XP, rewards and ranking.
-                        </div>
-                    ) : (
-                        <>
-                        <div className="relative w-[250px] bg-gray-800 rounded-full h-8 overflow-hidden">
-                            <div
-                                className="bg-gradient-to-r from-blue-500 to-blue-300 h-full"
-                                style={{ width: `${progressPercent}%` }}
-                            ></div>
-                            {progressPercent >= 100 && locked ? (
-                                <button
-                                    onClick={() => onClickShow(3, dispatch)}
-                                    className="absolute inset-0 text-white text-lg font-bold rounded-md cursor-pointer"
-                                >
-                                    Upgrade Level
-                                </button>
-                            ):
-                                (<span className="absolute inset-0 text-white text-lg flex items-center justify-center font-bold">
-                                    {xp} / {xpGoal} XP
-                                </span>)
-                            }
-                        </div>
-                        <div className="relative">
-                            <div className="absolute -top-13 -right-40 bg-[#d2a679] text-white p-2 text-xs rounded-full font-bold border-2 border-gray-800">
-                                {getLevelIcon(level)}
+                    {loading
+                        ? <LoadingText />
+                        : level === 0 ? <WelcomeNewbie />
+                            : (
+                            <>
+                            <div className="relative w-[250px] bg-gray-800 rounded-full h-8 overflow-hidden">
+                                <div
+                                    className="bg-gradient-to-r from-blue-500 to-blue-300 h-full"
+                                    style={{ width: `${progressPercent}%` }}
+                                />
+                                {progressPercent >= 100 && locked
+                                    ? <BtnUpgrade onClick={() => onClickShow(3, dispatch)} />
+                                    : <XpGoalPercent xp={xp} xpGoal={xpGoal} />
+                                }
                             </div>
-                        </div>
-                        </>
+                            <div className="relative">
+                                <div className="absolute -top-13 -right-40 bg-[#d2a679] text-white p-2 text-xs rounded-full font-bold border-2 border-gray-800">
+                                    {getLevelIcon(level)}
+                                </div>
+                            </div>
+                            </>
                     )}
-
                     <h2 className="text-2xl -mt-3 font-bold text-transparent bg-clip-text bg-gradient-to-br from-gray-100 to-blue-600">
                         {levelName[level]}
                     </h2>
