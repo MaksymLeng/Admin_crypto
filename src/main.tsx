@@ -7,7 +7,13 @@ import './index.css'
 
 createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
-        <TonConnectUIProvider manifestUrl="https://ndeposit.app/tonconnect-manifest.json">
+        <TonConnectUIProvider
+            manifestUrl="https://ndeposit.app/tonconnect-manifest.json"
+            actionsConfiguration=
+                {{
+                    twaReturnUrl: 'https://t.me/NdepositPayment_bot'
+                }}
+        >
             <App />
         </TonConnectUIProvider>
     </Provider>
