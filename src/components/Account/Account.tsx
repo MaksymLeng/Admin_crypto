@@ -62,9 +62,9 @@ const Account = () => {
                             :'????'}
                         </h2>
                     </div>
-                    {loading
+                    {loading || !level
                         ? <LoadingText />
-                        : !level ? <WelcomeNewbie />
+                        : level === 0 ? <WelcomeNewbie />
                             : (
                             <>
                                 <div className="relative w-[250px] bg-gray-800 rounded-full h-8 overflow-hidden">
