@@ -9,7 +9,7 @@ const initialState: UserState = {
     telegramUser: null,
     userData: null,
     walletFriendly: '',
-    walletRaw: '',
+    rawWallet: '',
     balanceTon: 0,
     loading: false,
     error: null,
@@ -66,7 +66,7 @@ const userSlice = createSlice({
             state.balanceTon = action.payload;
         },
         setWalletRaw(state, action: PayloadAction<string>) {
-            state.walletRaw = action.payload;
+            state.rawWallet = action.payload;
         },
     },
     extraReducers: (builder) => {

@@ -11,7 +11,7 @@ import {onClickShow} from "../HelperFunction/onClickShow.ts";
 const SettingsMenu = () => {
     const showArr= useAppSelector((state) => state.modal.showArr);
     const dispatch = useAppDispatch();
-    const { userData , telegramUser, walletFriendly, walletRaw } = useAppSelector((state) => state.user);
+    const { userData , telegramUser, walletFriendly, rawWallet } = useAppSelector((state) => state.user);
 
     const formatAddress = (address: string) => {
         if (!address) return '-';
@@ -75,7 +75,7 @@ const SettingsMenu = () => {
                     </div>
                     <div className="flex justify-between text-md font-light items-center">
                         <div className="flex gap-1">
-                            {walletRaw
+                            {rawWallet
                                 ? (
                                     <div className="flex flex-col items-start">
                                         <span className="text-left opacity-50 uppercase">
@@ -95,9 +95,9 @@ const SettingsMenu = () => {
                             }
                         </div>
 
-                        {walletRaw &&(
+                        {rawWallet &&(
                             showArr[0] ? (
-                                <WalletBalance address={walletRaw} />
+                                <WalletBalance address={rawWallet} />
                             ) : (
                                 <span className="text-xl text-white font-semibold">*****</span>
                             )
