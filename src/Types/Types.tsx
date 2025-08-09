@@ -20,11 +20,16 @@ export type LevelInfo = {
     locked: boolean;
 };
 
+export type accountHeaderProps = {
+    className?: string;
+};
+
 export type UserType = {
     id: string;
     username: string;
     depositSum: number;
     referralCount: number;
+    walletRaw: string
     Balance: number;
     deposits: string[];
     levelInfo: LevelInfo;

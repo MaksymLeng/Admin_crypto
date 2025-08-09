@@ -80,7 +80,7 @@ const userSlice = createSlice({
                 state.error = action.payload as string;
             })
             .addCase(updateWallet.fulfilled, (state, action) => {
-            state.walletFriendly = action.payload.friendly;
+                state.walletFriendly = action.payload.friendly;
             });
 
     },

@@ -1,99 +1,66 @@
 import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
-import {levelName} from "../../data/variables.ts";
-import UpgradeModal from "../UpgradeModal/UpgradeModal";
 import {onClickShow} from "../HelperFunction/onClickShow.ts";
-import {getLevelIcon} from "../HelperFunction/getLevelIcon.tsx";
+import {ArrowUpIcon, PlusIcon} from "@heroicons/react/24/outline";
+import {useTonConnectUI, useTonWallet} from "@tonconnect/ui-react";
+import AccountHeader from "../AccountHeader/AccountHeader";
+import {useEffect} from "react";
+import {updateWallet} from "../../store/userSlice.ts";
 
 const Account = () => {
-    const {userData , telegramUser, loading } = useAppSelector((state) => state.user);
+    const {userData , telegramUser, walletFriendly } = useAppSelector((state) => state.user);
 
-    const { level, xp = 0, xpGoal = 1, locked = false } = userData?.levelInfo || {};
-
-    const showArr = useAppSelector((state) => state.modal.showArr);
+    const { key } = useAppSelector((state) => state.apiKey);
     const dispatch = useAppDispatch();
 
-    const progressPercent = Math.min((xp / xpGoal) * 100, 100);
 
-    const WelcomeNewbie = () => (
-        <div className="bg-black/20 rounded-md px-4 py-3 text-white text-center text-lg font-light tracking-wide">
-            Welcome, Newbie!<br />
-            Make your first deposit to unlock XP, rewards and ranking.
-        </div>
-    );
+    const [tonConnectUI] = useTonConnectUI();
+    const wallet = useTonWallet();
+    const raw  = wallet?.account?.address;
+    const id = telegramUser?.id || Number(userData?.id);
 
-    const BtnUpgrade = ({ onClick }: { onClick: () => void }) => (
-        <button
-            onClick={onClick}
-            className="absolute inset-0 text-white text-lg font-bold rounded-md cursor-pointer"
-        >
-            Upgrade Level
-        </button>
-    );
 
-    const XpGoalPercent = ({ xp, xpGoal }: { xp: number; xpGoal: number }) => (
-        <span className="absolute inset-0 text-white text-lg flex items-center justify-center font-bold">
-    {xp} / {xpGoal} XP
-  </span>
-    );
+    const handleDepositClick = () => {
+        if (!raw) {
+            tonConnectUI.openModal();
+            return;
+        }
+        onClickShow(1, dispatch);
+    };
 
-    const LoadingText = () => (
-        <div className="bg-black/20 rounded-md px-4 py-3 text-white text-center text-lg font-light tracking-wide">
-            Loading...
-        </div>
-    );
+    useEffect(() => {
+        if (raw  && id && walletFriendly === '') {
+            dispatch(updateWallet({
+                id: id,
+                address: raw,
+                apiKey: key
+            }));
+        }
+    }, [dispatch, raw, id, walletFriendly, key]);
 
     return (
         <>
             <div className="flex items-center justify-center">
-                <div className="flex flex-col items-center gap-4 ">
-                    <UpgradeModal isOpen={showArr[3]} onClose={() => onClickShow(3, dispatch)} />
-                    <div className="relative flex flex-col items-center mt-25">
-                        <div className="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg relative">
-                            <div className="absolute top-10 -right-3 bg-[#d2a679] text-white px-1 py-1 text-xs rounded-full font-bold border-2 border-black">
-                                {level ? getLevelIcon(level) : null}
-                            </div>
-                            {telegramUser?.username
-                                ? telegramUser.username[0].toUpperCase()
-                                : "?"}
-                        </div>
-                        <h2 className="text-2xl font-bold mt-2 text-transparent bg-clip-text bg-gradient-to-br from-gray-100 to-purple-600">
-                            {telegramUser ?
-                                telegramUser.username
-                            :'????'}
-                        </h2>
-                    </div>
-                    {loading || level === undefined
-                        ? <LoadingText />
-                        : level === 0 ? <WelcomeNewbie />
-                            : (
-                            <>
-                                <div className="relative w-[250px] bg-gray-800 rounded-full h-8 overflow-hidden">
-                                    <div
-                                        className="bg-gradient-to-r from-blue-500 to-blue-300 h-full"
-                                        style={{ width: `${progressPercent}%` }}
-                                    />
-                                    {progressPercent >= 100 && locked
-                                        ? <BtnUpgrade onClick={() => onClickShow(3, dispatch)} />
-                                        : <XpGoalPercent xp={xp} xpGoal={xpGoal} />
-                                    }
-                                </div>
-                                <div className="relative">
-                                    <div className="absolute -top-13 -right-40 bg-[#d2a679] text-white p-2 text-xs rounded-full font-bold border-2 border-gray-800">
-                                        {getLevelIcon(level)}
-                                    </div>
-                                </div>
-                                <h2 className="text-2xl -mt-3 font-bold text-transparent bg-clip-text bg-gradient-to-br from-gray-100 to-blue-600">
-                                    {levelName[level]}
-                                </h2>
-                            </>
-                    )}
-                </div>
+                <AccountHeader className="top-6 lg:top-10" />
             </div>
-            <div className="flex flex-col mt-15 items-center h-[55%]">
-                <div className="relative bg-black/30 rounded-2xl py-6 h-[90%] lg:px-5 px-3 lg:w-[60%] w-[100%] shadow-md text-white flex flex-col justify-between">
+            <div className="flex flex-col mt-20 lg:mt-40 items-center h-[55%]">
+                <div className="relative bg-black/30 rounded-2xl flex justify-center h-[30%] px-3 lg:w-[60%] w-[100%] shadow-md text-white flex flex-col justify-between">
                     <h2 className="absolute -top-7 left-1/2 lg:-left-0 lg:-right-0 -translate-x-1/2 lg:-translate-0 text-3xl lg:text-5xl opacity-80 font-extrabold text-center italic mb-6 tracking-wider whitespace-nowrap">
-                        DEPOSIT HISTORY
+                        DEPOSIT WITHDRAW
                     </h2>
+                    <div className="grid grid-cols-2 gap-4">
+                        <button className='bg-white px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg' onClick={handleDepositClick}>
+                            <div className="w-full flex justify-center items-center gap-1 pointer-events-none">
+                                <div className='text-black '>DEPOSIT</div>
+                                <PlusIcon className='w-6 h-6 cursor-pointer text-[#1c0740]'></PlusIcon>
+                            </div>
+                        </button>
+                        <button className="bg-white/20 text-white px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg" onClick={() => onClickShow(2, dispatch)} disabled={!raw}>
+                            <div className="w-full flex justify-center items-center gap-1 pointer-events-none">
+                                <div className="opacity-80">WITHDRAW</div>
+                                <ArrowUpIcon className="w-6 h-6 text-white cursor-pointer"></ArrowUpIcon>
+                            </div>
+                        </button>
+                    </div>
                 </div>
             </div>
         </>

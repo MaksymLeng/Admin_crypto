@@ -1,43 +1,26 @@
-import { useEffect } from 'react';
 import { Eye, EyeOff} from "lucide-react";
 import {DepositModal} from "../DepositModal/DepositModal.tsx";
-import {ArrowUpIcon, PlusIcon} from "@heroicons/react/24/outline";
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
-import { updateWallet } from '../../store/userSlice';
 import WithdrawModal  from "../WithdrawModal/WithdrawModal.tsx";
-import {useTonConnectUI, useTonWallet } from '@tonconnect/ui-react';
 import WalletBalance from "../WalletBalance/WalletBalance.tsx";
 import Logo from '../../assets/N.svg'
 import tonIcon from '../../assets/wallet.svg'
 import {levelName} from "../../data/variables.ts";
 import {onClickShow} from "../HelperFunction/onClickShow.ts";
 
-const DepositMenu = () => {
+const SettingsMenu = () => {
     const showArr= useAppSelector((state) => state.modal.showArr);
     const dispatch = useAppDispatch();
     const { userData , telegramUser, walletFriendly } = useAppSelector((state) => state.user);
-    const { key } = useAppSelector((state) => state.apiKey);
 
     const formatAddress = (address: string) => {
         if (!address) return '-';
         return `${address.slice(0, 4)}...${address.slice(-4)}`;
     }
 
-    const [tonConnectUI] = useTonConnectUI();
-    const wallet = useTonWallet();
-    const raw  = wallet?.account?.address;
     const id = telegramUser?.id || Number(userData?.id);
     const masked = id?.toString().replace(/\S/g, '*');
-    
-    useEffect(() => {
-        if (raw  && id && walletFriendly === '') {
-            dispatch(updateWallet({
-                id: id,
-                address: raw,
-                apiKey: key
-            }));
-        }
-    }, [dispatch, raw, id, walletFriendly, key]);
+    const raw = userData?.walletRaw;
 
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-10 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
@@ -70,7 +53,7 @@ const DepositMenu = () => {
                     </div>
                 </div>
 
-                <div className="space-y-8 py-15 text-lg font-semibold">
+                <div className="space-y-8 pt-15 pb-8 text-lg font-semibold">
                     <div className="flex justify-between items-center">
                         <span className="text-xl font-bold">BALANCE:</span>
                         <span className="text-3xl">
@@ -113,35 +96,21 @@ const DepositMenu = () => {
                             }
                         </div>
 
-                        {raw  ? (
+                        {raw &&(
                             showArr[0] ? (
                                 <WalletBalance address={raw} />
                             ) : (
                                 <span className="text-xl text-white font-semibold">*****</span>
                             )
-                        ) : (
-                            <button
-                                className="flex items-center justify-center gap-1 font-semibold cursor-pointer"
-                                onClick={() => tonConnectUI.openModal()}
-                            >
-                                <span>Connect</span>
-                                <PlusIcon className="w-5 h-5 text-white" />
-                            </button>
                         )}
                     </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                    <button className={`${raw ? 'bg-white' : "bg-white/40"} px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg`} onClick={() => onClickShow(1, dispatch)} disabled={!raw}>
-                        <div className="w-full flex justify-center items-center gap-1 pointer-events-none">
-                            <div className={`${raw ? 'text-black' : 'text-black/70'}`}>DEPOSIT</div>
-                            <PlusIcon className={`w-6 h-6 cursor-pointer ${raw ? 'text-[#1c0740]' : 'text-[#1c0740]/70'}`}></PlusIcon>
-                        </div>
+                <div className="flex flex-col gap-3">
+                    <button className='bg-white/20 px-1 py-4 font-bold rounded-md cursor-pointer uppercase opacity-80 cursor-pointer'>
+                        Invite friends
                     </button>
-                    <button className="bg-white/20 text-white px-1 py-4 font-bold rounded-md cursor-pointer hover:shadow-lg" onClick={() => onClickShow(2, dispatch)} disabled={!raw}>
-                        <div className="w-full flex justify-center items-center gap-1 pointer-events-none">
-                            <div className="opacity-80">WITHDRAW</div>
-                            <ArrowUpIcon className="w-6 h-6 text-white cursor-pointer"></ArrowUpIcon>
-                        </div>
+                    <button className='bg-white/20 px-1 py-4 font-bold rounded-md cursor-pointer uppercase opacity-80 cursor-pointer'>
+                        Deposit history
                     </button>
                 </div>
             </div>
@@ -149,4 +118,4 @@ const DepositMenu = () => {
     )
 }
 
-export default DepositMenu
+export default SettingsMenu
