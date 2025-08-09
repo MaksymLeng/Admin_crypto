@@ -4,7 +4,7 @@ import {ArrowUpIcon, PlusIcon} from "@heroicons/react/24/outline";
 import {useTonConnectUI, useTonWallet} from "@tonconnect/ui-react";
 import AccountHeader from "../AccountHeader/AccountHeader";
 import {useEffect} from "react";
-import {updateWallet} from "../../store/userSlice.ts";
+import {setWalletRaw, updateWallet} from "../../store/userSlice.ts";
 
 const Account = () => {
     const {userData , telegramUser, walletFriendly } = useAppSelector((state) => state.user);
@@ -36,6 +36,10 @@ const Account = () => {
             }));
         }
     }, [dispatch, raw, id, walletFriendly, key]);
+
+    useEffect(() => {
+        dispatch(setWalletRaw(raw ?? ''));
+    }, [dispatch, raw]);
 
     return (
         <>
