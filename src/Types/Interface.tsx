@@ -1,5 +1,5 @@
 import type {JSX} from "react";
-import type {UserType} from "./Types.tsx";
+import type {Deposit, UserType} from "./Types.tsx";
 
 export interface AppRoute {
     path: string
@@ -37,6 +37,9 @@ export interface UserState {
     balanceTon: number;
     loading: boolean;
     error: string | null;
+    depositHistory: Deposit[];
+    depositLoading: boolean;
+    depositError: string | null;
 }
 
 export interface TradeState {

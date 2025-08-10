@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
-import type {UserType} from "../Types/Types.tsx"; // Это тип с бэка
+import type {Deposit, UserType} from "../Types/Types.tsx"; // Это тип с бэка
 import type {TelegramUser} from "../Types/Interface.tsx"; // Это тип Telegram WebApp
 import type {UserState} from "../Types/Interface.tsx"
 import {userAPI} from "../data/variables.ts";
@@ -13,6 +13,9 @@ const initialState: UserState = {
     balanceTon: 0,
     loading: false,
     error: null,
+    depositHistory: [],
+    depositLoading: false,
+    depositError: null,
 };
 
 export const fetchUserData = createAsyncThunk(
@@ -50,6 +53,16 @@ export const updateWallet = createAsyncThunk(
     }
 );
 
+export const fetchDepositHistory = createAsyncThunk<
+    Deposit[], { userId: number; apiKey: string }>
+('user/fetchDepositHistory', async ({ userId, apiKey }) => {
+    const { data } = await axios.get(
+        `${userAPI}/api/deposit/history/${userId}`,
+        { headers: { 'x-api-key': apiKey } }
+    );
+    return data;
+});
+
 const userSlice = createSlice({
     name: "user",
     initialState,
@@ -85,8 +98,19 @@ const userSlice = createSlice({
             })
             .addCase(updateWallet.fulfilled, (state, action) => {
                 state.walletFriendly = action.payload.friendly;
+            })
+            .addCase(fetchDepositHistory.pending, (state) => {
+            state.depositLoading = true;
+            state.depositError = null;
+            })
+            .addCase(fetchDepositHistory.fulfilled, (state, action) => {
+                state.depositLoading = false;
+                state.depositHistory = action.payload ?? [];
+            })
+            .addCase(fetchDepositHistory.rejected, (state, action) => {
+                state.depositLoading = false;
+                state.depositError = action.error.message ?? 'Failed to load deposits';
             });
-
     },
 });
 

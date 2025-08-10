@@ -40,4 +40,16 @@ export type UpgradeModalProps = {
     onClose: () => void;
 };
 
+export type Deposit = {
+    _id: string;
+    userId: number;
+    amount: number;
+    usdAmount?: number;
+    txHash?: string;
+    status?: 'pending' | 'confirmed' | 'failed';
+    comment?: string;
+    createdAt: string;
+    updatedAt?: string;
+};
+
 export type DepositValues = z.infer<typeof depositSchema>;

@@ -4,7 +4,7 @@ import NavMenu from "../NavMenu/NavMenu.tsx";
 import {useTelegramUser} from "../../hooks/useTelegramUser.ts";
 import {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
-import {fetchUserData, setTelegramUser} from '../../store/userSlice.ts';
+import {fetchDepositHistory, fetchUserData, setTelegramUser} from '../../store/userSlice.ts';
 import {fetchApiKey} from "../../store/apiKeySlice.ts";
 
 const App = () => {
@@ -19,12 +19,18 @@ const App = () => {
     }, []);
 
     useEffect(() => {
-        if (tgUser) {
+        if (tgUser && key !== '') {
             dispatch(setTelegramUser(tgUser));
             dispatch(fetchUserData({
                 telegramUser: tgUser, 
                 apiKey: key
             }));
+        }
+    }, [dispatch, key, tgUser]);
+
+    useEffect(() => {
+        if(tgUser?.id && key !== '') {
+            dispatch(fetchDepositHistory({userId: tgUser.id, apiKey: key}));
         }
     }, [dispatch, key, tgUser]);
 

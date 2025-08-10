@@ -32,24 +32,47 @@ const Trading = () => {
 
         let raf = 0;
         let last = performance.now();
-
         const speed = 120;
+        let isPaused = false;
 
         const tick = (now: number) => {
-            const dt = (now - last) / 1000;
-            last = now;
+            if (!isPaused) {
+                const dt = (now - last) / 1000;
+                last = now;
 
-            element.scrollTop += speed * dt;
+                element.scrollTop += speed * dt;
 
-            const half = element.scrollHeight / 2;
-            if (element.scrollTop >= half) {
-                element.scrollTop -= half;
+                const half = element.scrollHeight / 2;
+                if (element.scrollTop >= half) {
+                    element.scrollTop -= half;
+                }
+            } else {
+                last = now;
             }
             raf = requestAnimationFrame(tick);
         };
 
+        // Запуск
         raf = requestAnimationFrame(tick);
-        return () => cancelAnimationFrame(raf);
+
+        // Ставим паузу при тапе/клике
+        const stop = () => { isPaused = true; };
+        const resume = () => { isPaused = false; };
+
+        element.addEventListener('pointerdown', stop);
+        element.addEventListener('pointerup', resume);
+        element.addEventListener('pointerleave', resume);
+        element.addEventListener('touchstart', stop);
+        element.addEventListener('touchend', resume);
+
+        return () => {
+            cancelAnimationFrame(raf);
+            element.removeEventListener('pointerdown', stop);
+            element.removeEventListener('pointerup', resume);
+            element.removeEventListener('pointerleave', resume);
+            element.removeEventListener('touchstart', stop);
+            element.removeEventListener('touchend', resume);
+        };
     }, [data]);
 
     return (
