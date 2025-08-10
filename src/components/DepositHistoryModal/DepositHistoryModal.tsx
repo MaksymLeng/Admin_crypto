@@ -78,7 +78,7 @@ const DepositHistoryModal: FC<ModalProps> = ({ isOpen, onClose }) => {
                         leaveTo="translate-y-full opacity-0"
                     >
                         {/* ВАЖНО: делаем панель flex-колонкой и ограничиваем высоту, скроллится контент ниже */}
-                        <DialogPanel className="lg:w-[calc((100%-15rem)*0.6)] w-full max-w-full bg-[#1e1e1e]/40 text-white rounded-t-3xl shadow-lg border-t border-[#2e2e2e] flex flex-col max-h-[90svh] md:max-h-[85vh]">
+                        <DialogPanel className="lg:w-[calc((100%-15rem)*0.6)] w-full max-w-full bg-[#1e1e1e]/40 text-white rounded-t-3xl shadow-lg border-t border-[#2e2e2e] flex flex-col max-h-[80svh] md:max-h-[85vh]">
                             {/* Header (фиксированный) */}
                             <div className="flex items-center justify-between pt-7 p-6 pb-3 rounded-t-3xl shrink-0">
                                 <DialogTitle className="text-2xl text-gray-300 font-extrabold font-montserrat">
