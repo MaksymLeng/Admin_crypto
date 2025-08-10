@@ -71,6 +71,7 @@ const userSlice = createSlice({
             state.telegramUser = action.payload;
         },
         clearWallet: (state) => {
+            state.rawWallet = "";
             state.walletFriendly = "";
             state.loading = false;
             state.error = null;

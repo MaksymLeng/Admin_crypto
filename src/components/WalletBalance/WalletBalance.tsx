@@ -6,7 +6,7 @@ import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
 import {clearWallet, setTonBalance} from "../../store/userSlice";
 
 const WalletBalance = ({ address }: { address: string }) => {
-    const { balanceTon } = useAppSelector((state) => state.user);
+    const { balanceTon} = useAppSelector((state) => state.user);
     const [tonConnectUi] = useTonConnectUI(); // подключение хука
     const dispatch = useAppDispatch();
 
