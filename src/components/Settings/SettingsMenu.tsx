@@ -103,10 +103,10 @@ const SettingsMenu = () => {
                     </div>
                 </div>
                 <div className="flex flex-col gap-3">
-                    <button className='bg-white/20 px-1 py-4 font-bold rounded-md cursor-pointer uppercase opacity-80 cursor-pointer' onClick={() => onClickShow(4, dispatch)}>
+                    <button className='bg-white/20 px-1 py-4 font-bold rounded-md cursor-pointer uppercase opacity-80 cursor-pointer'>
                         Invite friends
                     </button>
-                    <button className='bg-white/20 px-1 py-4 font-bold rounded-md cursor-pointer uppercase opacity-80 cursor-pointer'>
+                    <button className='bg-white/20 px-1 py-4 font-bold rounded-md cursor-pointer uppercase opacity-80 cursor-pointer' onClick={() => onClickShow(4, dispatch)}>
                         Deposit history
                     </button>
                 </div>
