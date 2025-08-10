@@ -33,7 +33,7 @@ const Trading = () => {
         let raf = 0;
         let last = performance.now();
 
-        const speed = 28;
+        const speed = 120;
 
         const tick = (now: number) => {
             const dt = (now - last) / 1000;
