@@ -8,8 +8,8 @@ import type {accountHeaderProps} from "../../Types/Types.tsx";
 
 const AccountHeader: React.FC<accountHeaderProps> = ({ className = "" }) => {
     const dispatch = useAppDispatch();
-    const { userData, telegramUser, loading } = useAppSelector((s) => s.user);
-    const showArr = useAppSelector((s) => s.modal.showArr);
+    const { userData, telegramUser, loading } = useAppSelector((state) => state.user);
+    const showArr= useAppSelector((state) => state.modal.showArr);
 
     const { level, xp = 0, xpGoal = 1, locked = false } = userData?.levelInfo || {};
     const progressPercent = Math.min((xp / xpGoal) * 100, 100);
