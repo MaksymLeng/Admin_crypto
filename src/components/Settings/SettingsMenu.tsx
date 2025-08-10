@@ -1,7 +1,5 @@
 import { Eye, EyeOff} from "lucide-react";
-import {DepositModal} from "../DepositModal/DepositModal.tsx";
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
-import WithdrawModal  from "../WithdrawModal/WithdrawModal.tsx";
 import WalletBalance from "../WalletBalance/WalletBalance.tsx";
 import Logo from '../../assets/N.svg'
 import tonIcon from '../../assets/wallet.svg'
@@ -23,8 +21,6 @@ const SettingsMenu = () => {
 
     return (
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-10 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
-            <DepositModal isOpen={showArr[1]} onClose={() => onClickShow(1, dispatch)}/>
-            <WithdrawModal isOpen={showArr[2]} onClose={() => onClickShow(2, dispatch)} />
             <div className="relative bg-black/30 rounded-xl p-6 lg:w-[65%] w-[100%] shadow-md text-white flex flex-col justify-between">
                 {/* Верхняя карточка с ID */}
                 <div className=" absolute -top-12 inset-x-6 bg-linear-130 from-[#af5505] to-[#1c0740] rounded-xl p-4 mb-6 text-white">

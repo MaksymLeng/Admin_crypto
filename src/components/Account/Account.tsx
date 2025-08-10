@@ -5,9 +5,13 @@ import {useTonConnectUI, useTonWallet} from "@tonconnect/ui-react";
 import AccountHeader from "../AccountHeader/AccountHeader";
 import {useEffect} from "react";
 import {setWalletRaw, updateWallet} from "../../store/userSlice.ts";
+import {DepositModal} from "../DepositModal/DepositModal.tsx";
+import WithdrawModal from "../WithdrawModal/WithdrawModal.tsx";
 
 const Account = () => {
     const {userData , telegramUser, walletFriendly } = useAppSelector((state) => state.user);
+
+    const showArr= useAppSelector((state) => state.modal.showArr);
 
     const { key } = useAppSelector((state) => state.apiKey);
     const dispatch = useAppDispatch();
@@ -43,6 +47,8 @@ const Account = () => {
 
     return (
         <>
+            <DepositModal isOpen={showArr[1]} onClose={() => onClickShow(1, dispatch)}/>
+            <WithdrawModal isOpen={showArr[2]} onClose={() => onClickShow(2, dispatch)} />
             <div className="flex items-center justify-center">
                 <AccountHeader className="top-6 lg:top-10" />
             </div>
