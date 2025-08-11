@@ -15,6 +15,8 @@ const UpgradeModal = ({ isOpen, onClose }: ModalProps) => {
     const [result, setResult] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch();
+    const userId = tgUser?.id ?? null ;
+    const username = tgUser?.username ?? null;
 
     const handleUpgrade = async () => {
         setLoading(true);
@@ -29,9 +31,10 @@ const UpgradeModal = ({ isOpen, onClose }: ModalProps) => {
             });
             const level = res.data?.newLevel;
             setResult(`🎉 You’ve successfully reached level ${level}`);
-            if(tgUser) {
+            if(userId && username) {
                 dispatch(fetchUserData({
-                    telegramUser: tgUser,
+                    id: userId,
+                    username,
                     apiKey: key
                 }));
             }

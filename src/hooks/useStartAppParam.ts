@@ -17,7 +17,7 @@ function getFromUrl(): string | null {
 /** 2) Из Telegram.WebApp.initDataUnsafe.start_param (может быть пустым на части клиентов) */
 function getFromUnsafe(): string | null {
     try {
-        const wa = (globalThis as any)?.Telegram?.WebApp;
+        const wa = window.Telegram?.WebApp;
         const v = wa?.initDataUnsafe?.start_param ?? wa?.initDataUnsafe?.startParam;
         return v ? String(v) : null;
     } catch {
@@ -28,7 +28,7 @@ function getFromUnsafe(): string | null {
 /** 3) Из «сырого» initData (строка querystring), если нужно добить крайние случаи */
 function getFromRawInitData(): string | null {
     try {
-        const wa = (globalThis as any)?.Telegram?.WebApp;
+        const wa = window.Telegram?.WebApp;
         const raw: string | undefined = wa?.initData;
         if (!raw) return null;
         const qs = new URLSearchParams(raw);
@@ -67,5 +67,7 @@ export function useStartAppParam(): string | null {
 
 /** Опционально: ручной сброс (например, после успешного бинда реферала) */
 useStartAppParam.reset = () => {
-    try { sessionStorage.removeItem(STORAGE_KEY); } catch {}
+    try { sessionStorage.removeItem(STORAGE_KEY); } catch (error) {
+        console.error(`Ошибка ${error}`);
+    }
 };
