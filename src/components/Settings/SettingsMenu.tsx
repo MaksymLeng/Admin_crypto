@@ -5,7 +5,8 @@ import Logo from '../../assets/N.svg'
 import tonIcon from '../../assets/wallet.svg'
 import {levelName} from "../../data/variables.ts";
 import {onClickShow} from "../HelperFunction/onClickShow.ts";
-import DepositHistoryModal from "../DepositHistoryModal/DepositHistoryModal.tsx";
+import DepositHistoryModal from "../modals/DepositHistoryModal/DepositHistoryModal.tsx";
+import ReferralModal from '../modals/ReferralModal/ReferralModal.tsx';
 
 const SettingsMenu = () => {
     const showArr= useAppSelector((state) => state.modal.showArr);
@@ -24,6 +25,7 @@ const SettingsMenu = () => {
         <div className="flex lg:flex-row flex-col gap-20 lg:gap-10 min-h-screen items-center justify-center px-4 pt-30 lg:px-0 lg:pt-0">
             <div className="relative bg-black/30 rounded-xl p-6 lg:w-[65%] w-[100%] shadow-md text-white flex flex-col justify-between">
                 <DepositHistoryModal isOpen={showArr[4]} onClose={() => onClickShow(4, dispatch)}/>
+                <ReferralModal isOpen={showArr[5]} onClose={() => onClickShow(5, dispatch)} />
                 {/* Верхняя карточка с ID */}
                 <div className=" absolute -top-12 inset-x-6 bg-linear-130 from-[#af5505] to-[#1c0740] rounded-xl p-4 mb-6 text-white">
                     <div className="flex flex-col gap-3">
@@ -103,7 +105,7 @@ const SettingsMenu = () => {
                     </div>
                 </div>
                 <div className="flex flex-col gap-3">
-                    <button className='bg-white/20 px-1 py-4 font-bold rounded-md cursor-pointer uppercase opacity-80 cursor-pointer'>
+                    <button className='bg-white/20 px-1 py-4 font-bold rounded-md cursor-pointer uppercase opacity-80 cursor-pointer' onClick={() => onClickShow(5, dispatch)}>
                         Invite friends
                     </button>
                     <button className='bg-white/20 px-1 py-4 font-bold rounded-md cursor-pointer uppercase opacity-80 cursor-pointer' onClick={() => onClickShow(4, dispatch)}>

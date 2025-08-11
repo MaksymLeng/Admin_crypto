@@ -4,19 +4,33 @@ import NavMenu from "../NavMenu/NavMenu.tsx";
 import {useTelegramUser} from "../../hooks/useTelegramUser.ts";
 import {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
-import {fetchDepositHistory, fetchUserData, setTelegramUser} from '../../store/userSlice.ts';
+import {
+    applyReferral, clearRefCandidate,
+    fetchDepositHistory,
+    fetchUserData,
+    setRefCandidate,
+    setTelegramUser
+} from '../../store/userSlice.ts';
 import {fetchApiKey} from "../../store/apiKeySlice.ts";
 
 const App = () => {
     const tgUser = useTelegramUser();
     const dispatch = useAppDispatch();
     const { key } = useAppSelector((state) => state.apiKey);
-    
+    const {userData, refCandidate } = useAppSelector((s) => s.user);
+
     useEffect(() => {
         if(tgUser) {
             dispatch(fetchApiKey(tgUser.id.toString()));
         }
     }, []);
+
+    useEffect(() => {
+        if (tgUser?.startParam) {
+            dispatch(setRefCandidate(tgUser.startParam));
+        }
+    }, [dispatch, tgUser?.startParam]);
+
 
     useEffect(() => {
         if (tgUser && key !== '') {
@@ -27,6 +41,13 @@ const App = () => {
             }));
         }
     }, [dispatch, key, tgUser]);
+
+    useEffect(() => {
+        if (userData?.id && key && !userData.invitedBy && refCandidate) {
+            dispatch(applyReferral({ userId: Number(userData.id), ref: refCandidate, apiKey: key }))
+                .finally(() => dispatch(clearRefCandidate()));
+        }
+    }, [dispatch, key, userData?.id, userData?.invitedBy, refCandidate]);
 
     useEffect(() => {
         if(tgUser?.id && key !== '') {

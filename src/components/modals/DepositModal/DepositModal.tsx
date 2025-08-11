@@ -4,11 +4,11 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from 'zod';
 import {Dialog, DialogPanel, DialogTitle, Transition, TransitionChild} from '@headlessui/react'
 import {XMarkIcon} from '@heroicons/react/24/outline'
-import type {ModalProps} from "../../Types/Interface.tsx";
-import tonIcon from "../../assets/ton_icon.png";
-import type {DepositValues} from "../../Types/Types.tsx";
-import {useAppSelector} from '../../store/hooks';
-import {createDeposit} from '../../FetchHelper/createDeposit';
+import type {ModalProps} from "../../../Types/Interface.tsx";
+import tonIcon from "../../../assets/ton_icon.png";
+import type {DepositValues} from "../../../Types/Types.tsx";
+import {useAppSelector} from '../../../store/hooks.ts';
+import {createDeposit} from '../../../FetchHelper/createDeposit.ts';
 import {useTonConnectUI} from "@tonconnect/ui-react";
 
 // eslint-disable-next-line react-refresh/only-export-components

@@ -2,8 +2,8 @@
 import { type FC, Fragment } from "react";
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import type { ModalProps } from "../../Types/Interface.tsx";
-import { useAppSelector } from "../../store/hooks.ts";
+import type { ModalProps } from "../../../Types/Interface.tsx";
+import { useAppSelector } from "../../../store/hooks.ts";
 
 const StatusBadge = ({ status }: { status?: string }) => {
     const label = (status || "confirmed").toUpperCase();

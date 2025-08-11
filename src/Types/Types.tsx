@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import {depositSchema} from "../components/DepositModal/DepositModal.tsx";
+import {depositSchema} from "../components/modals/DepositModal/DepositModal.tsx";
 
 export type Trade = {
     coin: string;
@@ -32,12 +32,9 @@ export type UserType = {
     walletRaw: string
     Balance: number;
     deposits: string[];
+    refCode?: string | null;
+    invitedBy?: string | null;
     levelInfo: LevelInfo;
-};
-
-export type UpgradeModalProps = {
-    isOpen: boolean;
-    onClose: () => void;
 };
 
 export type Deposit = {

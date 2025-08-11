@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import UpgradeModal from "../UpgradeModal/UpgradeModal";
+import UpgradeModal from "../modals/UpgradeModal/UpgradeModal";
 import { onClickShow } from "../HelperFunction/onClickShow";
 import { getLevelIcon } from "../HelperFunction/getLevelIcon";
 import { levelName } from "../../data/variables";

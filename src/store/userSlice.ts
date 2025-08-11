@@ -16,21 +16,21 @@ const initialState: UserState = {
     depositHistory: [],
     depositLoading: false,
     depositError: null,
+    refCandidate: null,
 };
 
 export const fetchUserData = createAsyncThunk(
     "user/fetchUserData",
     async ({telegramUser, apiKey} : {telegramUser: TelegramUser, apiKey: string }) => {
-        const res = await axios<UserType>({
-            url: `${userAPI}/api/user`,
-            params: {
+        const res = await axios.get<UserType>(`${userAPI}/api/user`,
+            {params: {
                 id: telegramUser.id,
                 username: telegramUser.username,
             },
             headers: {
                 'x-api-key': apiKey,
-            }
-        })
+            }}
+        )
         return res.data;
     }
 );
@@ -38,17 +38,10 @@ export const fetchUserData = createAsyncThunk(
 export const updateWallet = createAsyncThunk(
     'user/updateWallet',
     async ({ id, address, apiKey }: { id: number, address: string, apiKey: string}) => {
-        const response = await axios({
-            url: `${userAPI}/api/user/setWallet`,
-            method: 'POST',
-            data: {
-                id,
-                address
-            },
-            headers: {
-                'x-api-key': apiKey,
-            }
-        })
+        const response = await axios.post(`${userAPI}/api/user/setWallet`,
+           { id, address },
+            { headers: { 'x-api-key': apiKey } }
+        )
         return response.data;
     }
 );
@@ -61,6 +54,18 @@ export const fetchDepositHistory = createAsyncThunk<
         { headers: { 'x-api-key': apiKey } }
     );
     return data;
+});
+
+export const applyReferral = createAsyncThunk<
+    { invitedBy: string },
+    { userId: number; ref: string; apiKey: string }
+>('user/applyReferral', async ({ userId, ref, apiKey }) => {
+    const { data } = await axios.post(
+        `${userAPI}/api/user/apply-ref`,
+        { userId, ref },
+        { headers: { 'x-api-key': apiKey } }
+    );
+    return { invitedBy: data.invitedBy ?? ref };
 });
 
 const userSlice = createSlice({
@@ -81,6 +86,12 @@ const userSlice = createSlice({
         },
         setWalletRaw(state, action: PayloadAction<string>) {
             state.rawWallet = action.payload;
+        },
+        setRefCandidate: (state, action: PayloadAction<string | null>) => {
+            state.refCandidate = action.payload;
+        },
+        clearRefCandidate: (state) => {
+            state.refCandidate = null;
         },
     },
     extraReducers: (builder) => {
@@ -111,9 +122,12 @@ const userSlice = createSlice({
             .addCase(fetchDepositHistory.rejected, (state, action) => {
                 state.depositLoading = false;
                 state.depositError = action.error.message ?? 'Failed to load deposits';
-            });
+            })
+            .addCase(applyReferral.fulfilled, (state, action) => {
+            if (state.userData) state.userData.invitedBy = action.payload.invitedBy;
+        });
     },
 });
 
-export const { setTelegramUser,clearWallet, setTonBalance, setWalletRaw } = userSlice.actions;
+export const { setTelegramUser,clearWallet, setTonBalance, setWalletRaw, setRefCandidate, clearRefCandidate } = userSlice.actions;
 export default userSlice.reducer;

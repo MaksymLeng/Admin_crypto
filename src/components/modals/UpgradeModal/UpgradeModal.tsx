@@ -1,15 +1,15 @@
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
 import {Fragment, useState } from 'react';
 import axios from 'axios';
-import { useAppSelector } from '../../store/hooks';
+import { useAppSelector } from '../../../store/hooks.ts';
 import {XMarkIcon} from '@heroicons/react/24/outline'
-import type { UpgradeModalProps } from "../../Types/Types.tsx";
-import {userAPI} from "../../data/variables.ts";
-import { useAppDispatch } from '../../store/hooks';
-import {fetchUserData} from '../../store/userSlice';
+import type { ModalProps } from "../../../Types/Interface.tsx";
+import {userAPI} from "../../../data/variables.ts";
+import { useAppDispatch } from '../../../store/hooks.ts';
+import {fetchUserData} from '../../../store/userSlice.ts';
 
 
-const UpgradeModal = ({ isOpen, onClose }: UpgradeModalProps) => {
+const UpgradeModal = ({ isOpen, onClose }: ModalProps) => {
     const tgUser = useAppSelector((state) => state.user.telegramUser);
     const { key } = useAppSelector((state) => state.apiKey);
     const [result, setResult] = useState<string | null>(null);

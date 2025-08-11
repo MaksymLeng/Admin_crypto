@@ -13,11 +13,6 @@ export interface ModalProps {
     recoveryPhrase?: string[]
 }
 
-export interface WithdrawProps {
-    isOpen: boolean;
-    onClose: () => void;
-}
-
 export interface TelegramUser {
     id: number;
     first_name?: string;
@@ -26,7 +21,7 @@ export interface TelegramUser {
     language_code?: string;
     is_premium?: boolean;
     photo_url?: string;
-    name: string; // свойство, которое ты используешь (если кастомное)
+    startParam?: string;
 }
 
 export interface UserState {
@@ -40,6 +35,7 @@ export interface UserState {
     depositHistory: Deposit[];
     depositLoading: boolean;
     depositError: string | null;
+    refCandidate: string | null,
 }
 
 export interface TradeState {

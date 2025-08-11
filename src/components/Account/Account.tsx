@@ -5,8 +5,8 @@ import {useTonConnectUI, useTonWallet} from "@tonconnect/ui-react";
 import AccountHeader from "../AccountHeader/AccountHeader";
 import {useEffect} from "react";
 import {setWalletRaw, updateWallet} from "../../store/userSlice.ts";
-import {DepositModal} from "../DepositModal/DepositModal.tsx";
-import WithdrawModal from "../WithdrawModal/WithdrawModal.tsx";
+import {DepositModal} from "../modals/DepositModal/DepositModal.tsx";
+import WithdrawModal from "../modals/WithdrawModal/WithdrawModal.tsx";
 
 const Account = () => {
     const {userData , telegramUser, walletFriendly } = useAppSelector((state) => state.user);
