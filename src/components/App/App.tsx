@@ -12,18 +12,17 @@ import {
     setTelegramUser
 } from '../../store/userSlice.ts';
 import {fetchApiKey} from "../../store/apiKeySlice.ts";
+import {useStartAppParam} from "../../hooks/useStartAppParam.ts";
 
 const App = () => {
     const tgUser = useTelegramUser();
+    const startParam = useStartAppParam();
     const dispatch = useAppDispatch();
     const { key } = useAppSelector((state) => state.apiKey);
     const {userData, refCandidate } = useAppSelector((s) => s.user);
 
     const userId = tgUser?.id ?? null ;
     const username = tgUser?.username ?? null;
-    const startParam = tgUser?.startParam ?? null;
-
-
 
     useEffect(() => {
         if(userId) {
@@ -33,9 +32,8 @@ const App = () => {
     }, [dispatch, key, userId]);
 
     useEffect(() => {
-        if (startParam) {
+        if (!startParam) return;
             dispatch(setRefCandidate(startParam));
-        }
     }, [dispatch, startParam]);
 
     useEffect(() => {
