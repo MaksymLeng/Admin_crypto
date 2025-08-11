@@ -26,7 +26,7 @@ const App = () => {
 
     useEffect(() => {
         if(userId) {
-            if (key) return;
+            if (key !== '') return;
             dispatch(fetchApiKey(String(userId)));
         }
     }, [dispatch, key, userId]);

@@ -123,7 +123,7 @@ const ReferralModal: FC<ModalProps> = ({ isOpen, onClose }) => {
                                     />
                                 </div>
 
-                                {!hasReferrer ? (
+                                {hasReferrer ? (
                                     <div className="space-y-2">
                                         <div className="text-gray-300/90 text-sm">Enter referral code</div>
                                         <div className="flex gap-2">
