@@ -19,18 +19,20 @@ const App = () => {
     const { key } = useAppSelector((state) => state.apiKey);
     const {userData, refCandidate } = useAppSelector((s) => s.user);
 
+    const userId = tgUser?.id ?? null;
+    const startParam = tgUser?.startParam ?? null;
+
     useEffect(() => {
-        if(tgUser) {
-            dispatch(fetchApiKey(tgUser.id.toString()));
+        if(userId) {
+            dispatch(fetchApiKey(String(userId)));
         }
     }, []);
 
     useEffect(() => {
-        if (tgUser?.startParam) {
-            dispatch(setRefCandidate(tgUser.startParam));
+        if (startParam) {
+            dispatch(setRefCandidate(startParam));
         }
-    }, [dispatch, tgUser?.startParam]);
-
+    }, [dispatch, startParam]);
 
     useEffect(() => {
         if (tgUser && key !== '') {
@@ -43,17 +45,17 @@ const App = () => {
     }, [dispatch, key, tgUser]);
 
     useEffect(() => {
+        if(userId && key !== '') {
+            dispatch(fetchDepositHistory({userId, apiKey: key}));
+        }
+    }, [dispatch, key, userId]);
+
+    useEffect(() => {
         if (userData?.id && key && !userData.invitedBy && refCandidate) {
             dispatch(applyReferral({ userId: Number(userData.id), ref: refCandidate, apiKey: key }))
                 .finally(() => dispatch(clearRefCandidate()));
         }
     }, [dispatch, key, userData?.id, userData?.invitedBy, refCandidate]);
-
-    useEffect(() => {
-        if(tgUser?.id && key !== '') {
-            dispatch(fetchDepositHistory({userId: tgUser.id, apiKey: key}));
-        }
-    }, [dispatch, key, tgUser]);
 
   return (
       <Router>
