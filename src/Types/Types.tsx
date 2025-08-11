@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import {depositSchema} from "../components/modals/DepositModal/DepositModal.tsx";
+import type {TelegramUser} from "./Interface.tsx";
 
 export type Trade = {
     coin: string;
@@ -48,5 +49,10 @@ export type Deposit = {
     createdAt: string;
     updatedAt?: string;
 };
+
+export type useTelegramUserReturn = {
+    tgUser: TelegramUser;
+    start_param : string;
+}
 
 export type DepositValues = z.infer<typeof depositSchema>;
