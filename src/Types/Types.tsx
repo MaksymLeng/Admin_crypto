@@ -52,7 +52,7 @@ export type Deposit = {
 
 export type useTelegramUserReturn = {
     tgUser: TelegramUser;
-    start_param : string;
+    start_param : string | null;
 }
 
 export type DepositValues = z.infer<typeof depositSchema>;
