@@ -19,14 +19,18 @@ const App = () => {
     const { key } = useAppSelector((state) => state.apiKey);
     const {userData, refCandidate } = useAppSelector((s) => s.user);
 
-    const userId = tgUser?.id ?? null;
+    const userId = tgUser?.id ?? null ;
+    const username = tgUser?.username ?? null;
     const startParam = tgUser?.startParam ?? null;
+
+
 
     useEffect(() => {
         if(userId) {
+            if (key) return;
             dispatch(fetchApiKey(String(userId)));
         }
-    }, []);
+    }, [dispatch, key, userId]);
 
     useEffect(() => {
         if (startParam) {
@@ -37,12 +41,18 @@ const App = () => {
     useEffect(() => {
         if (tgUser && key !== '') {
             dispatch(setTelegramUser(tgUser));
+        }
+    }, [dispatch, key, tgUser]);
+
+    useEffect(() => {
+        if (username && userId && key !== '') {
             dispatch(fetchUserData({
-                telegramUser: tgUser, 
+                id: userId,
+                username,
                 apiKey: key
             }));
         }
-    }, [dispatch, key, tgUser]);
+    }, [dispatch, key, userId, username]);
 
     useEffect(() => {
         if(userId && key !== '') {
@@ -51,13 +61,13 @@ const App = () => {
     }, [dispatch, key, userId]);
 
     useEffect(() => {
-        if (userData?.id && key && !userData.invitedBy && refCandidate) {
-            dispatch(applyReferral({ userId: Number(userData.id), ref: refCandidate, apiKey: key }))
-                .finally(() => dispatch(clearRefCandidate()));
-        }
+        if (!userData?.id || !key || !refCandidate) return;
+        if (userData.invitedBy) return;
+        dispatch(applyReferral({ userId: Number(userData.id), ref: refCandidate, apiKey: key }))
+            .finally(() => dispatch(clearRefCandidate()));
     }, [dispatch, key, userData?.id, userData?.invitedBy, refCandidate]);
 
-  return (
+    return (
       <Router>
           <div className="fixed inset-0 bg-linear-120 lg:overflow-hidden from-[#70139f] from-20% via-[#79156b] via-30% to-[#340575] to-80% overflow-auto">
               <div className="flex h-full w-full">

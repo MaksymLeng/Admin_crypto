@@ -21,11 +21,11 @@ const initialState: UserState = {
 
 export const fetchUserData = createAsyncThunk(
     "user/fetchUserData",
-    async ({telegramUser, apiKey} : {telegramUser: TelegramUser, apiKey: string }) => {
+    async ({id, username, apiKey} : {id: number, username: string, apiKey: string }) => {
         const res = await axios.get<UserType>(`${userAPI}/api/user`,
             {params: {
-                id: telegramUser.id,
-                username: telegramUser.username,
+                id,
+                username,
             },
             headers: {
                 'x-api-key': apiKey,
