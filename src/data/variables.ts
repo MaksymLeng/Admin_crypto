@@ -1,4 +1,4 @@
-export const botAPI = 'https://api.ndeposit.app';
+export const tgBotLink = 'https://t.me/NdepositPayment_bot'
 export const userAPI = 'https://user.ndeposit.app';
 export const levelName = [
     "Newbie",

@@ -1,21 +1,18 @@
 // src/components/modals/ReferralModal.tsx
 import { type FC, Fragment, useMemo, useState, type ReactElement } from "react";
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
-import { XMarkIcon, CheckCircleIcon, StarIcon, GiftIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon, GiftIcon } from "@heroicons/react/24/outline";
 import type { ModalProps } from "../../../Types/Interface.tsx";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks.ts";
 import { applyReferral } from "../../../store/userSlice.ts";
+import {tgBotLink} from "../../../data/variables.ts";
 
-const Card = ({
-                  title,
-                  subtitle,
-                  icon,
-              }: {
+const Card = ({title, subtitle, icon,}: {
     title: string;
     subtitle: string;
     icon: ReactElement;
 }) => (
-    <div className="rounded-2xl bg-black/20 border border-white/10 px-4 py-3 flex items-start gap-3">
+    <div className="rounded-2xl bg-black/20 border border-white/10 px-4 py-3 flex items-center gap-3">
         <div className="mt-0.5">{icon}</div>
         <div className="flex-1">
             <div className="text-white font-semibold">{title}</div>
@@ -31,12 +28,11 @@ const ReferralModal: FC<ModalProps> = ({ isOpen, onClose }) => {
 
     const [input, setInput] = useState("");
     const [error, setError] = useState<string | null>(null);
-    const bot = import.meta.env.VITE_TG_BOT || "NdepositPayment_bot";
 
     const inviteLink = useMemo(() => {
         const code = userData?.refCode ?? "";
-        return code ? `https://t.me/${bot}?startapp=${code}` : "";
-    }, [userData?.refCode, bot]);
+        return code ? `${tgBotLink}?startapp=${code}` : "";
+    }, [userData?.refCode]);
 
     const hasReferrer = Boolean(userData?.invitedBy);
 
@@ -105,10 +101,11 @@ const ReferralModal: FC<ModalProps> = ({ isOpen, onClose }) => {
                         leaveFrom="translate-y-0 opacity-100"
                         leaveTo="translate-y-full opacity-0"
                     >
-                        <DialogPanel className="lg:w-[calc((100%-15rem)*0.6)] w-full max-w-full bg-[#1e1e1e]/40 text-white rounded-t-3xl shadow-lg border-t border-[#2e2e2e] flex flex-col max-h-[78svh] md:max-h-[70vh]">
+                        <DialogPanel className="lg:w-[calc((100%-15rem)*0.6)] w-full max-w-full bg-[#1e1e1e]/40 text-white rounded-t-3xl shadow-lg border-t border-[#2e2e2e] pb-15
+                         flex flex-col max-h-[78svh]  h-auto md:max-h-[70vh]">
                             {/* Header */}
-                            <div className="flex items-center justify-between pt-7 p-6 pb-3 rounded-t-3xl">
-                                <DialogTitle className="text-2xl text-gray-200 font-extrabold">Earn TON</DialogTitle>
+                            <div className="flex items-center justify-between pt-7 p-6 pb-9 rounded-t-3xl">
+                                <DialogTitle className="text-2xl text-gray-200 font-extrabold uppercase">Invite Friends</DialogTitle>
                                 <button onClick={onClose} aria-label="Close">
                                     <XMarkIcon className="w-5 h-5 text-gray-400" />
                                 </button>
@@ -116,22 +113,12 @@ const ReferralModal: FC<ModalProps> = ({ isOpen, onClose }) => {
 
                             {/* Body */}
                             <div className="flex-1 w-full md:max-w-xl max-w-[23rem] mx-auto bg-gradient-to-br from-[#1c0740] to-[#af5505] rounded-2xl p-4 overflow-y-auto">
-                                <div className="text-gray-300/80 text-sm mb-3">From your friends volumes</div>
+                                <div className="text-gray-300/80 text-md mb-4">From your friends volumes</div>
 
                                 <div className="space-y-2 mb-5">
                                     <Card
-                                        title="Referral commissions"
-                                        subtitle="Earn from 20% to 50% in TON from their purchases"
-                                        icon={<CheckCircleIcon className="w-5 h-5 text-green-300" />}
-                                    />
-                                    <Card
-                                        title="10% season points"
-                                        subtitle="From the points earned by your referrals"
-                                        icon={<StarIcon className="w-5 h-5 text-yellow-300" />}
-                                    />
-                                    <Card
-                                        title="Cashback — earn money from purchases"
-                                        subtitle="Increasing with your purchases volume"
+                                        title="Get 100% on your first deposit"
+                                        subtitle="When entering the referral code"
                                         icon={<GiftIcon className="w-5 h-5 text-blue-300" />}
                                     />
                                 </div>
