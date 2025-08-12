@@ -93,7 +93,7 @@ const DepositHistoryModal: FC<ModalProps> = ({ isOpen, onClose }) => {
                             <div className="w-full md:max-w-3xl max-w-[95%] mx-auto flex-1 bg-gradient-to-br from-[#1c0740] to-[#af5505] rounded-2xl p-4 overflow-y-auto overscroll-contain">
                                 {/* Subheader (можно закрепить) */}
                                 <div className="flex items-center justify-between px-2 pb-2 sticky top-0 bg-transparent">
-                                    <div className="text-gray-300/90 text-sm">Latest first</div>
+                                    <div className="text-gray-300/90 text-md">Latest first</div>
                                     <div className="text-gray-300/60 text-xs">
                                         {depositHistory?.length ? `${depositHistory.length} records` : ""}
                                     </div>
@@ -106,7 +106,7 @@ const DepositHistoryModal: FC<ModalProps> = ({ isOpen, onClose }) => {
                                     </div>
                                 ) : !depositHistory || depositHistory.length === 0 ? (
                                     <div className="flex items-center justify-center min-h-40 text-gray-200/80">
-                                        История депозитов пуста
+                                        Deposit history is empty
                                     </div>
                                 ) : (
                                     <ul className="space-y-2 pb-4">
