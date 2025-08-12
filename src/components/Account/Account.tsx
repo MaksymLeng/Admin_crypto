@@ -4,24 +4,18 @@ import {ArrowUpIcon, PlusIcon} from "@heroicons/react/24/outline";
 import {useTonConnectUI, useTonWallet} from "@tonconnect/ui-react";
 import AccountHeader from "../AccountHeader/AccountHeader";
 import {useEffect} from "react";
-import {setWalletRaw, updateWallet} from "../../store/userSlice.ts";
+import {setWalletRaw} from "../../store/userSlice.ts";
 import {DepositModal} from "../modals/DepositModal/DepositModal.tsx";
 import WithdrawModal from "../modals/WithdrawModal/WithdrawModal.tsx";
 
 const Account = () => {
-    const {userData , telegramUser, walletFriendly } = useAppSelector((state) => state.user);
-
     const showArr= useAppSelector((state) => state.modal.showArr);
 
-    const { key } = useAppSelector((state) => state.apiKey);
     const dispatch = useAppDispatch();
-
 
     const [tonConnectUI] = useTonConnectUI();
     const wallet = useTonWallet();
     const raw  = wallet?.account?.address;
-    const id = telegramUser?.id || Number(userData?.id);
-
 
     const handleDepositClick = () => {
         if (!raw) {
@@ -30,16 +24,6 @@ const Account = () => {
         }
         onClickShow(1, dispatch);
     };
-
-    useEffect(() => {
-        if (raw  && id && walletFriendly === '') {
-            dispatch(updateWallet({
-                id: id,
-                address: raw,
-                apiKey: key
-            }));
-        }
-    }, [dispatch, raw, id, walletFriendly, key]);
 
     useEffect(() => {
         dispatch(setWalletRaw(raw ?? ''));

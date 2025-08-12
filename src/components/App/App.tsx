@@ -12,6 +12,7 @@ import {
     setTelegramUser
 } from '../../store/userSlice.ts';
 import {fetchApiKey} from "../../store/apiKeySlice.ts";
+import {useSyncTonWallet} from "../../hooks/useSyncTonWallet.ts";
 
 const App = () => {
     const res = useTelegramUser();
@@ -20,6 +21,7 @@ const App = () => {
     const dispatch = useAppDispatch();
     const { key } = useAppSelector((state) => state.apiKey);
     const {userData, refCandidate } = useAppSelector((s) => s.user);
+    useSyncTonWallet();
 
     const userId = tgUser?.id ?? null ;
     const username = tgUser?.username ?? null;
