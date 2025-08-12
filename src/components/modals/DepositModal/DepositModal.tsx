@@ -132,33 +132,31 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                                                     className="bg-transparent text-white text-5xl font-bold outline-none text-center w-auto max-w-[160px]"
                                                     style={{ width: `${(amount?.length || 1) + 0.5}ch` }}
                                                     onInput={(e) => {
-                                                        const input = e.target as HTMLInputElement;
-                                                        // 1) локаль: заменяем запятую на точку
-                                                        let value = input.value.replace(',', '.').replace(/[^\d.]/g, '');
+                                                        const input = e.currentTarget;
 
-                                                        // 2) одна точка максимум
-                                                        const parts = value.split('.');
-                                                        if (parts.length > 2) value = parts[0] + '.' + parts[1];
+                                                        // 1) Разрешаем только цифры и точку, запятую превращаем в точку
+                                                        let v = input.value.replace(',', '.').replace(/[^\d.]/g, '');
 
-                                                        // 3) разделяем
-                                                        const [whole = '', decimal = ''] = value.split('.');
+                                                        // 2) Только одна точка
+                                                        const parts = v.split('.');
+                                                        if (parts.length > 2) v = parts[0] + '.' + parts[1];
 
-                                                        // 4) убираем лишние ведущие нули, но разрешаем просто "0"
-                                                        let wholeClean = whole.replace(/^0+(?=\d)/, '');
-                                                        if (wholeClean === '' && whole === '0' && !decimal) wholeClean = '0';
+                                                        // 3) Спец-правила автоподстановки
+                                                        if (v === '.') v = '0.';     // "." -> "0."
+                                                        if (v === '0') v = '0.';     // "0" -> "0." (как ты и хотел)
 
-                                                        // 5) длины
-                                                        let newValue = wholeClean.slice(0, 5);
-                                                        if (decimal) newValue += '.' + decimal.slice(0, 6);
+                                                        // 4) Если есть точка, гарантируем ведущий 0 перед ней
+                                                        if (v.startsWith('.')) v = '0' + v;
 
-                                                        // 6) диапазон
-                                                        const num = parseFloat(newValue);
-                                                        if (!isNaN(num) && num > 99999) newValue = '99999';
+                                                        // 5) Убираем ведущие нули типа "00012" => "12", но "0." оставляем
+                                                        if (/^0\d/.test(v)) v = v.replace(/^0+/, '');
 
-                                                        // 7) если ввели только ".", превращаем в "0."
-                                                        if (newValue === '.') newValue = '0.';
+                                                        // 6) Ограничения (по желанию): 5 цифр до точки, 6 после
+                                                        const [whole = '', dec = ''] = v.split('.');
+                                                        let newValue = whole.slice(0, 5);
+                                                        if (v.includes('.')) newValue += '.' + dec.slice(0, 6);
 
-                                                        // синхронизируем и с DOM, и с RHF
+                                                        // 7) Синхронизируем DOM и RHF
                                                         input.value = newValue;
                                                         setValue('amount', newValue, { shouldValidate: true, shouldDirty: true });
                                                     }}
