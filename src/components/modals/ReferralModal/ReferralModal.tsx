@@ -112,7 +112,7 @@ const ReferralModal: FC<ModalProps> = ({ isOpen, onClose }) => {
                             </div>
 
                             {/* Body */}
-                            <div className="flex-1 w-full md:max-w-xl max-w-[23rem] mx-auto bg-gradient-to-br from-[#1c0740] to-[#af5505] rounded-2xl p-4 overflow-y-auto">
+                            <div className="flex-1 w-full md:max-w-xl max-w-[23rem] mx-auto bg-gradient-to-br from-[#1c0740] to-[#af5505] rounded-2xl p-4 overflow-y-auto ">
                                 <div className="text-gray-300/80 text-md mb-4">From your friends volumes</div>
 
                                 <div className="space-y-2 mb-5">
@@ -123,8 +123,8 @@ const ReferralModal: FC<ModalProps> = ({ isOpen, onClose }) => {
                                     />
                                 </div>
 
-                                {hasReferrer ? (
-                                    <div className="space-y-2">
+                                {!hasReferrer ? (
+                                    <div className="space-y-2 focus-within:mb-5">
                                         <div className="text-gray-300/90 text-sm">Enter referral code</div>
                                         <div className="flex gap-2">
                                             <input
