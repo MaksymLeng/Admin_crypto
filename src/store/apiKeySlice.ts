@@ -5,13 +5,9 @@ import {userAPI} from "../data/variables.ts";
 export const fetchApiKey = createAsyncThunk(
     'apiKey/fetch',
     async (userId: string) => {
-        const response = await axios({
-            url:`${userAPI}/bot/get-api-key`,
-            method: 'POST',
-            data: {
-                userId
-            }
-        });
+        const response = await axios.post(
+            `${userAPI}/bot/get-api-key`,
+            {userId});
         return response.data.apiKey;
     }
 );
@@ -19,7 +15,7 @@ export const fetchApiKey = createAsyncThunk(
 const apiKeySlice = createSlice({
     name: 'apiKey',
     initialState: {
-        key: '',
+        key:  null as string | null,
         loading: false,
         error: null as string | null,
     },
@@ -37,6 +33,7 @@ const apiKeySlice = createSlice({
             .addCase(fetchApiKey.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message || 'Не удалось получить API ключ';
+                state.key = null;
             });
     },
 });

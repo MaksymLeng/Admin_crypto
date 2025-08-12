@@ -27,11 +27,10 @@ const App = () => {
     const username = tgUser?.username ?? null;
 
     useEffect(() => {
-        if(userId) {
-            if (key !== '') return;
+        if (userId && !key) {
             dispatch(fetchApiKey(String(userId)));
         }
-    }, [dispatch, key, userId]);
+    }, [dispatch, userId, key]);
 
     useEffect(() => {
         if (!start_param) return;
@@ -39,13 +38,13 @@ const App = () => {
     }, [dispatch, start_param]);
 
     useEffect(() => {
-        if (tgUser && key !== '') {
+        if (tgUser) {
             dispatch(setTelegramUser(tgUser));
         }
-    }, [dispatch, key, tgUser]);
+    }, [dispatch, tgUser]);
 
     useEffect(() => {
-        if (username && userId && key !== '') {
+        if (username && userId && key) {
             dispatch(fetchUserData({
                 id: userId,
                 username,
@@ -55,16 +54,16 @@ const App = () => {
     }, [dispatch, key, userId, username]);
 
     useEffect(() => {
-        if(userId && key !== '') {
+        if(userId && key) {
             dispatch(fetchDepositHistory({userId, apiKey: key}));
         }
     }, [dispatch, key, userId]);
 
     useEffect(() => {
-        if (!userData?.id || !key || !refCandidate) return;
-        if (userData.invitedBy) return;
-        dispatch(applyReferral({ userId: Number(userData.id), ref: refCandidate, apiKey: key }))
-            .finally(() => dispatch(clearRefCandidate()));
+        if (userData?.id && key && refCandidate && !userData.invitedBy) {
+            dispatch(applyReferral({userId: Number(userData.id), ref: refCandidate, apiKey: key}))
+                .finally(() => dispatch(clearRefCandidate()));
+        }
     }, [dispatch, key, userData?.id, userData?.invitedBy, refCandidate]);
 
     return (
