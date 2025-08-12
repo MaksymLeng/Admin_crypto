@@ -55,4 +55,10 @@ export type useTelegramUserReturn = {
     start_param : string | null;
 }
 
+export type ApiKeyState = {
+    key: string | null;
+    loading: boolean;
+    error: string | null;
+};
+
 export type DepositValues = z.infer<typeof depositSchema>;

@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import {userAPI} from "../data/variables.ts";
+import type {ApiKeyState} from "../Types/Types.tsx";
 
 export const fetchApiKey = createAsyncThunk(
     'apiKey/fetch',
@@ -11,12 +12,6 @@ export const fetchApiKey = createAsyncThunk(
         return response.data.apiKey;
     }
 );
-
-type ApiKeyState = {
-    key: string | null;
-    loading: boolean;
-    error: string | null;
-};
 
 const initialState: ApiKeyState = {
     key: null,

@@ -38,10 +38,10 @@ const App = () => {
     }, [dispatch, start_param]);
 
     useEffect(() => {
-        if (tgUser) {
+        if (tgUser && key) {
             dispatch(setTelegramUser(tgUser));
         }
-    }, [dispatch, tgUser]);
+    }, [dispatch, tgUser, key]);
 
     useEffect(() => {
         if (username && userId && key) {
@@ -60,10 +60,10 @@ const App = () => {
     }, [dispatch, key, userId]);
 
     useEffect(() => {
-        if (userData?.id && key && refCandidate && !userData.invitedBy) {
+        if (!userData?.id || !key || !refCandidate) return;
+        if (userData.invitedBy) return;
             dispatch(applyReferral({userId: Number(userData.id), ref: refCandidate, apiKey: key}))
                 .finally(() => dispatch(clearRefCandidate()));
-        }
     }, [dispatch, key, userData?.id, userData?.invitedBy, refCandidate]);
 
     return (
