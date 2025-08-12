@@ -12,13 +12,21 @@ export const fetchApiKey = createAsyncThunk(
     }
 );
 
+type ApiKeyState = {
+    key: string | null;
+    loading: boolean;
+    error: string | null;
+};
+
+const initialState: ApiKeyState = {
+    key: null,
+    loading: false,
+    error: null,
+};
+
 const apiKeySlice = createSlice({
     name: 'apiKey',
-    initialState: {
-        key:  null as string | null,
-        loading: false,
-        error: null as string | null,
-    },
+    initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
