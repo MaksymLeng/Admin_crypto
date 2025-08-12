@@ -76,6 +76,8 @@ const ReferralModal: FC<ModalProps> = ({ isOpen, onClose }) => {
         }
     };
 
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
     return (
         <Transition show={isOpen} as={Fragment}>
             <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -124,7 +126,7 @@ const ReferralModal: FC<ModalProps> = ({ isOpen, onClose }) => {
                                 </div>
 
                                 {!hasReferrer ? (
-                                    <div className="space-y-2 focus-within:mb-5">
+                                    <div className={`space-y-2 ${isMobile ? "focus-within:mb-5" : ""}`}>
                                         <div className="text-gray-300/90 text-sm">Enter referral code</div>
                                         <div className="flex gap-2">
                                             <input

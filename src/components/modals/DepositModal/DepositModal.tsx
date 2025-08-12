@@ -33,10 +33,12 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
         handleSubmit,
         formState: { isValid },
         reset,
-        watch
+        watch,
+        setValue
     } = useForm<DepositValues>({
         resolver: zodResolver(depositSchema),
         mode: "onChange",
+        defaultValues: { amount: "0" }
     });
 
     const onSubmit = async (data: DepositValues) => {
@@ -62,15 +64,15 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                 }]
             });
 
-            // ✅ После успеха
-            reset();       // очищаем форму
-            onClose();     // закрываем модалку
+            reset();
+            onClose();
         } catch (err) {
             console.error('❌ Deposit failed:', err);
         }
     };
 
     const amount = watch("amount");
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
     return (
         <Transition show={isOpen} as={Fragment}>
@@ -98,7 +100,7 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                         leaveTo="translate-y-full opacity-0"
                     >
                         <DialogPanel
-                            className="lg:w-[calc((100%-15rem)*0.6)] w-full md:h-[60%] h-[70%] max-w-full bg-[#1e1e1e]/40 text-white rounded-t-3xl shadow-lg border-t border-[#2e2e2e] focus-within:translate-y-[-120px] transition-transform duration-300">
+                            className={`lg:w-[calc((100%-15rem)*0.6)] w-full md:h-[60%] h-[70%] max-w-full bg-[#1e1e1e]/40 text-white rounded-t-3xl shadow-lg border-t border-[#2e2e2e] ${ isMobile ? 'focus-within:translate-y-[-120px]' : ''} transition-transform duration-300`}>
                             <div className="flex flex-col gap-10">
                                 <div className="flex justify-between items-center  pt-7 p-6 pb-0 rounded-t-3xl">
                                     <DialogTitle className="text-2xl text-gray-300 font-extrabold font-montserrat">DEPOSIT</DialogTitle>
@@ -131,42 +133,34 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                                                     style={{ width: `${(amount?.length || 1) + 0.5}ch` }}
                                                     onInput={(e) => {
                                                         const input = e.target as HTMLInputElement;
-                                                        let value = input.value.replace(/[^\d.]/g, '');
+                                                        // 1) локаль: заменяем запятую на точку
+                                                        let value = input.value.replace(',', '.').replace(/[^\d.]/g, '');
 
-                                                        // Удаляем лишние точки
+                                                        // 2) одна точка максимум
                                                         const parts = value.split('.');
-                                                        if (parts.length > 2) {
-                                                            value = parts[0] + '.' + parts[1];
-                                                        }
+                                                        if (parts.length > 2) value = parts[0] + '.' + parts[1];
 
-                                                        // Удаляем ведущие нули (кроме "0" и "0.")
-                                                        if (!/^0(\.|$)/.test(value)) {
-                                                            value = value.replace(/^0+/, '');
-                                                        }
-
-                                                        // Разделяем целую и дробную часть
+                                                        // 3) разделяем
                                                         const [whole = '', decimal = ''] = value.split('.');
 
-                                                        // Ограничение целой части до 5 цифр (99999)
-                                                        let newValue = whole.slice(0, 5);
+                                                        // 4) убираем лишние ведущие нули, но разрешаем просто "0"
+                                                        let wholeClean = whole.replace(/^0+(?=\d)/, '');
+                                                        if (wholeClean === '' && whole === '0' && !decimal) wholeClean = '0';
 
-                                                        // Ограничение дробной части до 6 цифр
-                                                        if (decimal) {
-                                                            newValue += '.' + decimal.slice(0, 6);
-                                                        }
+                                                        // 5) длины
+                                                        let newValue = wholeClean.slice(0, 5);
+                                                        if (decimal) newValue += '.' + decimal.slice(0, 6);
 
-                                                        // Преобразуем строку в число и проверяем диапазон
+                                                        // 6) диапазон
                                                         const num = parseFloat(newValue);
-                                                        if (!isNaN(num) && num > 99999) {
-                                                            newValue = '99999';
-                                                        }
+                                                        if (!isNaN(num) && num > 99999) newValue = '99999';
 
-                                                        // Если только "0" — превращаем в "0."
-                                                        if (newValue === '0') {
-                                                            newValue = '0.';
-                                                        }
+                                                        // 7) если ввели только ".", превращаем в "0."
+                                                        if (newValue === '.') newValue = '0.';
 
+                                                        // синхронизируем и с DOM, и с RHF
                                                         input.value = newValue;
+                                                        setValue('amount', newValue, { shouldValidate: true, shouldDirty: true });
                                                     }}
                                                 />
                                               </span>

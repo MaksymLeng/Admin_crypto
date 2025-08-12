@@ -49,7 +49,7 @@ const AccountHeader: React.FC<accountHeaderProps> = ({ className = "" }) => {
                 <div className="relative flex flex-col items-center mt-25">
                     <div className="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg relative">
                         <div className="absolute top-10 -right-3 bg-[#d2a679] text-white px-1 py-1 text-xs rounded-full font-bold border-2 border-black">
-                            {level ? getLevelIcon(level) : null}
+                            {level !== undefined ? getLevelIcon(level) : null}
                         </div>
                         {telegramUser?.username
                             ? telegramUser.username[0].toUpperCase()
