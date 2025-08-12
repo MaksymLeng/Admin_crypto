@@ -45,7 +45,7 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
         const amount = Number(data.amount);
         const userId = telegramUser?.id || userData?.id;
 
-        if (!walletFriendly || !userId || isNaN(amount)) {
+        if (!walletFriendly || !userId || isNaN(amount) || !key) {
             console.error('❌ Missing wallet, userId or invalid amount');
             return;
         }
@@ -53,6 +53,7 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
         try {
             // 🔁 Запрашиваем адрес и payload с сервера
             const { depositAddress, payload } = await createDeposit(Number(userId), amount, key);
+
 
             // 🚀 Отправляем перевод через TonConnect
             await tonConnectUI.sendTransaction({

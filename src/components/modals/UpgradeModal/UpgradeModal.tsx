@@ -31,6 +31,10 @@ const UpgradeModal = ({ isOpen, onClose }: ModalProps) => {
             });
             const level = res.data?.newLevel;
             setResult(`🎉 You’ve successfully reached level ${level}`);
+            if (!key) {
+                console.error('❌ Missing key');
+                return;
+            }
             if(userId && username) {
                 dispatch(fetchUserData({
                     id: userId,

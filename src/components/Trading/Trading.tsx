@@ -11,6 +11,11 @@ const Trading = () => {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        if (!key) {
+            console.error('❌ Missing key');
+            return;
+        }
+
         if (!data || data.length === 0) {
             dispatch(fetchTrades(key));
         }
