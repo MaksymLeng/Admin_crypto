@@ -62,17 +62,31 @@ const ReferralModal: FC<ModalProps> = ({ isOpen, onClose }) => {
 
     const share = async () => {
         if (!inviteLink) return;
-        const nav = navigator as Navigator & {
-            share?: (data: ShareData) => Promise<void>;
-        };
+
+        const text = "Join Ndeposit and get a 100% bonus on your first deposit!";
+        const url = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${encodeURIComponent(text)}`;
+
+        if (window?.Telegram?.WebApp?.openTelegramLink) {
+            window.Telegram.WebApp.openTelegramLink(url);
+            return;
+        }
+
+        // запасной вариант (если вдруг открыто в браузере)
+        const nav = navigator as Navigator & { share?: (data: ShareData) => Promise<void> };
         if (nav.share) {
             try {
-                await nav.share({ title: "Join me", url: inviteLink });
-            } catch (e) {
-                console.warn("navigator.share cancelled/failed:", e);
+                await nav.share({ title: "Ndeposit", text, url: inviteLink });
+                return;
             }
-        } else {
-            await copy();
+            catch(e) {
+                console.warn("navigator.share failed:", e);
+            }
+        }
+
+        try {
+            await navigator.clipboard.writeText(inviteLink);
+        } catch (e) {
+            console.warn("clipboard.writeText failed:", e);
         }
     };
 
