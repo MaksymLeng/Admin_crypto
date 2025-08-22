@@ -4,11 +4,11 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from 'zod';
 import {Dialog, DialogPanel, DialogTitle, Transition, TransitionChild} from '@headlessui/react'
 import {XMarkIcon} from '@heroicons/react/24/outline'
-import type {ModalProps} from "../../Types/Interface.tsx";
-import tonIcon from "../../assets/ton_icon.png";
-import type {DepositValues} from "../../Types/Types.tsx";
-import {useAppSelector} from '../../store/hooks';
-import {createDeposit} from '../../FetchHelper/createDeposit';
+import type {ModalProps} from "../../../Types/Interface.tsx";
+import tonIcon from "../../../assets/ton_icon.png";
+import type {DepositValues} from "../../../Types/Types.tsx";
+import {useAppSelector} from '../../../store/hooks.ts';
+import {createDeposit} from '../../../FetchHelper/createDeposit.ts';
 import {useTonConnectUI} from "@tonconnect/ui-react";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -33,17 +33,19 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
         handleSubmit,
         formState: { isValid },
         reset,
-        watch
+        watch,
+        setValue
     } = useForm<DepositValues>({
         resolver: zodResolver(depositSchema),
         mode: "onChange",
+        defaultValues: { amount: "0" }
     });
 
     const onSubmit = async (data: DepositValues) => {
         const amount = Number(data.amount);
         const userId = telegramUser?.id || userData?.id;
 
-        if (!walletFriendly || !userId || isNaN(amount)) {
+        if (!walletFriendly || !userId || isNaN(amount) || !key) {
             console.error('❌ Missing wallet, userId or invalid amount');
             return;
         }
@@ -51,6 +53,7 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
         try {
             // 🔁 Запрашиваем адрес и payload с сервера
             const { depositAddress, payload } = await createDeposit(Number(userId), amount, key);
+
 
             // 🚀 Отправляем перевод через TonConnect
             await tonConnectUI.sendTransaction({
@@ -62,15 +65,15 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                 }]
             });
 
-            // ✅ После успеха
-            reset();       // очищаем форму
-            onClose();     // закрываем модалку
+            reset();
+            onClose();
         } catch (err) {
             console.error('❌ Deposit failed:', err);
         }
     };
 
     const amount = watch("amount");
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
     return (
         <Transition show={isOpen} as={Fragment}>
@@ -98,7 +101,7 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                         leaveTo="translate-y-full opacity-0"
                     >
                         <DialogPanel
-                            className="lg:w-[calc((100%-15rem)*0.6)] w-full md:h-[60%] h-[70%] max-w-full bg-[#1e1e1e]/40 text-white rounded-t-3xl shadow-lg border-t border-[#2e2e2e]">
+                            className={`lg:w-[calc((100%-15rem)*0.6)] w-full md:h-[60%] h-[70%] max-w-full bg-[#1e1e1e]/40 text-white rounded-t-3xl shadow-lg border-t border-[#2e2e2e] ${ isMobile ? 'focus-within:translate-y-[-120px]' : ''} transition-transform duration-300`}>
                             <div className="flex flex-col gap-10">
                                 <div className="flex justify-between items-center  pt-7 p-6 pb-0 rounded-t-3xl">
                                     <DialogTitle className="text-2xl text-gray-300 font-extrabold font-montserrat">DEPOSIT</DialogTitle>
@@ -130,43 +133,33 @@ export const DepositModal: FC<ModalProps> = ({isOpen, onClose}) => {
                                                     className="bg-transparent text-white text-5xl font-bold outline-none text-center w-auto max-w-[160px]"
                                                     style={{ width: `${(amount?.length || 1) + 0.5}ch` }}
                                                     onInput={(e) => {
-                                                        const input = e.target as HTMLInputElement;
-                                                        let value = input.value.replace(/[^\d.]/g, '');
+                                                        const input = e.currentTarget;
 
-                                                        // Удаляем лишние точки
-                                                        const parts = value.split('.');
-                                                        if (parts.length > 2) {
-                                                            value = parts[0] + '.' + parts[1];
-                                                        }
+                                                        // 1) Разрешаем только цифры и точку, запятую превращаем в точку
+                                                        let v = input.value.replace(',', '.').replace(/[^\d.]/g, '');
 
-                                                        // Удаляем ведущие нули (кроме "0" и "0.")
-                                                        if (!/^0(\.|$)/.test(value)) {
-                                                            value = value.replace(/^0+/, '');
-                                                        }
+                                                        // 2) Только одна точка
+                                                        const parts = v.split('.');
+                                                        if (parts.length > 2) v = parts[0] + '.' + parts[1];
 
-                                                        // Разделяем целую и дробную часть
-                                                        const [whole = '', decimal = ''] = value.split('.');
+                                                        // 3) Спец-правила автоподстановки
+                                                        if (v === '.') v = '0.';     // "." -> "0."
+                                                        if (v === '0') v = '0.';     // "0" -> "0." (как ты и хотел)
 
-                                                        // Ограничение целой части до 5 цифр (99999)
+                                                        // 4) Если есть точка, гарантируем ведущий 0 перед ней
+                                                        if (v.startsWith('.')) v = '0' + v;
+
+                                                        // 5) Убираем ведущие нули типа "00012" => "12", но "0." оставляем
+                                                        if (/^0\d/.test(v)) v = v.replace(/^0+/, '');
+
+                                                        // 6) Ограничения (по желанию): 5 цифр до точки, 6 после
+                                                        const [whole = '', dec = ''] = v.split('.');
                                                         let newValue = whole.slice(0, 5);
+                                                        if (v.includes('.')) newValue += '.' + dec.slice(0, 6);
 
-                                                        // Ограничение дробной части до 6 цифр
-                                                        if (decimal) {
-                                                            newValue += '.' + decimal.slice(0, 6);
-                                                        }
-
-                                                        // Преобразуем строку в число и проверяем диапазон
-                                                        const num = parseFloat(newValue);
-                                                        if (!isNaN(num) && num > 99999) {
-                                                            newValue = '99999';
-                                                        }
-
-                                                        // Если только "0" — превращаем в "0."
-                                                        if (newValue === '0') {
-                                                            newValue = '0.';
-                                                        }
-
+                                                        // 7) Синхронизируем DOM и RHF
                                                         input.value = newValue;
+                                                        setValue('amount', newValue, { shouldValidate: true, shouldDirty: true });
                                                     }}
                                                 />
                                               </span>

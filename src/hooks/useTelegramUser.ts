@@ -1,13 +1,15 @@
-import type {TelegramUser} from "../Types/Interface.tsx";
+import type {useTelegramUserReturn} from "../Types/Types.tsx";
 
-export const useTelegramUser = (): TelegramUser | null => {
+
+export const useTelegramUser = (): useTelegramUserReturn | null => {
     const tg = window.Telegram?.WebApp;
-    const user = tg?.initDataUnsafe?.user;
+    const tgUser = tg?.initDataUnsafe?.user;
+    const start_param  = tg?.initDataUnsafe?.start_param ?? null;
 
-    if (!user) return null;
+    if (!tgUser) return null;
 
     return {
-        ...user,
-        name: `${user.first_name} ${user.last_name ?? ''}`.trim(),
+        tgUser,
+        start_param
     };
 };

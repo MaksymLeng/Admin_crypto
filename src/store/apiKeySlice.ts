@@ -1,22 +1,27 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import {botAPI} from "../data/variables.ts";
+import {userAPI} from "../data/variables.ts";
+import type {ApiKeyState} from "../Types/Types.tsx";
 
 export const fetchApiKey = createAsyncThunk(
     'apiKey/fetch',
     async (userId: string) => {
-        const response = await axios.post(`${botAPI}/api/get-api-key`, { userId });
+        const response = await axios.post(
+            `${userAPI}/bot/get-api-key`,
+            {userId});
         return response.data.apiKey;
     }
 );
 
+const initialState: ApiKeyState = {
+    key: null,
+    loading: false,
+    error: null,
+};
+
 const apiKeySlice = createSlice({
     name: 'apiKey',
-    initialState: {
-        key: '',
-        loading: false,
-        error: null as string | null,
-    },
+    initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
@@ -31,6 +36,7 @@ const apiKeySlice = createSlice({
             .addCase(fetchApiKey.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message || 'Не удалось получить API ключ';
+                state.key = null;
             });
     },
 });

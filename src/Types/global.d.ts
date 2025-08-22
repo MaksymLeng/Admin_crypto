@@ -14,6 +14,7 @@ interface TelegramWebApp {
     close: () => void;
     initData: string;
     initDataUnsafe: TelegramWebAppInitDataUnsafe;
+    openTelegramLink: (url: string) => void;
     [key: string]: never;
 }
 

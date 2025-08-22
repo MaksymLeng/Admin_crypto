@@ -7,9 +7,9 @@ import {
     TransitionChild,
 } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import type { WithdrawProps} from "../../Types/Interface.tsx";
+import type { ModalProps} from "../../../Types/Interface.tsx";
 
-const WithdrawModal: FC<WithdrawProps> = ({ isOpen, onClose }) => {
+const WithdrawModal: FC<ModalProps> = ({ isOpen, onClose }) => {
     return (
         <Transition show={isOpen} as={Fragment}>
             <Dialog as="div" className="relative z-50" onClose={onClose}>

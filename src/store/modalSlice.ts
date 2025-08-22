@@ -2,7 +2,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type {ModalState} from "../Types/Types.tsx";
 
 const initialState: ModalState = {
-    showArr: [true, false,false],
+    showArr: [true, false,false,false,false,false],
 };
 
 const modalSlice = createSlice({

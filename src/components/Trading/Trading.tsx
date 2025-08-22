@@ -1,15 +1,21 @@
 import type {Trade} from "../../Types/Types.tsx";
-import {useEffect, useState} from "react";
+import {useEffect, useRef} from "react";
 import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
 import {fetchTrades} from "../../store/tradeSlice.ts";
 
 const Trading = () => {
     const dispatch = useAppDispatch();
     const { data, loading } = useAppSelector((state) => state.trades);
-    const [isMobile, setIsMobile] = useState(false);
     const { key } = useAppSelector((state) => state.apiKey);
 
+    const containerRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
+        if (!key) {
+            console.error('❌ Missing key');
+            return;
+        }
+
         if (!data || data.length === 0) {
             dispatch(fetchTrades(key));
         }
@@ -23,14 +29,56 @@ const Trading = () => {
         data[0] || { rawAmount: 0 }
     );
 
-
     useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-        checkMobile();
-        window.addEventListener("resize", checkMobile);
-        return () => window.removeEventListener("resize", checkMobile);
-    }, []);
+        const element = containerRef.current;
+        if (!element) return;
 
+        element.scrollTop = 0;
+
+        let raf = 0;
+        let last = performance.now();
+        const speed = 120;
+        let isPaused = false;
+
+        const tick = (now: number) => {
+            if (!isPaused) {
+                const dt = (now - last) / 1000;
+                last = now;
+
+                element.scrollTop += speed * dt;
+
+                const half = element.scrollHeight / 2;
+                if (element.scrollTop >= half) {
+                    element.scrollTop -= half;
+                }
+            } else {
+                last = now;
+            }
+            raf = requestAnimationFrame(tick);
+        };
+
+        // Запуск
+        raf = requestAnimationFrame(tick);
+
+        // Ставим паузу при тапе/клике
+        const stop = () => { isPaused = true; };
+        const resume = () => { isPaused = false; };
+
+        element.addEventListener('pointerdown', stop);
+        element.addEventListener('pointerup', resume);
+        element.addEventListener('pointerleave', resume);
+        element.addEventListener('touchstart', stop);
+        element.addEventListener('touchend', resume);
+
+        return () => {
+            cancelAnimationFrame(raf);
+            element.removeEventListener('pointerdown', stop);
+            element.removeEventListener('pointerup', resume);
+            element.removeEventListener('pointerleave', resume);
+            element.removeEventListener('touchstart', stop);
+            element.removeEventListener('touchend', resume);
+        };
+    }, [data]);
 
     return (
         <div className="relative md:h-[100%] h-screen w-full text-white md:px-4 py-16 rounded-2xl">
@@ -52,57 +100,40 @@ const Trading = () => {
                     <div
                         className="pointer-events-none absolute top-0 left-0 right-0 h-10 z-20"
                         style={{
-                            background:
-                                "linear-gradient(to bottom, rgba(20,0,50,1), rgba(20,0,50,0))",
+                            background: "linear-gradient(to bottom, rgba(20,0,50,1), rgba(20,0,50,0))",
                         }}
                     />
 
-                    {/* Auto scroll on desktop, manual on mobile */}
-                    <div
-                        className={`${
-                            isMobile
-                                ? "overflow-y-auto max-h-[340px] pr-2"
-                                : "absolute top-0 left-0 w-full animate-scroll"
-                        }`}
-                    >
-                        <div>
-                            <ul className="space-y-3">
-                                {data.map((t, i) => (
-                                    <TradeItem key={i} trade={t} />
-                                ))}
-                            </ul>
-                        </div>
-
-                        {!isMobile && (
-                            <div>
-                                <ul className="space-y-3">
-                                    {data.map((t, i) => (
-                                        <TradeItem key={`dup-${i}`} trade={t} />
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
+                    {/* Автопрокрутка: контейнер фиксированной высоты без нативного скролла */}
+                    <div ref={containerRef} className="h-[340px] overflow-hidden pr-2">
+                        <ul className="space-y-3">
+                            {data.map((t, i) => (
+                                <TradeItem key={i} trade={t} />
+                            ))}
+                        </ul>
+                        {/* дублируем список для бесшовной петли */}
+                        <ul className="space-y-3">
+                            {data.map((t, i) => (
+                                <TradeItem key={`dup-${i}`} trade={t} />
+                            ))}
+                        </ul>
                     </div>
                 </div>
-
-
 
                 {/* BEST TRADE */}
                 <div className="bg-[#30056f]/80 rounded-xl lg:px-6 px-2 py-6 w-full lg:w-2/3 mx-auto relative">
                     <div className="absolute bottom-14 italic left-3 tracking-wide py-1 text-white font-bold text-2xl z-21 uppercase">
                         Best Trade 24H
                     </div>
-                    {!loading && (
+                    {!loading && bestTrade && (
                         <div className="flex justify-between text-lg">
                             <div className="flex lg:gap-4 gap-1">
                                 <span className="text-xl">{bestTrade.coin}</span>
                                 <span className="text-green-400 text-lg">{bestTrade.change}</span>
                                 <span className="flex gap-2 text-lg">
-                                            CM
-                                           <span className="text-green-400 text-lg">
-                                               {bestTrade.cm}
-                                           </span>
-                                        </span>
+                  CM
+                  <span className="text-green-400 text-lg">{bestTrade.cm}</span>
+                </span>
                             </div>
                             <span className="text-green-400 text-xl">{bestTrade.amount}</span>
                         </div>
