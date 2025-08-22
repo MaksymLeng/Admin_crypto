@@ -2,7 +2,7 @@
 
 Hello! This is the official frontend for the Ndeposit project.
 
-🔗 **Live version:** [https://ndeposit.app](https://ndeposit.app)
+🔗 **Live version:** https://ndeposit.netlify.app/
 
 ## ℹ️ About the Project
 
